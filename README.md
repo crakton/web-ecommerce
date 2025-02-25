@@ -1,4 +1,4 @@
-# MB Frontend
+# Web Ecommerce
 
 Welcome to the Web Ecommerce project! This README will guide you through the setup and usage of the project.
 
@@ -21,7 +21,7 @@ To get started with the Web Ecommerce project, follow these steps:
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/yourusername/mb-frontend.git
+git clone https://github.com/crakton/web-ecommerce.git
 ```
 
 2. Navigate to the project directory:
