@@ -3,8 +3,8 @@ import { faTrash, faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import emptyCart from '../../Images/empty_cart.webp';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
 import { useCart } from "../../../hooks";
+import api from "../../../config/api";
 
 const CartItems = () => {
   const { cartItems, removeCartItem, updateQty, handleCheckout } = useCart();
@@ -25,7 +25,7 @@ const CartItems = () => {
 
   const handleVoucherRedeem = async () => {
     try {
-      const response = await axios.post('https://api.merabestie.com/coupon/verify-coupon', {
+      const response = await api.post('/coupons/verify-coupon', {
         code: voucher
       });
 

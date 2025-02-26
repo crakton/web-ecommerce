@@ -10,7 +10,6 @@ import {
   FaHeart,
 } from "react-icons/fa";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
 import { Helmet } from "react-helmet";
 import Navbar from "../../components/user/navbar/navbar";
 import SEOComponent from "../../components/SEO/SEOComponent";

@@ -144,7 +144,7 @@ const ProfessionalNavbar = () => {
         <div className="max-w-[1200px] mx-auto px-4 flex items-center justify-center">
           <RiGift2Line className="mr-2" />
           <span className="text-[10px] sm:text-xs">
-            USE CODE OFF10 TO GET FLAT 10% OFF ON ORDERS ABOVE RS.499 | FREE SHIPPING | COD AVAILABLE
+           Get your product, fast and reliable Delivery
           </span>
         </div>
       </div>

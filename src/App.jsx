@@ -27,6 +27,7 @@ import Reviews from "./pages/admin/review";
 import SEO from "./pages/admin/SEO";
 import { CartProvider } from "./context/CartContext";
 import { ToastContainer } from 'react-toastify';
+import LandingPage from "./pages/user/LandingPage";
 
 function App() {
   return (
@@ -36,8 +37,9 @@ function App() {
       <BrowserRouter>
         <CartProvider>
           <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/HomePage" element={<HomePage />} />
+
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/store" element={<HomePage />} />
             <Route path="/about" element={<About />} />
             <Route path="/shop" element={<Shop />} />
             <Route path="/Contact" element={<Contact />} />

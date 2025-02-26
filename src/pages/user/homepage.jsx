@@ -138,7 +138,7 @@ const ProductGrid = ({ title, products }) => {
       <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-6">
         <h2 className="text-lg sm:text-xl font-semibold">{title}</h2>
         <a href="/shop">
-          <button className="w-full sm:w-auto bg-pink-100 text-pink-700 px-4 py-2 rounded-md text-sm font-medium hover:bg-pink-200 transition-colors">
+          <button className="w-full sm:w-auto bg-primary text-secondary px-4 py-2 rounded-md text-sm font-medium hover:bg-[rgb(46 49 162)] transition-colors">
             View All
           </button>
         </a>

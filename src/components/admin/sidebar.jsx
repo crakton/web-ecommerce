@@ -267,8 +267,8 @@ const Sidebar = () => {
                         <label className="flex-1 cursor-pointer group">
                           <div className="flex items-center justify-center h-36 px-4 transition-all border-2 border-dashed rounded-xl border-gray-300 group-hover:border-pink-400 group-hover:bg-pink-50/50">
                             <div className="flex flex-col items-center space-y-2 text-center">
-                              <ImageIcon className="w-8 h-8 text-gray-400 group-hover:text-pink-500" />
-                              <span className="text-sm text-gray-500 group-hover:text-pink-600">
+                              <ImageIcon className="w-8 h-8 text-gray-400 group-hover:text-secondary" />
+                              <span className="text-sm text-gray-500 group-hover:text-primary">
                                 {selectedFile ? selectedFile.name : 'Drop image here or click to browse'}
                               </span>
                             </div>
@@ -287,7 +287,7 @@ const Sidebar = () => {
                           className={`px-4 py-2.5 rounded-lg flex items-center gap-2 transition-all ${
                             !selectedFile || isUploading
                               ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
-                              : 'bg-pink-500 hover:bg-pink-600 text-white shadow-sm'
+                              : 'bg-secondary hover:bg-primary text-white shadow-sm'
                           }`}
                         >
                           {isUploading ? (
@@ -302,7 +302,7 @@ const Sidebar = () => {
                       {uploadStatus && (
                         <p className={`text-sm font-medium ${
                           uploadStatus.includes('failed') || uploadStatus.includes('Error')
-                            ? 'text-red-600'
+                            ? 'text-primary'
                             : 'text-green-600'
                         }`}>
                           {uploadStatus}
@@ -339,7 +339,7 @@ const Sidebar = () => {
                         name="name"
                         value={productData.name}
                         onChange={handleInputChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-shadow outline-none"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-secondary transition-shadow outline-none"
                         placeholder="Enter product name"
                       />
                     </div>
@@ -351,7 +351,7 @@ const Sidebar = () => {
                         name="price"
                         value={productData.price}
                         onChange={handleInputChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-shadow outline-none"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-secondary transition-shadow outline-none"
                         placeholder="Enter price"
                       />
                     </div>
@@ -362,7 +362,7 @@ const Sidebar = () => {
                         name="category"
                         value={productData.category}
                         onChange={handleInputChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-shadow outline-none"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-secondary transition-shadow outline-none"
                       >
                         <option value="">Select Category</option>
                         <option value="fashion">Fashion</option>
@@ -379,7 +379,7 @@ const Sidebar = () => {
                         name="rating"
                         value={productData.rating}
                         onChange={handleInputChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-shadow outline-none"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-secondary transition-shadow outline-none"
                         min={0}
                         max={5}
                         step={0.1}
@@ -400,7 +400,7 @@ const Sidebar = () => {
                         />
                         <button
                           onClick={generateProductId}
-                          className="px-4 py-2 bg-pink-500 text-white rounded-lg hover:bg-pink-600 transition-colors shadow-sm font-medium"
+                          className="px-4 py-2 bg-secondary text-white rounded-lg hover:bg-primary transition-colors shadow-sm font-medium"
                         >
                           Generate
                         </button>
@@ -415,7 +415,7 @@ const Sidebar = () => {
                           name="inStockValue"
                           value={productData.inStockValue}
                           onChange={handleInputChange}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-shadow outline-none"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-secondary transition-shadow outline-none"
                           placeholder="In Stock"
                         />
                         <input
@@ -423,7 +423,7 @@ const Sidebar = () => {
                           name="soldStockValue"
                           value={productData.soldStockValue}
                           onChange={handleInputChange}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-shadow outline-none"
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-secondary transition-shadow outline-none"
                           placeholder="Sold Stock"
                         />
                       </div>
@@ -436,7 +436,7 @@ const Sidebar = () => {
                       name="description"
                       value={productData.description}
                       onChange={handleInputChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-shadow outline-none"
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-secondary transition-shadow outline-none"
                       rows={4}
                       placeholder="Enter product description"
                     />
@@ -453,7 +453,7 @@ const Sidebar = () => {
                     <button
                       onClick={handleSubmit}
                       disabled={isUploading}
-                      className="px-4 py-2 bg-pink-500 text-white rounded-lg hover:bg-pink-600 transition-colors disabled:bg-pink-300 shadow-sm font-medium"
+                      className="px-4 py-2 bg-secondary text-white rounded-lg hover:bg-primary transition-colors disabled:bg-pink-300 shadow-sm font-medium"
                     >
                       Save Product
                     </button>
@@ -471,7 +471,7 @@ const Sidebar = () => {
       >
         <div className="flex items-center justify-between p-6 border-b">
           {isOpen && (
-            <div className="text-2xl font-bold bg-gradient-to-r from-pink-500 to-purple-500 bg-clip-text text-transparent">
+            <div className="text-2xl font-bold bg-gradient-to-r from-secondary to-purple-500 bg-clip-text text-transparent">
               Mera Bestie
             </div>
           )}
@@ -486,8 +486,8 @@ const Sidebar = () => {
                     to={item.path}
                     className={`flex items-center px-4 py-3 rounded-lg transition-all
                       ${location.pathname === item.path
-                        ? "bg-pink-100 text-pink-600"
-                        : "text-gray-600 hover:bg-pink-50 hover:text-pink-500"
+                        ? "bg-pink-100 text-primary"
+                        : "text-gray-600 hover:bg-pink-50 hover:text-secondary"
                       }
                       ${isOpen ? "justify-start space-x-3" : "justify-center"}`}
                   >
@@ -504,7 +504,7 @@ const Sidebar = () => {
               <>
                 <button
                   onClick={() => setShowDialog(true)}
-                  className="w-full flex items-center justify-center px-4 py-2 bg-pink-500 text-white rounded-lg hover:bg-pink-600 transition-colors"
+                  className="w-full flex items-center justify-center px-4 py-2 bg-secondary text-white rounded-lg hover:bg-primary transition-colors"
                 >
                   <Package className="w-5 h-5 mr-2" />
                   Add Product
@@ -519,7 +519,7 @@ const Sidebar = () => {
 
                 <button
                   onClick={handleLogout}
-                  className="w-full flex items-center justify-center px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors"
+                  className="w-full flex items-center justify-center px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-primary transition-colors"
                 >
                   <LogOut className="w-5 h-5 mr-2" />
                   Logout
