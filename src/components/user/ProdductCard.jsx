@@ -1,7 +1,12 @@
-import React from 'react';
-import { motion, AnimatePresence } from "framer-motion";
+import React, { useState } from 'react';
+import { motion} from "framer-motion";
+import { Link } from 'react-router-dom';
 
 const ProductCard = ({ product }) => {
+  const [cartItems, setCartItems] = useState([]); // Move this here
+    const [layout, setLayout] = useState("grid");
+  
+
     const handleAddToCart = async (productId) => {
       // const userId = sessionStorage.getItem('userId');
       // If userId is not available, prompt the user to log in
@@ -16,6 +21,7 @@ const ProductCard = ({ product }) => {
         quantity: 1,
       };
       cartItems.push(cartItem);
+
     
       // Transform cart data for checkout
       const transformedData = cartItems.map(item => ({

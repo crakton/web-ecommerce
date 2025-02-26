@@ -27,7 +27,6 @@ const Shop = ({ category }) => {
   const [layout, setLayout] = useState("grid");
   const [hoveredProduct, setHoveredProduct] = useState(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [cartItems, setCartItems] = useState([]); // Move this here
 
   const categories = [
     {
