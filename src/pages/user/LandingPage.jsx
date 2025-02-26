@@ -4,24 +4,45 @@ import sampleImg from "../../assets/images/sample.jpg";
 import { whyUs } from "../../constants";
 import { FaCheckCircle, FaFacebook, FaInstagram, FaTwitter } from "react-icons/fa";
 import { TbCircleChevronsDown } from "react-icons/tb";
-
+import { FiMenu, FiX } from "react-icons/fi";
 const Navbar = () => {
-  return (
-    <nav className="fixed top-0 left-0 w-full bg-background shadow-lg py-4 px-10 flex justify-between items-center z-50">
-      <div className="text-white text-2xl font-bold flex items-center gap-2">
-        <TbCircleChevronsDown size={30} />
-        Zamda Global
-      </div>
-      <div className="space-x-6">
-        <a href="#welcome" className="text-white hover:text-blue-300">Home</a>
-        <a href="#why-us" className="text-white hover:text-blue-300">Why Us</a>
-        <a href="#progress" className="text-white hover:text-blue-300">Achievement</a>
-        <a href="#contact" className="text-white hover:text-blue-300">Contact</a>
-      </div>
-    </nav>
-  );
-};
-
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  
+    return (
+      <nav className="fixed top-0 left-0 w-full bg-background shadow-lg py-4 px-10 flex justify-between items-center z-50">
+        <div className="text-white text-2xl font-bold flex items-center gap-2">
+          <TbCircleChevronsDown size={30} />
+          Zamda Global
+        </div>
+        
+        {/* Desktop Nav */}
+        <div className="hidden md:flex space-x-6">
+          <a href="#welcome" className="text-white hover:text-blue-300">Home</a>
+          <a href="#why-us" className="text-white hover:text-blue-300">Why Us</a>
+          <a href="#progress" className="text-white hover:text-blue-300">Progress</a>
+          <a href="#contact" className="text-white hover:text-blue-300">Contact</a>
+        </div>
+        
+        {/* Mobile Nav Button */}
+        <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="md:hidden text-white text-3xl">
+          {mobileMenuOpen ? <FiX /> : <FiMenu />}
+        </button>
+        
+        {/* Mobile Nav Menu */}
+        {mobileMenuOpen && (
+          <div className="fixed top-0 left-0 w-64 h-full bg-background shadow-lg flex flex-col items-center py-10 space-y-6 z-50">
+            <button onClick={() => setMobileMenuOpen(false)} className="text-white text-3xl absolute top-4 right-4">
+              <FiX />
+            </button>
+            <a href="#welcome" className="text-white hover:text-blue-300">Home</a>
+            <a href="#why-us" className="text-white hover:text-blue-300">Why Us</a>
+            <a href="#progress" className="text-white hover:text-blue-300">Progress</a>
+            <a href="#contact" className="text-white hover:text-blue-300">Contact</a>
+          </div>
+        )}
+      </nav>
+    );
+  };
 const Counter = ({ value }) => {
   const [count, setCount] = useState(0);
 
