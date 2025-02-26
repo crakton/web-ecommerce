@@ -57,7 +57,7 @@ const CartItems = () => {
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64 bg-gray-50">
-        <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-pink-500"></div>
+        <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-secondary"></div>
       </div>
     );
   }
@@ -69,7 +69,7 @@ const CartItems = () => {
         <p className="text-base sm:text-lg text-gray-600 mb-4 text-center">{error || 'Your cart is empty'}</p>
         <Link 
           to="/HomePage" 
-          className="px-6 py-2 bg-pink-500 text-white rounded-md hover:bg-pink-600 transition-colors duration-200 text-sm sm:text-base"
+          className="px-6 py-2 bg-secondary text-white rounded-md hover:bg-primary transition-colors duration-200 text-sm sm:text-base"
         >
           Continue Shopping
         </Link>
@@ -161,10 +161,10 @@ const CartItems = () => {
               placeholder="Enter voucher code"
               value={voucher}
               onChange={(e) => setVoucher(e.target.value)}
-              className="flex-1 border rounded-md px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-pink-500/20 focus:border-pink-500"
+              className="flex-1 border rounded-md px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-secondary/20 focus:border-secondary"
             />
             <button
-              className="w-full sm:w-auto bg-pink-500 text-white px-4 py-2 rounded-md hover:bg-pink-600 transition-colors text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full sm:w-auto bg-secondary text-white px-4 py-2 rounded-md hover:bg-primary transition-colors text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
               onClick={handleVoucherRedeem}
               disabled={!voucher}
             >
@@ -207,7 +207,7 @@ const CartItems = () => {
           {/* Checkout Button */}
           <button
             onClick={handleCheckout}
-            className="w-full bg-pink-500 text-white py-3 rounded-md hover:bg-pink-600 transition-colors text-sm sm:text-base font-medium mt-4"
+            className="w-full bg-secondary text-white py-3 rounded-md hover:bg-primary transition-colors text-sm sm:text-base font-medium mt-4"
           >
             Proceed to Checkout
           </button>

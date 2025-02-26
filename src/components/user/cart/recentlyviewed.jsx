@@ -48,7 +48,7 @@ const RecentlyViewed = () => {
           <h2 className="text-xl font-bold text-gray-800">Recently Viewed Products</h2>
         </div>
         <div className="flex justify-center items-center h-64">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-pink-500"></div>
+          <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-secondary"></div>
         </div>
       </div>
     );
@@ -103,7 +103,7 @@ const RecentlyViewed = () => {
                   className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform"
                 />
                 <div className="absolute top-2 right-2">
-                  <span className="bg-pink-500 text-white text-xs px-2 py-1 rounded">
+                  <span className="bg-primary text-white text-xs px-2 py-1 rounded">
                     Save {Math.round(((400 - parseFloat(product.price.split('₹')[2]?.trim() || product.price)) / 400) * 100)}%
                   </span>
                 </div>
@@ -114,13 +114,13 @@ const RecentlyViewed = () => {
                   <span className="text-gray-500 line-through text-xs">
                     ₹{product.price.split('₹')[1]||400}
                   </span>
-                  <span className="font-bold text-pink-600">
+                  <span className="font-bold text-secondary">
                     ₹{product.price.split('₹')[2]|| product.price}
                   </span>
                   </div>
                 <Link to={`/${product._id}`}>
                   <button 
-                    className="mt-2 w-full bg-pink-50 text-pink-600 py-2 rounded-md 
+                    className="mt-2 w-full bg-pink-50 text-secondary py-2 rounded-md 
                     hover:bg-pink-100 transition-colors"
                   >
                     View Details

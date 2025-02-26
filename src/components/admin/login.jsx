@@ -170,7 +170,7 @@ const AdminLogin = () => {
               <h2 className="text-4xl font-extrabold text-gray-900 tracking-tight">
                 Admin Login
               </h2>
-              <p className="text-pink-600 mt-2">Log in to Admin Dashboard</p>
+              <p className="text-secondary mt-2">Log in to Admin Dashboard</p>
             </div>
 
             {error && (
@@ -182,13 +182,13 @@ const AdminLogin = () => {
             <div className="space-y-6">
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <User className="text-pink-400" />
+                  <User className="text-primary" />
                 </div>
                 <input
                   type="text"
                   placeholder="Seller ID"
                   required
-                  className="w-full pl-10 pr-4 py-3 border border-pink-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 transition duration-300"
+                  className="w-full pl-10 pr-4 py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition duration-300"
                   value={sellerId}
                   onChange={(e) => setSellerId(e.target.value)}
                 />
@@ -196,13 +196,13 @@ const AdminLogin = () => {
 
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Mail className="text-pink-400" />
+                  <Mail className="text-primary" />
                 </div>
                 <input
                   type="email"
                   placeholder="Email Address"
                   required
-                  className="w-full pl-10 pr-4 py-3 border border-pink-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 transition duration-300"
+                  className="w-full pl-10 pr-4 py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition duration-300"
                   value={emailOrPhone}
                   onChange={(e) => setEmailOrPhone(e.target.value)}
                 />
@@ -211,7 +211,7 @@ const AdminLogin = () => {
               {!otpSent ? (
                 <button
                   type="button"
-                  className="w-full bg-pink-500 hover:bg-pink-600 text-white py-3 rounded-lg font-semibold transition duration-300 transform active:scale-95"
+                  className="w-full bg-primary hover:bg-secondary text-white py-3 rounded-lg font-semibold transition duration-300 transform active:scale-95"
                   onClick={handleSendOtp}
                 >
                   Send OTP
@@ -219,14 +219,14 @@ const AdminLogin = () => {
               ) : (
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Lock className="text-pink-400" />
+                    <Lock className="text-primary" />
                   </div>
                   <input
                     type="text"
                     placeholder="Enter OTP"
                     required
                     maxLength="6"
-                    className="w-full pl-10 pr-4 py-3 border border-pink-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 transition duration-300"
+                    className="w-full pl-10 pr-4 py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition duration-300"
                     value={otp}
                     onChange={(e) => {
                       const value = e.target.value.replace(/\D/g, "");
@@ -244,7 +244,7 @@ const AdminLogin = () => {
               {showResendButton && (
                 <button
                   type="button"
-                  className="w-full bg-pink-500 hover:bg-pink-600 text-white py-3 rounded-lg font-semibold transition duration-300 transform active:scale-95"
+                  className="w-full bg-primary hover:bg-secondary text-white py-3 rounded-lg font-semibold transition duration-300 transform active:scale-95"
                   onClick={handleResendOtp}
                 >
                   Resend OTP
@@ -253,19 +253,19 @@ const AdminLogin = () => {
 
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Lock className="text-pink-400" />
+                  <Lock className="text-primary" />
                 </div>
                 <input
                   type={showPassword ? "text" : "password"}
                   placeholder="Password"
                   required
-                  className="w-full pl-10 pr-12 py-3 border border-pink-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 transition duration-300"
+                  className="w-full pl-10 pr-12 py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition duration-300"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
                 <button
                   type="button"
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-pink-400 hover:text-pink-600 transition"
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-primary hover:text-secondary transition"
                   onClick={() => setShowPassword(!showPassword)}
                 >
                   {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
@@ -274,7 +274,7 @@ const AdminLogin = () => {
 
               <motion.button
                 type="button"
-                className={`w-full bg-pink-500 hover:bg-pink-600 text-white py-3 rounded-lg font-semibold transition duration-300 transform active:scale-95 ${
+                className={`w-full bg-primary hover:bg-secondary text-white py-3 rounded-lg font-semibold transition duration-300 transform active:scale-95 ${
                   !otpVerified ? "opacity-50 cursor-not-allowed" : ""
                 }`}
                 whileTap={{ scale: 0.95 }}

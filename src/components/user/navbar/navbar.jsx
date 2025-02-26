@@ -138,7 +138,7 @@ const ProfessionalNavbar = () => {
       scrolled ? "bg-white shadow-md" : "bg-transparent"
     }`}>
       {/* Promo Banner - Hidden on mobile when scrolled */}
-      <div className={`bg-pink-600 text-white py-2 text-center text-xs transition-all duration-300 ${
+      <div className={`bg-primary text-white py-2 text-center text-xs transition-all duration-300 ${
         scrolled ? "hidden sm:block sm:h-auto sm:opacity-100" : "h-auto opacity-100"
       }`}>
         <div className="max-w-[1200px] mx-auto px-4 flex items-center justify-center">
@@ -156,7 +156,7 @@ const ProfessionalNavbar = () => {
             {/* Mobile Menu Toggle */}
             <button
               onClick={toggleMenu}
-              className="lg:hidden text-black hover:text-pink-600 transition"
+              className="lg:hidden text-black hover:text-primary transition"
             >
               <RiMenu3Line className="w-6 h-6" />
             </button>
@@ -166,8 +166,8 @@ const ProfessionalNavbar = () => {
               to="/HomePage"
               className="text-2xl flex items-center hover:opacity-80 transition mx-auto lg:mx-0"
             >
-              <span className="font-['Bodoni_MT'] font-bold text-2xl sm:text-3xl md:text-4xl text-pink-600">
-                MERA Bestie
+              <span className="font-['Bodoni_MT'] font-bold text-2xl sm:text-3xl md:text-4xl text-primary">
+                Zang store
               </span>
             </Link>
 
@@ -181,7 +181,7 @@ const ProfessionalNavbar = () => {
                   onMouseLeave={() => name === "SHOP" && setIsShopDropdownOpen(false)}
                 >
                   <button className={`px-4 py-2 mx-2 flex items-center ${
-                    isActive(path) ? "text-pink-600" : "text-gray-800 hover:text-pink-600"
+                    isActive(path) ? "text-primary" : "text-gray-800 hover:text-primary"
                   } transition-colors duration-200`}>
                     <Icon className="w-5 h-5 mr-2" />
                     {name}
@@ -206,7 +206,7 @@ const ProfessionalNavbar = () => {
             {/* Action Icons */}
             <div className="flex items-center space-x-3 sm:space-x-6">
               <button
-                className="text-gray-800 hover:text-pink-600 transition"
+                className="text-gray-800 hover:text-primary transition"
                 onClick={toggleSearch}
               >
                 <RiSearchLine className="w-5 h-5" />
@@ -214,12 +214,12 @@ const ProfessionalNavbar = () => {
 
               <Link
                 to="/cart"
-                className="relative text-gray-800 hover:text-pink-600 transition flex items-center"
+                className="relative text-gray-800 hover:text-primary transition flex items-center"
               >
                 <RiShoppingCart2Line className="w-5 h-5" />
                 <span className="ml-2 hidden md:block">Cart</span>
                 {memorizedCartItemCount > 0 && (
-                  <span className="absolute top-[-8px] right-[-8px] bg-pink-600 text-white rounded-full text-xs w-4 h-4 flex items-center justify-center">
+                  <span className="absolute top-[-8px] right-[-8px] bg-primary text-white rounded-full text-xs w-4 h-4 flex items-center justify-center">
                     {memorizedCartItemCount}
                   </span>
                 )}
@@ -228,7 +228,7 @@ const ProfessionalNavbar = () => {
               <div className="relative" ref={profileRef}>
                 <button
                   onClick={toggleProfileMenu}
-                  className="flex items-center text-gray-800 hover:text-pink-600 transition"
+                  className="flex items-center text-gray-800 hover:text-primary transition"
                 >
                   <RiUser3Line className="w-5 h-5" />
                   <span className="ml-2 hidden md:block">
@@ -297,7 +297,7 @@ const ProfessionalNavbar = () => {
             className="lg:hidden fixed inset-y-0 left-0 w-64 z-50 bg-white shadow-xl"
           >
             <div className="flex justify-between items-center p-4 border-b">
-              <span className="font-['Bodoni_MT'] text-xl sm:text-2xl font-bold text-pink-600">
+              <span className="font-['Bodoni_MT'] text-xl sm:text-2xl font-bold text-primary">
                 Menu
               </span>
               <motion.button
@@ -323,8 +323,8 @@ const ProfessionalNavbar = () => {
                     to={path}
                     className={`flex items-center px-6 py-3 ${
                       isActive(path)
-                        ? "text-pink-600 bg-pink-50"
-                        : "text-gray-800 hover:bg-pink-50 hover:text-pink-600"
+                        ? "text-primary bg-pink-50"
+                        : "text-gray-800 hover:bg-pink-50 hover:text-primary"
                     } transition-colors duration-200`}
                     onClick={() => setIsMenuOpen(false)}
                   >
@@ -339,7 +339,7 @@ const ProfessionalNavbar = () => {
                     <Link
                       key={category.path}
                       to={category.path}
-                      className="block py-1 text-gray-600 hover:text-pink-600"
+                      className="block py-1 text-gray-600 hover:text-primary"
                       onClick={() => setIsMenuOpen(false)}
                     >
                       {category.name}
@@ -350,7 +350,7 @@ const ProfessionalNavbar = () => {
               <div className="border-t mt-4 pt-4">
                 <Link
                   to="/cart"
-                  className="flex items-center px-6 py-3 text-gray-800 hover:bg-pink-50 hover:text-pink-600 transition-colors duration-200"
+                  className="flex items-center px-6 py-3 text-gray-800 hover:bg-pink-50 hover:text-primary transition-colors duration-200"
                   onClick={() => setIsMenuOpen(false)}
                 >
                   <RiShoppingCart2Line className="w-5 h-5 mr-3" />
@@ -384,7 +384,7 @@ const ProfessionalNavbar = () => {
               <SearchBar />
               <button
                 onClick={toggleSearch}
-                className="mt-2 text-gray-600 hover:text-pink-600 flex items-center justify-center w-full"
+                className="mt-2 text-gray-600 hover:text-primary flex items-center justify-center w-full"
               >
                 <RiCloseLine className="w-4 h-4 mr-2" />
                 Close

@@ -187,13 +187,13 @@ const AdminSignup = () => {
                 <h2 className="text-3xl sm:text-4xl font-extrabold text-gray-900 tracking-tight">
                   Admin Signup
                 </h2>
-                <p className="text-pink-600 mt-2 text-sm sm:text-base">
+                <p className="text-secondary mt-2 text-sm sm:text-base">
                   {showVerificationOptions ? 'Choose Verification Method' : 'Create your Admin Account'}
                 </p>
               </div>
 
               {error && (
-                <div className="bg-red-50 border border-red-200 text-red-600 px-3 py-2 sm:px-4 sm:py-3 rounded-lg mb-4 sm:mb-6 text-center text-sm sm:text-base">
+                <div className="bg-red-50 border border-red-200 text-primary px-3 py-2 sm:px-4 sm:py-3 rounded-lg mb-4 sm:mb-6 text-center text-sm sm:text-base">
                   {error}
                 </div>
               )}
@@ -214,7 +214,7 @@ const AdminSignup = () => {
                         required
                         maxLength="10"
                         pattern="[0-9]{10}"
-                        className="w-full pl-20 pr-4 py-2 sm:py-3 text-sm sm:text-base border border-pink-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 transition duration-300"
+                        className="w-full pl-20 pr-4 py-2 sm:py-3 text-sm sm:text-base border border-red-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition duration-300"
                         value={phoneNumber}
                         onChange={(e) => {
                           const value = e.target.value.replace(/\D/g, '');
@@ -233,7 +233,7 @@ const AdminSignup = () => {
                         type="email"
                         placeholder="Email Address"
                         required
-                        className="w-full pl-10 pr-4 py-2 sm:py-3 text-sm sm:text-base border border-pink-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 transition duration-300"
+                        className="w-full pl-10 pr-4 py-2 sm:py-3 text-sm sm:text-base border border-red-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition duration-300"
                         value={emailId}
                         onChange={(e) => setEmailId(e.target.value)}
                       />
@@ -247,13 +247,13 @@ const AdminSignup = () => {
                         type={showPassword ? "text" : "password"}
                         placeholder="Password"
                         required
-                        className="w-full pl-10 pr-12 py-2 sm:py-3 text-sm sm:text-base border border-pink-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 transition duration-300"
+                        className="w-full pl-10 pr-12 py-2 sm:py-3 text-sm sm:text-base border border-red-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition duration-300"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                       />
                       <button
                         type="button"
-                        className="absolute inset-y-0 right-0 pr-3 flex items-center text-pink-400 hover:text-pink-600 transition"
+                        className="absolute inset-y-0 right-0 pr-3 flex items-center text-pink-400 hover:text-secondary transition"
                         onClick={() => setShowPassword(!showPassword)}
                       >
                         {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
@@ -264,16 +264,16 @@ const AdminSignup = () => {
                   <div className="flex flex-col sm:flex-row justify-center gap-4 sm:gap-8">
                     <button
                       onClick={() => handleVerificationMethodSelect('email')}
-                      className="flex flex-col items-center p-4 sm:p-6 border-2 border-pink-300 rounded-xl hover:border-pink-500 transition-colors"
+                      className="flex flex-col items-center p-4 sm:p-6 border-2 border-red-200 rounded-xl hover:border-primary transition-colors"
                     >
-                      <Mail size={36} className="text-pink-500 mb-2" />
+                      <Mail size={36} className="text-primary mb-2" />
                       <span className="text-gray-700 text-sm sm:text-base">Email</span>
                     </button>
                     <button
                       onClick={() => handleVerificationMethodSelect('phone')}
-                      className="flex flex-col items-center p-4 sm:p-6 border-2 border-pink-300 rounded-xl hover:border-pink-500 transition-colors"
+                      className="flex flex-col items-center p-4 sm:p-6 border-2 border-red-200 rounded-xl hover:border-primary transition-colors"
                     >
-                      <Phone size={36} className="text-pink-500 mb-2" />
+                      <Phone size={36} className="text-primary mb-2" />
                       <span className="text-gray-700 text-sm sm:text-base">Phone</span>
                     </button>
                   </div>
@@ -286,7 +286,7 @@ const AdminSignup = () => {
                           id={`otp-${index}`}
                           type="text"
                           maxLength="1"
-                          className="w-10 h-10 sm:w-12 sm:h-12 text-center text-sm sm:text-base border border-pink-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 transition duration-300"
+                          className="w-10 h-10 sm:w-12 sm:h-12 text-center text-sm sm:text-base border border-red-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition duration-300"
                           value={digit}
                           onChange={(e) => handleOtpChange(index, e.target.value)}
                         />
@@ -297,7 +297,7 @@ const AdminSignup = () => {
                       disabled={resendDisabled}
                       className={`w-full py-2 text-xs sm:text-sm ${resendDisabled 
                         ? 'text-gray-400 cursor-not-allowed' 
-                        : 'text-pink-500 hover:text-pink-600'}`}
+                        : 'text-primary hover:text-secondary'}`}
                     >
                       {resendTimer > 0 
                         ? `Resend OTP in ${resendTimer}s` 
@@ -308,7 +308,7 @@ const AdminSignup = () => {
 
                 <motion.button
                   type="button"
-                  className="w-full bg-pink-500 text-white py-2 sm:py-3 rounded-lg font-semibold text-sm sm:text-base hover:bg-pink-600 transition duration-300 transform active:scale-95"
+                  className="w-full bg-primary text-white py-2 sm:py-3 rounded-lg font-semibold text-sm sm:text-base hover:bg-secondary transition duration-300 transform active:scale-95"
                   whileTap={{ scale: 0.95 }}
                   onClick={verificationMethod ? handleVerifyOtp : handleSignup}
                 >
@@ -318,7 +318,7 @@ const AdminSignup = () => {
                 <div className="text-center mt-4">
                   <p className="text-gray-600 text-sm sm:text-base">
                     Already a seller?{' '}
-                    <Link to="/seller/login" className="text-pink-500 hover:text-pink-600 font-semibold">
+                    <Link to="/seller/login" className="text-primary hover:text-secondary font-semibold">
                       Login here
                     </Link>
                   </p>

@@ -95,7 +95,7 @@ const SearchBar = () => {
           aria-label="Search products"
           placeholder="Search gifts for your loved ones..."
           className="w-full px-4 py-3 pl-10 pr-10 border-2 border-pink-200 rounded-full 
-                     focus:outline-none focus:ring-2 focus:ring-pink-500 
+                     focus:outline-none focus:ring-2 focus:ring-primary 
                      transition-all duration-300 ease-in-out placeholder:text-gray-400"
           value={inputValue}
           onChange={handleInputChange}
@@ -107,7 +107,7 @@ const SearchBar = () => {
             onClick={clearSearch}
             aria-label="Clear search"
             className="absolute right-3 top-1/2 -translate-y-1/2 
-                       text-pink-400 hover:text-pink-600 transition-colors"
+                       text-pink-400 hover:text-primary transition-colors"
           >
             <X className="h-5 w-5" />
           </button>
@@ -118,7 +118,7 @@ const SearchBar = () => {
         <div className="absolute z-50 w-full mt-2 bg-white shadow-lg rounded-xl overflow-hidden border border-gray-100">
           <div className="max-h-96 overflow-y-auto">
             {isLoading ? (
-              <div className="p-6 text-center text-pink-500 flex items-center justify-center space-x-2">
+              <div className="p-6 text-center text-primary flex items-center justify-center space-x-2">
                 <Loader className="h-5 w-5 animate-spin" />
                 <span>Searching for products...</span>
               </div>
@@ -141,10 +141,10 @@ const SearchBar = () => {
                         />
                       </div>
                       <div className="ml-4 flex-1 min-w-0">
-                        <h3 className="font-medium text-gray-900 truncate group-hover:text-pink-600 transition-colors">
+                        <h3 className="font-medium text-gray-900 truncate group-hover:text-primary transition-colors">
                           {result.name}
                         </h3>
-                        <p className="text-pink-600 font-medium mt-1">
+                        <p className="text-primary font-medium mt-1">
                           ${typeof result.price === 'number' ? result.price.toFixed(2) : result.price}
                         </p>
                         <span className="text-xs text-gray-500 capitalize mt-1 block">
