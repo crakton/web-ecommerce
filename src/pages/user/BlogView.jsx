@@ -1,6 +1,6 @@
 import React from "react";
 import { useParams } from "react-router-dom";
-import blogs from "../constants/blogData";
+import blogs from "../../blogData";
 
 const BlogView = () => {
   const { id } = useParams();
