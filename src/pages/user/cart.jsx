@@ -18,8 +18,8 @@ const ShoppingCartPage = () => {
           <div className="p-4 flex flex-col md:flex-row items-center justify-between">
             <h1 className="text-2xl font-bold text-gray-800">Shopping Cart</h1>
             <Link
-              to="/HomePage"
-              className="flex items-center space-x-2 text-pink-600 hover:text-pink-800 transition-colors mt-4 md:mt-0"
+              to="/store"
+              className="flex items-center space-x-2 text-primary transition-colors mt-4 md:mt-0"
             >
               <FontAwesomeIcon icon={faArrowLeft} className="mr-2" />
               Continue Shopping

@@ -50,11 +50,11 @@ export default function SignUp() {
         >
           <div className="p-8">
             <div className="text-center mb-8">
-              <h2 className="text-4xl font-extrabold text-gray-900 mx-5 tracking-tight">
+              <h2 className="text-xl font-extrabold text-gray-900 mx-5 tracking-tight">
                 Create Your Account
               </h2>
-              <p className="text-pink-600 mt-2">
-                Join Mera Bestie
+              <p className="text-primary mt-2">
+                Zang Global
               </p>
             </div>
 
@@ -68,13 +68,13 @@ export default function SignUp() {
               {/* Name Input */}
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <User className="text-pink-400" />
+                  <User className="text-primary" />
                 </div>
                 <input
                   type="text"
                   placeholder="Full Name"
                   required
-                  className="w-full pl-10 pr-4 py-3 border border-pink-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 transition duration-300"
+                  className="w-full pl-10 pr-4 py-3 border border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition duration-300"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                 />
@@ -83,13 +83,13 @@ export default function SignUp() {
               {/* Email Input */}
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Mail className="text-pink-400" />
+                  <Mail className="text-primary" />
                 </div>
                 <input
                   type="email"
                   placeholder="Email Address"
                   required
-                  className="w-full pl-10 pr-4 py-3 border border-pink-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 transition duration-300"
+                  className="w-full pl-10 pr-4 py-3 border border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition duration-300"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
@@ -98,13 +98,13 @@ export default function SignUp() {
               {/* Mobile Input */}
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Phone className="text-pink-400" />
+                  <Phone className="text-primary" />
                 </div>
                 <input
                   type="tel"
                   placeholder="Mobile Number"
                   required
-                  className="w-full pl-10 pr-4 py-3 border border-pink-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 transition duration-300"
+                  className="w-full pl-10 pr-4 py-3 border border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition duration-300"
                   value={mobile}
                   onChange={(e) => setMobile(e.target.value)}
                 />
@@ -113,19 +113,19 @@ export default function SignUp() {
               {/* Password Input */}
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Lock className="text-pink-400" />
+                  <Lock className="text-primary" />
                 </div>
                 <input
                   type={showPassword ? "text" : "password"}
                   placeholder="Password"
                   required
-                  className="w-full pl-10 pr-12 py-3 border border-pink-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 transition duration-300"
+                  className="w-full pl-10 pr-12 py-3 border border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition duration-300"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
                 <button
                   type="button"
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-pink-400 hover:text-pink-600 transition"
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-primary hover:text-primary transition"
                   onClick={() => setShowPassword(!showPassword)}
                 >
                   {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
@@ -135,13 +135,13 @@ export default function SignUp() {
               {/* Confirm Password Input */}
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Lock className="text-pink-400" />
+                  <Lock className="text-primary" />
                 </div>
                 <input
                   type="password"
                   placeholder="Confirm Password"
                   required
-                  className="w-full pl-10 pr-4 py-3 border border-pink-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 transition duration-300"
+                  className="w-full pl-10 pr-4 py-3 border border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition duration-300"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                 />
@@ -150,7 +150,7 @@ export default function SignUp() {
               {/* Submit Button */}
               <motion.button
                 type="submit"
-                className="w-full bg-pink-500 text-white py-3 rounded-lg font-semibold hover:bg-pink-600 transition duration-300 transform active:scale-95"
+                className="w-full bg-primary text-white py-3 rounded-lg font-semibold hover:bg-primary transition duration-300 transform active:scale-95"
                 whileTap={{ scale: 0.95 }}
               >
                 Create Account
@@ -160,7 +160,7 @@ export default function SignUp() {
             <div className="mt-6 text-center">
               <p className="text-gray-600 text-sm">
                 Already have an account? 
-                <a href="/login" className="text-pink-600 hover:text-pink-800 ml-2 font-semibold">
+                <a href="/login" className="text-primary hover:text-pink-800 ml-2 font-semibold">
                   Log In
                 </a>
               </p>

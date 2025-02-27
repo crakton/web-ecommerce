@@ -120,7 +120,7 @@ const ProfessionalNavbar = () => {
   };
 
   const navLinks = [
-    { path: "/HomePage", name: "HOME", icon: RiHome2Line },
+    { path: "/store", name: "HOME", icon: RiHome2Line },
     { path: "/shop", name: "SHOP", icon: RiStore2Line },
     { path: "/Contact", name: "CONTACT", icon: RiPhoneLine },
   ];
@@ -163,7 +163,7 @@ const ProfessionalNavbar = () => {
 
             {/* Logo */}
             <Link
-              to="/HomePage"
+              to="/store"
               className="text-2xl flex items-center hover:opacity-80 transition mx-auto lg:mx-0"
             >
               <span className="font-['Bodoni_MT'] font-bold text-2xl sm:text-3xl md:text-4xl text-primary">

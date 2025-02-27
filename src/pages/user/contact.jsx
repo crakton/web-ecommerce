@@ -54,7 +54,7 @@ const ContactUs = () => {
     <>
     <SEOComponent/>
     <Navbar className='z-0 mb-auto' />
-    <div className="bg-gradient-to-br from-pink-50 to-blue-50 min-h-screen mt-16">
+    <div className="bg-gradient-to-br from-slate-200 to-blue-50 min-h-screen mt-16">
       
       <div className="container mx-auto px-4 py-16">
         {showSuccess && (
@@ -100,7 +100,7 @@ const ContactUs = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <h1 className="text-5xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-600">
+          <h1 className="text-5xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue">
             Contact Us
           </h1>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
@@ -118,10 +118,10 @@ const ContactUs = () => {
             className="bg-white rounded-3xl p-8 shadow-2xl"
           >
             <div className="flex items-center mb-6">
-              <FaPaperPlane className="text-pink-500 mr-4 text-3xl" />
-              <h2 className="text-3xl font-bold text-gray-800">Send a Message</h2>
+              <FaPaperPlane className="text-blue mr-4 text-3xl" />
+              <h2 className="text-2xl font-bold text-gray-800">Send a Message</h2>
             </div>
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-3">
               <div>
                 <label className="block text-gray-700 font-medium mb-2">Name</label>
                 <input
@@ -130,8 +130,8 @@ const ContactUs = () => {
                   value={formData.name}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-500 transition-all duration-300"
-                  placeholder="Your Name"
+                  className="w-full p-2 border border-gray-300 rounded-md focus:outline-none placeholder:text-xs focus:ring-2 focus:ring-primary transition-all duration-300"
+                  placeholder="Full Name"
                 />
               </div>
               <div>
@@ -142,7 +142,7 @@ const ContactUs = () => {
                   value={formData.email}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-500 transition-all duration-300"
+                  className="w-full p-2 border border-gray-300 rounded-md placeholder:text-xs text-sm focus:outline-none focus:ring-2 focus:ring-blue transition-all duration-300"
                   placeholder="you@example.com"
                 />
               </div>
@@ -154,7 +154,7 @@ const ContactUs = () => {
                   onChange={handleChange}
                   required
                   rows="4"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-500 transition-all duration-300"
+                  className="w-full p-3 border border-gray-300 rounded-md placeholder:text-xs text-sm focus:outline-none focus:ring-2 focus:ring-blue transition-all duration-300"
                   placeholder="Your message here..."
                 ></textarea>
               </div>
@@ -162,7 +162,7 @@ const ContactUs = () => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 type="submit"
-                className="w-full bg-gradient-to-r from-pink-500 to-purple-600 text-white py-4 rounded-xl font-semibold hover:from-pink-600 hover:to-purple-700 transition-all duration-300 shadow-lg"
+                className="w-full bg-gradient-to-r from-primary to-blue text-white py-3 rounded-md font-semibold hover:from-blue  hover:to-primary transition-all duration-300 shadow-lg"
               >
                 Send Message
               </motion.button>
@@ -174,27 +174,27 @@ const ContactUs = () => {
             initial={{ x: 50, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="bg-white rounded-3xl p-8 shadow-2xl flex flex-col justify-between"
+            className="bg-white rounded-md rounded p-3 shadow-2xl flex flex-col justify-between"
           >
             <div>
               <div className="flex items-center mb-6">
-                <FaMapMarkerAlt className="text-pink-500 mr-4 text-3xl" />
-                <h2 className="text-3xl font-bold text-gray-800">Our Location</h2>
+                <FaMapMarkerAlt className="text-blue mr-4 text-3xl" />
+                <h2 className="md:text-2xl text-lg font-bold text-gray-800">Our Location</h2>
               </div>
               <div className="space-y-6 mb-8">
                 {[
                   { 
-                    icon: <FaPhone className="text-pink-500 text-2xl" />, 
+                    icon: <FaPhone className="text-blue text-lg" />, 
                     title: "Phone", 
                     detail: "+1 (555) 123-4567" 
                   },
                   { 
-                    icon: <FaEnvelope className="text-pink-500 text-2xl" />, 
+                    icon: <FaEnvelope className="text-blue text-2xl" />, 
                     title: "Email", 
                     detail: "support@merabestie.com" 
                   },
                   { 
-                    icon: <FaMapMarkerAlt className="text-pink-500 text-2xl" />, 
+                    icon: <FaMapMarkerAlt className="text-blue text-2xl" />, 
                     title: "Address", 
                     detail: "123 Gift Street, Creative Quarter, NY 10001" 
                   }
@@ -202,7 +202,7 @@ const ContactUs = () => {
                   <motion.div 
                     key={index}
                     whileHover={{ scale: 1.05 }}
-                    className="flex items-center space-x-4 bg-pink-50 p-4 rounded-xl"
+                    className="flex items-center space-x-4 bg-slate-200 p-4 rounded-xl"
                   >
                     <div className="p-3 bg-white rounded-full shadow-md">
                       {contact.icon}
@@ -236,10 +236,10 @@ const ContactUs = () => {
           transition={{ duration: 0.6, delay: 0.4 }}
           className="text-center mt-16 max-w-3xl mx-auto"
         >
-          <h2 className="text-4xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-pink-500 to-purple-600">
+          <h2 className="text-2xl font-bold mb-4 text-primary ">
             Let's Create Something Amazing Together
           </h2>
-          <p className="text-xl text-gray-600">
+          <p className="text-md text-gray-600">
             Whether you have a question, feedback, or just want to say hello, 
             we're always excited to hear from you. Your thoughts matter to us.
           </p>

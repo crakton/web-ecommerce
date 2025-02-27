@@ -29,7 +29,7 @@ const ScrollProgress = () => {
         left: 0,
         width: `${scrollProgress}%`,
         height: '4px',
-        backgroundColor: '#ec4899',
+        backgroundColor: '#2e3192',
         transition: 'width 0.3s ease-out',
         zIndex: 1000,
       }}
@@ -197,7 +197,7 @@ const HomePage = () => {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-500"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
       </div>
     );
   }
