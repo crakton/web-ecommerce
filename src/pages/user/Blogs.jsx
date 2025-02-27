@@ -5,13 +5,12 @@ import React from "react";
 
 const Blogs = () =>{
     return(
-        <main>
-
-            <div>
-                <p>
-                    Hello world
-                </p>
-            </div>
-        </main>
+        <div className="bg-red-500 h-screen w-screen">
+            <p>
+                Hllo
+            </p>
+        </div>
     )
 }
+
+export default Blogs

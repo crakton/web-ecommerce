@@ -93,10 +93,10 @@ const LandingPage = () => {
         </p>
         <div className="flex flex-wrap gap-5 justify-center mt-6">
           {whyUs.map((item, index) => (
-            <div className="bg-white md:p-6 p-4
-             text-background font-bold rounded-md gap-4 border border-background flex items-center flex-col shadow-md w-60 text-center" key={index}>
+            <div className="bg-white md:p-4 p-4
+             text-background font-bold rounded-md gap-4 border border-background flex items-center flex-col shadow-md md:w-40 w-60 text-center" key={index}>
                 <FaCheckCircle size={35} />
-                <p className="text-center text-xs md:text-xl">
+                <p className="text-center text-xs md:text-lg">
 
               {item.title}
                 </p>
