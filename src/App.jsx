@@ -40,7 +40,7 @@ function App() {
           <Routes>
 
             <Route path="/" element={<LandingPage />} />
-            {/* <Route path="/blogs" element={Blogs} /> */}
+            <Route path="/blogs" element={<Blogs />} />
             <Route path="/store" element={<HomePage />} />
             <Route path="/about" element={<About />} />
             <Route path="/shop" element={<Shop />} />

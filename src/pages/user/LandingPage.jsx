@@ -5,7 +5,7 @@ import { whyUs } from "../../constants";
 import { FaCheckCircle, FaFacebook, FaInstagram, FaTwitter } from "react-icons/fa";
 import { TbCircleChevronsDown } from "react-icons/tb";
 import { FiMenu, FiX } from "react-icons/fi";
-const Navbar = () => {
+export const LandingNavbar = () => {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   
     return (
@@ -72,7 +72,7 @@ const Counter = ({ value }) => {
 const LandingPage = () => {
   return (
     <main className="md:px-2">
-      <Navbar />
+      <LandingNavbar />
 
       {/* Welcome */}
       <section id="welcome" className=" h-screen flex flex-col md:flex-row items-center justify-around bg-background p-10">
