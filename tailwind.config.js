@@ -6,12 +6,13 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: "#2e3192",  // Replace with your actual color
-        secondary: "#eddb17",
-        accent: "#your-accent-color",
-        background: "#032f6c",
-        blue:"#0186ff",
-        text: "#your-text-color",
+        primary: "#2e3192",  // Deep blue
+        secondary: "#eddb17", // Bright yellow
+        background: "#032f6c", // Dark navy blue
+        accent: "#ff9800",  // Warm orange
+        mutedPrimary: "#5a5fb5", // Softer primary
+        mutedSecondary: "#f8e89a", // Softer yellow
+        neutralGray: "#d1d5db", // Soft gray
       },
     },
   },

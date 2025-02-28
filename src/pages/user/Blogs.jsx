@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import blogs from "../../blogData";
 import BlogCard from "../../components/user/BlogCard";
+import Navbar from "../../components/user/navbar/LandingNavBar";
 const Blogs = () => {
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -18,11 +19,12 @@ const Blogs = () => {
 
   return (
     <div className="bg-gray-100 min-h-screen">
+      <Navbar />
      
           {/* Blog Heading */}
-          <div>
+          <div >
           <div className="py-20 text-center">
-            <h1 className="text-4xl font-bold">Blogs</h1>
+            <h1 className="text-3xl font-bold">Blogs</h1>
             <p className="mt-4 text-lg">
               Explore insights, gain skills, and fuel your learning journey here.
             </p>
@@ -31,7 +33,7 @@ const Blogs = () => {
   
       {/* <BlogHeader blogs={blogs} /> */}
       <div className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold text-center mb-8">Our Blogs</h1>
+        <h1 className="text-2xl font-bold text-center mb-8">Our Blogs</h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {filterBlogs().map((blog, index) => (
             <BlogCard key={index} blog={blog} />

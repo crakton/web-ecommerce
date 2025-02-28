@@ -4,6 +4,8 @@ import { motion } from "framer-motion";
 import Navbar from "../../components/user/navbar/navbar";
 import { Helmet } from "react-helmet";
 import SEOComponent from "../../components/SEO/SEOComponent";
+import { useLocation } from "react-router-dom";
+
 
 const ContactUs = () => {
   const [formData, setFormData] = useState({
@@ -11,7 +13,7 @@ const ContactUs = () => {
     email: "", 
     message: "",
   });
-
+const pathLocation = useLocation()
   const [showSuccess, setShowSuccess] = useState(false);
 
   const handleChange = (e) => {
@@ -53,8 +55,11 @@ const ContactUs = () => {
   return (
     <>
     <SEOComponent/>
+    <div className={`${pathLocation.pathname ==="/"?"hidden":""}`}>
+
     <Navbar className='z-0 mb-auto' />
-    <div className="bg-gradient-to-br from-slate-200 to-blue-50 min-h-screen mt-16">
+    </div>
+    <div className="bg-mutedSecondary to-blue-50 min-h-screen mt-16">
       
       <div className="container mx-auto px-4 py-16">
         {showSuccess && (
@@ -100,7 +105,7 @@ const ContactUs = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <h1 className="text-5xl font-bold mb-4 text-transparent bg-clip-text bg-gradient-to-r from-primary to-blue">
+          <h1 className="text-5xl font-bold mb-4 text-primary">
             Contact Us
           </h1>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
@@ -162,7 +167,7 @@ const ContactUs = () => {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 type="submit"
-                className="w-full bg-gradient-to-r from-primary to-blue text-white py-3 rounded-md font-semibold hover:from-blue  hover:to-primary transition-all duration-300 shadow-lg"
+                className="w-full bg-gradient-to-r from-primary to-mutedPrimary text-white py-3 rounded-md font-semibold hover:from-mutedPrimary  hover:to-primary transition-all duration-300 shadow-lg"
               >
                 Send Message
               </motion.button>
@@ -184,19 +189,19 @@ const ContactUs = () => {
               <div className="space-y-6 mb-8">
                 {[
                   { 
-                    icon: <FaPhone className="text-blue text-lg" />, 
+                    icon: <FaPhone className="text-mutedPrimary text-lg" />, 
                     title: "Phone", 
                     detail: "+1 (555) 123-4567" 
                   },
                   { 
-                    icon: <FaEnvelope className="text-blue text-2xl" />, 
+                    icon: <FaEnvelope className="text-blue text-xl" />, 
                     title: "Email", 
                     detail: "support@merabestie.com" 
                   },
                   { 
-                    icon: <FaMapMarkerAlt className="text-blue text-2xl" />, 
+                    icon: <FaMapMarkerAlt className="text-blue text-xl" />, 
                     title: "Address", 
-                    detail: "123 Gift Street, Creative Quarter, NY 10001" 
+                    detail: "Lion Gate Plaza, 4 Bukuru Expy, opposite ITF Centre for Excellence, Jos 930103, Plateau" 
                   }
                 ].map((contact, index) => (
                   <motion.div 
@@ -209,7 +214,7 @@ const ContactUs = () => {
                     </div>
                     <div>
                       <h3 className="font-semibold text-gray-800">{contact.title}</h3>
-                      <p className="text-gray-600">{contact.detail}</p>
+                      <p className="text-gray-600 text-sm">{contact.detail}</p>
                     </div>
                   </motion.div>
                 ))}
@@ -218,7 +223,8 @@ const ContactUs = () => {
 
             <div className="mt-6 overflow-hidden rounded-2xl shadow-lg">
               <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3022.982135436!2d-73.98823922400567!3d40.748817671411!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c259a9b3117469%3A0xd134e199a405a163!2sEmpire%20State%20Building!5e0!3m2!1sen!2sus!4v1698352689255!5m2!1sen!2sus"
+    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3924.2285908540373!2d8.8659732!3d9.8143948!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x105375241bf0e419%3A0x6eba855dd96b8057!2sLion%20Gate%20Plaza%2C%204%20Bukuru%20Expy%2C%20opposite%20ITF%20Centre%20for%20Excellence%2C%20Jos%20930103%2C%20Plateau!5e0!3m2!1sen!2sng!4v1709136589456!5m2!1sen!2sng" 
+               
                 width="100%"
                 height="300"
                 style={{ border: 0 }}
