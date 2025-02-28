@@ -1,4 +1,6 @@
-import img from "../src/assets/images/IMG-20250211-WA0000.jpg";
+import img from "../src/assets/images/zang.jpg";
+import img2 from "../src/assets/images/review.jpg";
+
 
 
 const blogs = [
@@ -18,7 +20,7 @@ const blogs = [
       "Explore how our mission drives us to empower individuals and businesses through cutting-edge tools, innovative solutions, and unparalleled support.",
     content:
       "At the heart of everything we do is our mission: to empower individuals and businesses by providing them with the tools and resources they need to thrive. Whether through innovative products, comprehensive solutions, or exceptional customer support, we strive to exceed expectations. We believe that success comes from understanding the unique needs of our customers and delivering tailored solutions that drive meaningful results. Our mission extends beyond the bottom line; it's about creating long-term value and positive impact in every market we serve.",
-    image: img,
+    image: img2,
   },
   {
     id: 3,

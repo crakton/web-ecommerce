@@ -113,7 +113,7 @@ const Achievements = () => {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.6 }}
         >
-          <Counter value={3} />
+          <Counter value={30} />
           <p>Offices Nationwide</p>
         </motion.div>
       </div>
@@ -133,14 +133,12 @@ const Achievements = () => {
           <TypeAnimation
       sequence={[
         // Same substring at the start will only be typed out once, initially
-        'We produce food for Mice',
+        'We produce  for Power Banks',
         1000, // wait 1s before replacing "Mice" with "Hamsters"
-        'We produce food for Hamsters',
+        'We produce  for Power USB cables',
         1000,
-        'We produce food for Guinea Pigs',
+        'We offer  for IT training',
         1000,
-        'We produce food for Chinchillas',
-        1000
       ]}
       wrapper="span"
       speed={50}
@@ -149,7 +147,7 @@ const Achievements = () => {
     />
           <Link className="bg-secondary text-primary px-6 py-2 rounded-md font-bold w-fit mx-auto md:mx-0" to="/store">Shop Now</Link>
         </div>
-        <img src={sampleImg} className="w-[40%] h-[80%] rounded-lg shadow-lg" alt="company" />
+        <img src={sampleImg} className="md:w-[40%] md:h-[80%] rounded-lg shadow-lg" alt="company" />
       </section>
 
       {/* why us */}
@@ -169,7 +167,7 @@ const Achievements = () => {
 <Achievements />
 
       {/* Carousel */}
-      <section>
+      <section className=" bg-primary">
         <Carousel />
         <ContactUs />
       </section>
