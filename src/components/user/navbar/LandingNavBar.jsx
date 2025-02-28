@@ -1,32 +1,20 @@
-import { useState, useEffect } from "react";
+import { useState} from "react";
 import { Link } from "react-router-dom";
 import { TbCircleChevronsDown } from "react-icons/tb";
 import { FiMenu, FiX } from "react-icons/fi";
+import logo from "../../../assets/images/logoYellow.png"
+
 
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  // Function to close the menu when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (!event.target.closest("#mobile-menu") && !event.target.closest("#menu-button")) {
-        setMobileMenuOpen(false);
-      }
-    };
-
-    if (mobileMenuOpen) {
-      document.addEventListener("click", handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener("click", handleClickOutside);
-    };
-  }, [mobileMenuOpen]);
+ 
 
   return (
     <nav className="fixed top-0 left-0 w-full bg-primary shadow-lg py-4 px-5 flex justify-between items-center z-50">
       <div className="text-secondary text-xl md:text-2xl font-bold flex items-center gap-2">
-        <TbCircleChevronsDown size={30} /> Zamda Global
+        <img src={logo} width={70 } height={50} alt="image" />
+        
       </div>
 
       <div className="hidden text-secondary md:flex space-x-6">
@@ -39,7 +27,7 @@ const Navbar = () => {
 
       <button 
         id="menu-button"
-        onClick={() =>{ setMobileMenuOpen(!mobileMenuOpen); console.log("Hello")}}
+        onClick={() =>{ setMobileMenuOpen(!mobileMenuOpen); console.log("Hello",mobileMenuOpen)}}
         className="md:hidden text-secondary text-3xl"
       >
         {mobileMenuOpen ? <FiX /> : <FiMenu />}

@@ -202,9 +202,11 @@ const HomePage = () => {
     );
   }
 
+  console.log(products)
+
   return (
     <div className="bg-gray-50 min-h-screen">
-      <SEOComponent />
+      {/* <SEOComponent /> */}
       <ScrollProgress />
       <Navbar />
       <main className="pb-8">

@@ -9,6 +9,8 @@ import { whyUs } from "../../constants";
 import Navbar from "../../components/user/navbar/LandingNavBar";
 import { motion } from "framer-motion";
 import ContactUs from "./contact";
+import logo2 from "../../assets/images/logoYellow.png"
+
 import {TypeAnimation} from "react-type-animation"
 
 
@@ -137,12 +139,12 @@ const Achievements = () => {
         1000, // wait 1s before replacing "Mice" with "Hamsters"
         'We produce  for Power USB cables',
         1000,
-        'We offer  for IT training',
+        'We offer Services for IT training',
         1000,
       ]}
       wrapper="span"
       speed={50}
-      style={{ fontSize: '2em', display: 'inline-block' }}
+      className="text-mutedSecondary font-bold text-2xl"
       repeat={Infinity}
     />
           <Link className="bg-secondary text-primary px-6 py-2 rounded-md font-bold w-fit mx-auto md:mx-0" to="/store">Shop Now</Link>
@@ -174,7 +176,7 @@ const Achievements = () => {
       <footer className="bg-background text-secondary py-8 px-6 md:px-16">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center">
           <div className="text-center md:text-left">
-            <h2 className="text-2xl font-bold">Zamda Global</h2>
+            <img src={logo2} height={60} width={150} />
             <p className="text-sm mt-2">Bringing Power to Your Hands</p>
           </div>
           <div className="text-center my-4 md:my-0">
@@ -194,7 +196,7 @@ const Achievements = () => {
           </div>
         </div>
         <div className="text-center text-sm mt-6 border-t border-secondary pt-4">
-          &copy; {new Date().getFullYear()} Zamda Global. All Rights Reserved.
+          &copy; {new Date().getFullYear()} Zang Global. All Rights Reserved.
         </div>
       </footer>
     </main>
