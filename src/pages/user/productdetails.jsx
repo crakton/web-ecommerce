@@ -19,12 +19,18 @@ import Navbar from '../../components/user/navbar/navbar';
 import { Helmet } from "react-helmet";
 import ReviewSection from './ReviewSection';
 import ReviewForm from './ReviewForm';
+import { fetchProductById } from '../../config/api';
+
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
+import { prepareStackTrace } from 'postcss/lib/css-syntax-error';
+
 
 const ProductDetail = () => {
   const { productId } = useParams();
   const navigate = useNavigate();
   const [product, setProduct] = useState(null);
-  const [selectedImage, setSelectedImage] = useState(''); // Added state for selected image
+  const [selectedImage, setSelectedImage] = useState(0); // Added state for selected image
   const [quantity, setQuantity] = useState(1);
   const [showLoginDialog, setShowLoginDialog] = useState(false);
   const [showAddAnimation, setShowAddAnimation] = useState(false);
@@ -36,35 +42,21 @@ const ProductDetail = () => {
   const [rating, setRating] = useState(1);
   const [reviews, setReviews] = useState([]);
   const [showReviewForm, setShowReviewForm] = useState(false);
-
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
+    if (!productId) return; // Prevent API call if productId is invalid
+
     const fetchProduct = async () => {
       try {
-        const response = await fetch(`https://api.merabestie.com/:productId`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ productId }),
-        });
-        const data = await response.json();
-        if (data.success) {
-          // Duplicate the same image multiple times
-          let images
-          if(!Array.isArray(data.product.img))
-            images = Array(3).fill(data.product.img);
-          else
-            images = data.product.img
-          setProduct({ ...data.product, images });
-          setSelectedImage(images[0]); // Initialize with first image
-          calculateStockStatus(data.product);
-          fetchRelatedProducts(data.product.category);
-          updateRecentlyViewed(data.product);
-        }
+        const data = await fetchProductById(productId);
+        setProduct(data)
+        calculateStockStatus(product);
       } catch (error) {
-        console.error('Error fetching product:', error);
+      } finally {
+  
       }
     };
+
     fetchProduct();
   }, [productId]);
   
@@ -208,29 +200,42 @@ const ProductDetail = () => {
 
   // Added handlers for image navigation
   const handlePreviousImage = () => {
-    const currentIndex = product.images.indexOf(selectedImage);
-    const prevIndex = (currentIndex - 1 + product.images.length) % product.images.length;
-    setSelectedImage(product.images[prevIndex]);
+    const currentIndex = product.img.indexOf(selectedImage);
+    const prevIndex = (currentIndex - 1 + product.img.length) % product.img.length;
+    setSelectedImage(product.img[prevIndex]);
   };
 
   const handleNextImage = () => {
-    const currentIndex = product.images.indexOf(selectedImage);
-    const nextIndex = (currentIndex + 1) % product.images.length;
-    setSelectedImage(product.images[nextIndex]);
+    const currentIndex = product.img.indexOf(selectedImage);
+    const nextIndex = (currentIndex + 1) % product.img.length;
+    setSelectedImage(product.img[nextIndex]);
   };
 
   if (!product) {
     return (
-      <div className="min-h-screen bg-pink-50 flex items-center justify-center">
-        <motion.div 
-          animate={{ rotate: 360 }}
-          transition={{ 
-            repeat: Infinity, 
-            duration: 1, 
-            ease: "linear" 
-          }}
-          className="w-16 h-16 border-4 border-t-4 border-t-pink-600 border-pink-200 rounded-full"
-        />
+      <div className="min-h-screen bg-mutedSecondary flex flex-col items-center justify-center">
+        <div className="w-full max-w-6xl mx-auto p-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {/* Skeleton for Image */}
+            <div className="bg-gray-50 flex flex-col items-center">
+              <Skeleton height={500} width="100%" />
+              <div className="flex mt-4 space-x-2">
+                {[...Array(4)].map((_, index) => (
+                  <Skeleton key={index} width={64} height={64} />
+                ))}
+              </div>
+            </div>
+  
+            {/* Skeleton for Product Info */}
+            <div className="p-6 space-y-4">
+              <Skeleton height={40} width="80%" />
+              <Skeleton height={30} width="60%" />
+              <Skeleton height={20} width="30%" />
+              <Skeleton height={50} width="100%" />
+              <Skeleton height={50} width="100%" />
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
@@ -238,12 +243,12 @@ const ProductDetail = () => {
   return (
     <>
       <Helmet>
-        <title>{product.name} | Mera Bestie</title>
+        <title>{product.name} </title>
       </Helmet>
       <Navbar />
       <ToastContainer />
   
-      <div className="min-h-screen bg-gradient-to-b from-pink-50 to-white py-12 mt-16">
+      <div className="min-h-screen bg-mutedSecondary py-12 mt-16">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 50 }}
@@ -260,7 +265,7 @@ const ProductDetail = () => {
                   className="w-full max-w-md h-[500px] relative"
                 >
                   <img
-                    src={selectedImage}
+                    src={product.img[selectedImage]}
                     alt={product.name}
                     className="absolute inset-0 w-full h-full object-contain rounded-2xl shadow-lg"
                   />
@@ -280,10 +285,10 @@ const ProductDetail = () => {
                   </button>
                 </motion.div>
                 <div className="flex mt-4 space-x-2">
-                  {product.images.map((img, index) => (
+                  {product.img.map((img, index) => (
                     <button
                       key={index}
-                      onClick={() => setSelectedImage(img)}
+                      onClick={() => setSelectedImage(index)}
                       className={`w-16 h-16 object-cover rounded ${
                         selectedImage === img
                           ? "border-2 border-pink-600"
@@ -304,11 +309,11 @@ const ProductDetail = () => {
               <div className="p-8 space-y-6">
                 {/* Header Section with Name and Price */}
                 <div className="border-b border-pink-100 pb-6">
-                  <h1 className="text-4xl font-bold text-gray-900 mb-3 bg-gradient-to-r from-pink-600 to-rose-500 text-transparent bg-clip-text">
+                  <h1 className="text-xl font-bold text-gray-900 mb-1 bg-gradient-to-r from-pink-600 to-rose-500 text-transparent bg-clip-text">
                     {product.name}
                   </h1>
                   <div className="flex items-center justify-between">
-                    <p className="text-3xl font-semibold text-pink-600">
+                    <p className="text-lg font-semibold text-pink-600">
                       ₹{product.price}
                     </p>
                     <div className="flex items-center space-x-2 bg-yellow-50 px-3 py-1 rounded-full">
@@ -318,6 +323,11 @@ const ProductDetail = () => {
                       </span>
                     </div>
                   </div>
+                  <p>
+                    {
+                      product.description
+                    }
+                    </p>
                 </div>
   
                 {/* Stock Status Section */}
@@ -353,7 +363,7 @@ const ProductDetail = () => {
                 <div className="flex items-center space-x-4 py-6">
                   <button
                     onClick={() => handleQuantityChange(-1)}
-                    className="bg-pink-600 text-white px-4 py-2 rounded-full disabled:opacity-50"
+                    className="bg-primary text-white px-4 py-2 rounded-full disabled:opacity-50"
                     disabled={quantity <= 1}
                   >
                     <FaMinus />
@@ -374,7 +384,7 @@ const ProductDetail = () => {
                 <div className="flex justify-center">
                   <button
                     onClick={handleAddToCart}
-                    className="w-full py-3 bg-pink-600 text-white font-semibold rounded-lg hover:bg-pink-700"
+                    className="w-full py-3 bg-primary text-white font-semibold rounded-lg hover:bg-mutedPrimary"
                   >
                     Add to Cart
                   </button>

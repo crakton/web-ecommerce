@@ -6,6 +6,7 @@ import SEOComponent from "../../components/SEO/SEOComponent"
 import CartItems from "../../components/user/cart/Cartitems";
 import { fetchProducts } from '../../config/api';
 import { useCart } from '../../hooks';
+import ProductCard from '../../components/user/ProductCard';
 
 const ScrollProgress = () => {
   const [scrollProgress, setScrollProgress] = useState(0);
@@ -53,48 +54,7 @@ const Carousel = ({ slides, currentSlide }) => (
   </div>
 );
 
-const ProductCard = ({ product, onAddToCart, onBuyNow }) => {
-  const memorizedUserId = useMemo(() => sessionStorage.getItem('userId'), []);
-  
-  return (
-    <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 relative">
-      <div className="relative">
-        <img
-          src={product.img[0] || "/fallback-image.jpg"}
-          alt={product.name}
-          className="w-full h-36 sm:h-48 object-cover transition-transform duration-300 hover:scale-105"
-        />
-        <button className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-0 hover:bg-opacity-75 text-white opacity-0 hover:opacity-100 transition-all duration-300">
-          Shop Now
-        </button>
-      </div>
-      <div className="p-3 sm:p-4">
-        <h3 className="font-medium text-sm sm:text-base mb-1 sm:mb-2 line-clamp-2">{product.name}</h3>
-        <div className="flex items-center justify-between mt-1 sm:mt-2">
-          <span className="text-xs sm:text-sm font-semibold">₹{product.price}</span>
-          <div className="flex items-center">
-            <FaStar className="text-yellow-400 text-xs sm:text-sm mr-1" />
-            <span className="text-xs sm:text-sm">{product.rating}</span>
-          </div>
-        </div>
-        <div className="mt-2 sm:mt-4 flex flex-col sm:flex-row gap-2 sm:space-x-4">
-          <button
-            className="w-full sm:w-auto bg-indigo-500 text-white px-2 sm:px-3 py-1 rounded-md text-xs sm:text-sm hover:bg-indigo-600 transition-colors"
-            onClick={() => onAddToCart(product.productId, +1)}
-          >
-            Add to Cart
-          </button>
-          <button
-            className="w-full sm:w-auto bg-orange-500 text-white px-2 sm:px-3 py-1 rounded-md text-xs sm:text-sm hover:bg-orange-600 transition-colors"
-            onClick={() => onBuyNow(product)}
-          >
-            Buy Now
-          </button>
-        </div>
-      </div>
-    </div>
-  );
-};
+
 
 const ProductGrid = ({ title, products }) => {
   const { handleCheckout, sideCartVisible, setSideCartVisible, addToCart } = useCart();
@@ -149,8 +109,6 @@ const ProductGrid = ({ title, products }) => {
           <ProductCard
             key={index}
             product={product}
-            onAddToCart={addToCart}
-            onBuyNow={handleBuyNow}
           />
         ))}
       </div>

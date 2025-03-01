@@ -13,7 +13,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import Navbar from "../../components/user/navbar/navbar";
 import SEOComponent from "../../components/SEO/SEOComponent";
-import ProductCard from "../../components/user/ProdductCard";
+import ProductCard from "../../components/user/ProductCard";
 const axios = require('axios');
 const Shop = ({ category }) => {
   // State declarations

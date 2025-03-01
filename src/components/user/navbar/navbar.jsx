@@ -20,6 +20,8 @@ import {
 import SearchBar from "./SearchBar";
 import { useCart } from "../../../hooks";
 
+import logo from "../../../assets/images/logoBlue.png"
+
 const ProfessionalNavbar = () => {
   const { fetchCart, memorizedCartItemCount } = useCart();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -156,7 +158,7 @@ const ProfessionalNavbar = () => {
             {/* Mobile Menu Toggle */}
             <button
               onClick={toggleMenu}
-              className="lg:hidden text-black hover:text-primary transition"
+              className="sm:hidden text-black hover:text-primary transition"
             >
               <RiMenu3Line className="w-6 h-6" />
             </button>
@@ -164,11 +166,9 @@ const ProfessionalNavbar = () => {
             {/* Logo */}
             <Link
               to="/store"
-              className="text-2xl flex items-center hover:opacity-80 transition mx-auto lg:mx-0"
+              className="text-2xl flex items-center transition mx-auto lg:mx-0"
             >
-              <span className="font-['Bodoni_MT'] font-bold text-2xl sm:text-3xl md:text-4xl text-primary">
-                Zang store
-              </span>
+              <img src={logo} width={120}/>
             </Link>
 
             {/* Desktop Navigation - Hidden on mobile */}
@@ -177,7 +177,7 @@ const ProfessionalNavbar = () => {
                 <div
                   key={path}
                   className="relative group"
-                  onMouseEnter={() => name === "SHOP" && setIsShopDropdownOpen(true)}
+                  onClick={() => name === "SHOP" && setIsShopDropdownOpen(true)}
                   onMouseLeave={() => name === "SHOP" && setIsShopDropdownOpen(false)}
                 >
                   <button className={`px-4 py-2 mx-2 flex items-center ${

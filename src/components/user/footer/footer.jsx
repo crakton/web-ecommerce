@@ -1,12 +1,13 @@
 import React from 'react';
 import { FaFacebook, FaTwitter, FaInstagram } from 'react-icons/fa';
+import logo from "../../../assets/images/logoBlue.png"
 
 const Footer = () => {
   return (
-    <footer className="bg-white py-16 text-black border-t border-primary">
+    <footer className="bg-mutedSecondary py-16 text-black border-t border-primary">
       <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 px-6">
         <div className="flex flex-col items-center md:items-start">
-          <h4 className="text-3xl font-extrabold text-primary mb-4">Zang store</h4>
+          <img src={logo} alt='Logo' width={160} />
           <p className="text-gray-600 mb-4 text-center md:text-left">
             Your one-stop destination for thoughtful and unique gifts.
           </p>
@@ -34,7 +35,7 @@ const Footer = () => {
         </div>
       </div>
       <div className="mt-8 text-center text-gray-500 text-sm">
-        <p>&copy; {new Date().getFullYear()} Zang s=tech store. All rights reserved.</p>
+        <p>&copy; {new Date().getFullYear()} Zang Global Tech store. All rights reserved.</p>
       </div>
     </footer>
   );
