@@ -59,7 +59,7 @@ const pathLocation = useLocation()
 
     <Navbar className='z-0 mb-auto' />
     </div>
-    <div className="bg-mutedSecondary to-blue-50 min-h-screen mt-16">
+    <div id="contact" className="bg-mutedSecondary  to-blue-50 min-h-screen mt-16">
       
       <div className="container mx-auto px-4 py-16">
         {showSuccess && (
@@ -120,7 +120,7 @@ const pathLocation = useLocation()
             initial={{ x: -50, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="bg-white rounded-3xl p-8 shadow-2xl"
+            className="bg-white rounded-lg p-8 shadow-2xl"
           >
             <div className="flex items-center mb-6">
               <FaPaperPlane className="text-blue mr-4 text-3xl" />
@@ -206,14 +206,15 @@ const pathLocation = useLocation()
                 ].map((contact, index) => (
                   <motion.div 
                     key={index}
-                    whileHover={{ scale: 1.05 }}
+                    whileHover={{ scale: 1.009
+                     }}
                     className="flex items-center space-x-4 bg-slate-200 p-4 rounded-xl"
                   >
                     <div className="p-3 bg-white rounded-full shadow-md">
                       {contact.icon}
                     </div>
                     <div>
-                      <h3 className="font-semibold text-gray-800">{contact.title}</h3>
+                      <h3 className="font-semibold text-neutralGraay">{contact.title}</h3>
                       <p className="text-gray-600 text-sm">{contact.detail}</p>
                     </div>
                   </motion.div>
@@ -221,7 +222,7 @@ const pathLocation = useLocation()
               </div>
             </div>
 
-            <div className="mt-6 overflow-hidden rounded-2xl shadow-lg">
+            <div className="mt-6 overflow-hidden rounded-lg shadow-lg">
               <iframe
     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3924.2285908540373!2d8.8659732!3d9.8143948!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x105375241bf0e419%3A0x6eba855dd96b8057!2sLion%20Gate%20Plaza%2C%204%20Bukuru%20Expy%2C%20opposite%20ITF%20Centre%20for%20Excellence%2C%20Jos%20930103%2C%20Plateau!5e0!3m2!1sen!2sng!4v1709136589456!5m2!1sen!2sng" 
                

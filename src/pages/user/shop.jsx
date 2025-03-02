@@ -30,22 +30,22 @@ const Shop = ({ category }) => {
 
   const categories = [
     {
-      name: "Fashion",
+      name: "Usb Cables",
       img: "https://cdn.igp.com/f_auto,q_auto,t_pnopt12prodlp/products/p-modish-fashion-necklace-25631-m.jpg",
       description: "Trendy accessories for every occasion",
     },
     {
-      name: "Gift Items",
+      name: "Mini Power Banks",
       img: "http://images4.fanpop.com/image/photos/22200000/Christmas-gifts-christmas-gifts-22231235-2048-2048.jpg",
       description: "Perfect presents for your loved ones",
     },
     {
-      name: "Greeting Cards",
+      name: "Power Banks",
       img: "https://tse2.mm.bing.net/th?id=OIP.uyi1Q5l2H8Zf9APJQplJfQHaEK&pid=Api&P=0&h=180",
       description: "Express your feelings with our cards",
     },
     {
-      name: "Stationery",
+      name: "Mobile Phones",
       img: "https://image.shutterstock.com/image-photo/image-250nw-1350723956.jpg",
       description: "High-quality stationery for all your needs",
     },
@@ -144,12 +144,12 @@ const Shop = ({ category }) => {
 
   return (
     <>
-      <SEOComponent/>
+      {/* <SEOComponent/> */}
 
-      <div className="bg-gradient-to-r from-indigo-500 via-pink-500 to-pink-500 text-white">
+      <div className="bg-gradient-to-r from-indigo-500 mt-[100px] via-pink-500 to-pink-500 text-white">
         <div className="max-w-7xl mx-auto px-4 py-3">
           <p className="text-sm sm:text-base font-medium text-center animate-pulse">
-            USE CODE OFF10 TO GET FLAT 10% OFF ON ORDERS ABOVE ₹499 | FREE
+            USE CODE OFF10 TO GET FLAT 10% OFF ON ORDERS ABOVE ₦499 | FREE
             SHIPPING | COD AVAILABLE
           </p>
         </div>

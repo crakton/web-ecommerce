@@ -124,7 +124,7 @@ const ProfessionalNavbar = () => {
   const navLinks = [
     { path: "/store", name: "HOME", icon: RiHome2Line },
     { path: "/shop", name: "SHOP", icon: RiStore2Line },
-    { path: "/Contact", name: "CONTACT", icon: RiPhoneLine },
+    { path: "/contact", name: "CONTACT", icon: RiPhoneLine },
   ];
 
   const categories = [
@@ -165,7 +165,7 @@ const ProfessionalNavbar = () => {
 
             {/* Logo */}
             <Link
-              to="/store"
+              to="/"
               className="text-2xl flex items-center transition mx-auto lg:mx-0"
             >
               <img src={logo} width={120}/>
@@ -180,12 +180,12 @@ const ProfessionalNavbar = () => {
                   onClick={() => name === "SHOP" && setIsShopDropdownOpen(true)}
                   onMouseLeave={() => name === "SHOP" && setIsShopDropdownOpen(false)}
                 >
-                  <button className={`px-4 py-2 mx-2 flex items-center ${
+                  <Link to={path} className={`px-4 py-2 mx-2 flex items-center ${
                     isActive(path) ? "text-primary" : "text-gray-800 hover:text-primary"
                   } transition-colors duration-200`}>
                     <Icon className="w-5 h-5 mr-2" />
                     {name}
-                  </button>
+                  </Link >
                   {name === "SHOP" && isShopDropdownOpen && (
                     <div className="absolute mt-2 bg-white border rounded-lg shadow-lg">
                       {categories.map((category) => (

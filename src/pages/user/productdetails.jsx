@@ -4,13 +4,12 @@ import { motion } from 'framer-motion';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Link } from 'react-router-dom';
-import { 
-  FaMinus, 
-  FaPlus, 
-  FaShoppingCart, 
-  FaStar, 
+import {
+  FaMinus,
+  FaPlus,
+  FaStar,
   FaTag,
-  FaBox, 
+  FaBox,
   FaShippingFast,
   FaWarehouse,
   FaExclamationCircle
@@ -50,16 +49,17 @@ const ProductDetail = () => {
       try {
         const data = await fetchProductById(productId);
         setProduct(data)
-        calculateStockStatus(product);
+        calculateStockStatus(data);
+        console.log(product)
       } catch (error) {
       } finally {
-  
+
       }
     };
 
     fetchProduct();
   }, [productId]);
-  
+
   useEffect(() => {
     const fetchReviews = async () => {
       try {
@@ -73,7 +73,8 @@ const ProductDetail = () => {
         const data = await response.json();
         if (data.message === 'No reviews found for this product') {
           setReviews([]);
-        } else {
+        }
+        else {
           setReviews(data.reviews || []);
         }
       } catch (error) {
@@ -85,9 +86,14 @@ const ProductDetail = () => {
 
 
   const calculateStockStatus = (productData) => {
+    if(!productData){
+      console.log("no stock details")
+    }
+
     const stock = productData.inStockValue || 0;
     let status = '';
     let color = '';
+    console.log(productData)
 
     if (stock > 50) {
       status = 'In Stock';
@@ -113,7 +119,7 @@ const ProductDetail = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({category}),
+        body: JSON.stringify({ category }),
       });
       const data = await response.json();
       if (data.success) {
@@ -144,21 +150,21 @@ const ProductDetail = () => {
 
   const handleAddToCart = async () => {
     const userId = sessionStorage.getItem('userId');
-    
 
-  
+
+
     if (stockStatus?.stock === 0) {
       toast.error('Sorry, this product is currently out of stock');
       return;
     }
-  
+
     // Ensure quantity is a number before sending to the server
     const validQuantity = parseInt(quantity, 10); // Ensure `quantity` is a number
     if (isNaN(validQuantity) || validQuantity <= 0) {
       toast.error('Invalid quantity');
       return;
     }
-  
+
     try {
       const response = await fetch('https://api.merabestie.com/cart/addtocart', {
         method: 'POST',
@@ -171,9 +177,9 @@ const ProductDetail = () => {
           quantity: validQuantity, // Send valid quantity here
         }),
       });
-  
+
       const data = await response.json();
-  
+
       if (data.success) {
         toast.success(
           <div className="flex items-center cursor-pointer" onClick={() => navigate('/cart')}>
@@ -188,7 +194,7 @@ const ProductDetail = () => {
       console.error('Error adding to cart:', error);
     }
   };
-  
+
 
   const handleWriteReview = () => {
     setShowReviewDialog(true);
@@ -198,22 +204,22 @@ const ProductDetail = () => {
     setShowReviewDialog(false);
   };
 
-  // Added handlers for image navigation
   const handlePreviousImage = () => {
-    const currentIndex = product.img.indexOf(selectedImage);
-    const prevIndex = (currentIndex - 1 + product.img.length) % product.img.length;
-    setSelectedImage(product.img[prevIndex]);
-  };
+  setSelectedImage((prevIndex) =>
+    prevIndex === 0 ? product.img.length - 1 : prevIndex - 1
+  );
+};
 
-  const handleNextImage = () => {
-    const currentIndex = product.img.indexOf(selectedImage);
-    const nextIndex = (currentIndex + 1) % product.img.length;
-    setSelectedImage(product.img[nextIndex]);
-  };
+const handleNextImage = () => {
+  setSelectedImage((prevIndex) =>
+    prevIndex === product.img.length - 1 ? 0 : prevIndex + 1
+  );
+};
+
 
   if (!product) {
     return (
-      <div className="min-h-screen bg-mutedSecondary flex flex-col items-center justify-center">
+      <div className="min-h-screen flex flex-col items-center justify-center">
         <div className="w-full max-w-6xl mx-auto p-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Skeleton for Image */}
@@ -225,7 +231,7 @@ const ProductDetail = () => {
                 ))}
               </div>
             </div>
-  
+
             {/* Skeleton for Product Info */}
             <div className="p-6 space-y-4">
               <Skeleton height={40} width="80%" />
@@ -247,27 +253,27 @@ const ProductDetail = () => {
       </Helmet>
       <Navbar />
       <ToastContainer />
-  
-      <div className="min-h-screen bg-mutedSecondary py-12 mt-16">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      <div className="min-h-screen  mt-[100px] ">
+        <div className="max-w-6xl mx-auto px-1 sm:px-3 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="bg-white rounded-3xl shadow-2xl overflow-hidden border border-pink-100"
+            className=" rounded-xl shadow-2xl overflow-hidden border border-pink-100"
           >
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
               {/* Product Image Section */}
-              <div className="p-8 bg-gray-50 flex flex-col items-center">
+              <div className="p-2 bg-gray-50 flex flex-col items-center">
                 <motion.div
                   whileHover={{ scale: 1.05 }}
                   transition={{ type: "spring", stiffness: 300 }}
-                  className="w-full max-w-md h-[500px] relative"
+                  className="w-full max-w-md h-[250px] relative"
                 >
                   <img
                     src={product.img[selectedImage]}
                     alt={product.name}
-                    className="absolute inset-0 w-full h-full object-contain rounded-2xl shadow-lg"
+                    className="absolute inset-0 w-full h-full object-contain rounded-xl shadow-lg"
                   />
                   {/* Previous Button */}
                   <button
@@ -284,62 +290,53 @@ const ProductDetail = () => {
                     &#8594;
                   </button>
                 </motion.div>
-                <div className="flex mt-4 space-x-2">
+                <div className="flex mt-1  space-x-2">
                   {product.img.map((img, index) => (
                     <button
                       key={index}
                       onClick={() => setSelectedImage(index)}
-                      className={`w-16 h-16 object-cover rounded ${
-                        selectedImage === img
-                          ? "border-2 border-pink-600"
-                          : "border"
-                      } cursor-pointer`}
+                      className={`w-16 h-16 object-cover rounded ${selectedImage === index ? "border-2 border-pink-600" : "border"} cursor-pointer`}
                     >
-                      <img
-                        src={img}
-                        alt={`${product.name} ${index + 1}`}
-                        className="w-full h-full object-cover rounded"
-                      />
+                      <img src={img} alt={`${product.name} ${index + 1}`} className="w-full h-full object-cover rounded" />
                     </button>
                   ))}
                 </div>
               </div>
-  
+
               {/* Product Info Section */}
-              <div className="p-8 space-y-6">
+              <div className="p-2 space-y-2q">
                 {/* Header Section with Name and Price */}
                 <div className="border-b border-pink-100 pb-6">
-                  <h1 className="text-xl font-bold text-gray-900 mb-1 bg-gradient-to-r from-pink-600 to-rose-500 text-transparent bg-clip-text">
+                  <h1 className="text-lg font-bold text-gray-900 mb-1 bg-gradient-to-r from-pink-600 to-rose-500 text-transparent bg-clip-text">
                     {product.name}
                   </h1>
                   <div className="flex items-center justify-between">
-                    <p className="text-lg font-semibold text-pink-600">
-                      ₹{product.price}
+                    <p className="text-lg font-semibold">
+                      ₦{product.price}
                     </p>
                     <div className="flex items-center space-x-2 bg-yellow-50 px-3 py-1 rounded-full">
                       <FaStar className="text-yellow-400" />
                       <span className="font-medium text-yellow-600">
                         {product.rating}
-                      </span>
-                    </div>
+                      </span>                    </div>
                   </div>
-                  <p>
+                  <p className='text-xs'>
                     {
                       product.description
                     }
-                    </p>
+                  </p>
                 </div>
-  
+
                 {/* Stock Status Section */}
                 <div className="flex items-center space-x-4">
                   <div
-                    className={`px-4 py-2 rounded-full flex items-center ${stockStatus?.color}`}
+                    className={`px-4 py-2 rounded-md flex items-center ${stockStatus?.color}`}
                   >
                     {stockStatus?.status === "In Stock" && (
                       <FaBox className="mr-2 text-green-600" />
                     )}
                     {stockStatus?.status === "Low Stock" && (
-                      <FaExclamationCircle className="mr-2 text-yellow-600" />
+                      <FaExclamationCircle className="mr-2 text-orange-200" />
                     )}
                     {stockStatus?.status === "Very Low Stock" && (
                       <FaWarehouse className="mr-2 text-orange-600" />
@@ -348,22 +345,22 @@ const ProductDetail = () => {
                       <FaShippingFast className="mr-2 text-red-600" />
                     )}
                     <span className="font-medium">
-                      {stockStatus?.status} ({stockStatus?.stock} available)
+                      {stockStatus?.status} {stockStatus?.stock} available
                     </span>
                   </div>
-                  <div className="bg-pink-50 px-4 py-2 rounded-full flex items-center">
-                    <FaTag className="mr-2 text-pink-500" />
-                    <span className="font-medium text-pink-600">
+                  <div className="bg-mutedSecondary px-4 py-2 rounded-md flex items-center">
+                    <FaTag className="mr-2 text" />
+                    <span className="font-medium text-primary">
                       {product.category}
                     </span>
                   </div>
                 </div>
-  
+
                 {/* Quantity Section */}
                 <div className="flex items-center space-x-4 py-6">
                   <button
                     onClick={() => handleQuantityChange(-1)}
-                    className="bg-primary text-white px-4 py-2 rounded-full disabled:opacity-50"
+                    className="bg-primary text-white px-4 py-2 rounded-md disabled:opacity-50"
                     disabled={quantity <= 1}
                   >
                     <FaMinus />
@@ -373,26 +370,33 @@ const ProductDetail = () => {
                   </span>
                   <button
                     onClick={() => handleQuantityChange(1)}
-                    className="bg-pink-600 text-white px-4 py-2 rounded-full disabled:opacity-50"
+                    className="bg-pink-600 text-white px-4 py-2 rounded-md disabled:opacity-50"
                     disabled={quantity >= stockStatus?.stock}
                   >
                     <FaPlus />
                   </button>
                 </div>
-  
+
                 {/* Add to Cart Button */}
-                <div className="flex justify-center">
+                <div className="flex justify-evenly items-center w-full gap-5">
                   <button
                     onClick={handleAddToCart}
-                    className="w-full py-3 bg-primary text-white font-semibold rounded-lg hover:bg-mutedPrimary"
+                    className="w-1/2 py-2 bg-primary text-sm text-white font-semibold rounded-lg hover:bg-mutedPrimary"
                   >
                     Add to Cart
+                  </button>
+
+                  <button
+                    onClick={handleAddToCart}
+                    className="w-1/2 py-2 bg-primary text-sm text-white font-semibold rounded-lg hover:bg-mutedPrimary"
+                  >
+                    Buy now
                   </button>
                 </div>
               </div>
             </div>
           </motion.div>
-  
+
           {/* Reviews Section */}
           <ReviewSection
             reviews={reviews}
@@ -441,6 +445,6 @@ const ProductDetail = () => {
       </div>
     </>
   );
-}  
+}
 
 export default ProductDetail;

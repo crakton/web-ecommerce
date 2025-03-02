@@ -13,16 +13,16 @@ const Navbar = () => {
   return (
     <nav className="fixed top-0 left-0 w-full bg-primary shadow-lg py-4 px-5 flex justify-between items-center z-50">
       <div className="text-secondary text-xl md:text-2xl font-bold flex items-center gap-2">
-        <img src={logo} width={70 } height={50} alt="image" />
+        <img src={logo} width={100 } height={50} alt="image" />
         
       </div>
 
       <div className="hidden text-secondary md:flex space-x-6">
-        <a href="#welcome" className="hover:text-background">Home</a>
-        <a href="#why-us" className="hover:text-background">Why Us</a>
-        <a href="#achievements" className="hover:text-background">Achievements</a>
-        <a href="#contact" className="hover:text-background">Contact</a>
-        <Link to="/blogs" className="hover:text-background">Blog</Link>
+        <a href="/#welcome" className="hover:text-mutedSecondary">Home</a>
+        <a href="/#why-us" className="hover:text-mutedSecondary">Why Us</a>
+        <a href="/#achievements" className="hover:text-mutedSecondary">Achievements</a>
+        <a href="/#contact" className="hover:text-mutedSecondary">Contact</a>
+        <Link to="/blogs" className="hover:text-mutedSecondary">Blog</Link>
       </div>
 
       <button 
