@@ -1,15 +1,13 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import Footer from "../../components/user/footer/footer";
 import Navbar from "../../components/user/navbar/navbar";
-import { FaStar } from "react-icons/fa";
-import SEOComponent from "../../components/SEO/SEOComponent"
 import CartItems from "../../components/user/cart/Cartitems";
 import { fetchProducts } from '../../config/api';
-import { useCart } from '../../hooks';
 import ProductCard from '../../components/user/ProductCard';
 
 const ScrollProgress = () => {
   const [scrollProgress, setScrollProgress] = useState(0);
+
 
   useEffect(() => {
     const updateScrollProgress = () => {
@@ -57,21 +55,21 @@ const Carousel = ({ slides, currentSlide }) => (
 
 
 const ProductGrid = ({ title, products }) => {
-  const { handleCheckout, sideCartVisible, setSideCartVisible, addToCart } = useCart();
+  const [visible,setVisible] = useState(false)
+
   const memorizedUserId = useMemo(() => sessionStorage.getItem("userId"), []);
 
   const handleBuyNow = async (product) => {
-    await addToCart(memorizedUserId, product.productId, +1);
     window.location.href = "/cart";
   };
 
   return (
     <section className="container mx-auto px-4 py-6 sm:py-8">
-      {sideCartVisible && (
+      {visible && (
         <div className="fixed bottom-0 right-0 top-0 w-full sm:w-96 h-full bg-white shadow-2xl z-50 transform transition-all duration-300 ease-in-out">
           <div className="relative h-full flex flex-col">
             <button 
-              onClick={() => setSideCartVisible(false)}
+              onClick={() => visible(false)}
               className="absolute top-4 right-4 z-10 bg-red-500 text-white p-2 rounded-full hover:bg-red-600 transition-colors"
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">

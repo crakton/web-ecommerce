@@ -1,45 +1,40 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Eye, EyeOff, Lock, Mail } from 'lucide-react';
-import { FaGoogle, FaFacebook, FaTwitter } from 'react-icons/fa';
-import { useAuth } from '../../context/AuthContext';
 import Navbar from "../../components/user/navbar/navbar";
 import { motion } from 'framer-motion';
 import { Helmet } from "react-helmet";
 import SEOComponent from "../../components/SEO/SEOComponent";
+import { useDispatch, useSelector } from "react-redux";
+import { loginUser } from "../../redux/slice/authSlice";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
-  const { login,user } = useAuth();
-  const [emailOrMobile, setEmailOrMobile] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState('');
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  useEffect(()=>{
+  // Get authentication state from Redux
+  const { user, loading, error } = useSelector((state) => state.auth);
 
-    if (user?.isAuthenticated){
-      window.location.replace("/")
-      return;
-    }
-  },[user])
-
-  const handleSubmit = useCallback(async (e) => {
+  // Handle login submission
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log({emailOrMobile,password});
-    
     try {
-      const response = await login(emailOrMobile, password);
-      if (response === 'Login successful') {
-        window.location.href = '/cart';
-      }
-    } catch (error) {
-      setError('Login failed. Please check your credentials.');
-      console.error('Login failed:', error);
+      const resultAction = await dispatch(loginUser({ email, password })).unwrap();
+      console.log("Login successful", resultAction);
+
+      // Redirect to Dashboard or Home after login
+      navigate("/store"); 
+    } catch (err) {
+      console.error("Login failed:", err);
     }
-  },[emailOrMobile, login, password]);
+  };
 
   return (
     <>
-      <SEOComponent/>
+      <SEOComponent />
       <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4 mt-16">
         <div className="fixed top-0 left-0 w-full z-50">
           <Navbar />
@@ -49,20 +44,14 @@ const Login = () => {
           className="w-full max-w-md bg-white shadow-2xl rounded-2xl overflow-hidden"
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ 
-            duration: 0.5,
-            type: "spring",
-            stiffness: 120
-          }}
+          transition={{ duration: 0.5, type: "spring", stiffness: 120 }}
         >
           <div className="p-8">
             <div className="text-center mb-8">
               <h2 className="text-4xl font-extrabold text-gray-900 tracking-tight">
                 Welcome Back
               </h2>
-              <p className="text-primary mt-2">
-                Log in to Zang Global
-              </p>
+              <p className="text-primary mt-2">Log in to Zang Global</p>
             </div>
 
             {error && (
@@ -72,7 +61,7 @@ const Login = () => {
             )}
 
             <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Email/Mobile Input */}
+              {/* Email Input */}
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <Mail className="text-primary" />
@@ -82,8 +71,8 @@ const Login = () => {
                   placeholder="Email or Mobile Number"
                   required
                   className="w-full pl-10 pr-4 py-3 border border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 transition duration-300"
-                  value={emailOrMobile}
-                  onChange={(e) => setEmailOrMobile(e.target.value)}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                 />
               </div>
 
@@ -114,10 +103,12 @@ const Login = () => {
                 type="submit"
                 className="w-full bg-primary text-white py-3 rounded-lg font-semibold hover:bg-primary transition duration-300 transform active:scale-95"
                 whileTap={{ scale: 0.95 }}
+                disabled={loading}
               >
-                Log In
+                {loading ? "Please wait..." : "Log in"}
               </motion.button>
             </form>
+
             <div className="mt-6 text-center">
               <p className="text-gray-600 text-sm">
                 Don't have an account? 

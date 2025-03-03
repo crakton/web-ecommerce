@@ -18,12 +18,12 @@ import {
   RiLoginBoxLine,
 } from "react-icons/ri";
 import SearchBar from "./SearchBar";
-import { useCart } from "../../../hooks";
-
+import { useSelector,useDispatch } from "react-redux";
 import logo from "../../../assets/images/logoBlue.png"
+import { fetchUser,logout } from "../../../redux/slice/authSlice";
+import { fetchCart } from "../../../redux/slice/cartSlice";
 
 const ProfessionalNavbar = () => {
-  const { fetchCart, memorizedCartItemCount } = useCart();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -34,15 +34,33 @@ const ProfessionalNavbar = () => {
   const location = useLocation();
   const searchRef = useRef();
   const profileRef = useRef();
-
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
   const toggleProfileMenu = () => setIsProfileMenuOpen(!isProfileMenuOpen);
   const toggleSearch = () => setIsSearchOpen(!isSearchOpen);
   const isActive = (path) => location.pathname === path;
 
+
+
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.auth.user);
+  const token = useSelector((state) => state.auth.token);
+
   useEffect(() => {
-    fetchCart();
-  }, [fetchCart]);
+    if (token) {
+      dispatch(fetchUser()); // Fetch user data when logged in
+    }
+  }, [dispatch, token]);
+
+
+  const carts= useSelector((state) => state.cart.items);
+
+  useEffect(() => {
+    if (user) {
+      dispatch(fetchCart(user.userId));
+    }
+  }, [dispatch, user]);
+
+const cartItems = carts.cart.productsInCart
 
   // Handle click outside for search and profile menu
   useEffect(() => {
@@ -58,41 +76,7 @@ const ProfessionalNavbar = () => {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
-  const fetchUserName = useCallback(async () => {
-    const userId = sessionStorage.getItem("userId");
-    if (userId) {
-      try {
-        const response = await fetch(`https://api.merabestie.com/auth/user/${userId}`);
-        const data = await response.json();
-        setUserName(data.name);
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      }
-    }
-  },[]);
-  // Handle scroll, resize, and user data
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 50);
-    
-    const handleResize = () => {
-      if (window.innerWidth >= 1024) {
-        setIsMenuOpen(false);
-        setIsSearchOpen(false);
-      }
-    };
 
-   
-
-    window.addEventListener("scroll", handleScroll);
-    window.addEventListener("resize", handleResize);
-    fetchUserName();
-    handleResize(); // Initial check
-
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-      window.removeEventListener("resize", handleResize);
-    };
-  }, [fetchUserName]);
   
   const handleLogout = () => {
     sessionStorage.removeItem("userId");
@@ -218,11 +202,12 @@ const ProfessionalNavbar = () => {
               >
                 <RiShoppingCart2Line className="w-5 h-5" />
                 <span className="ml-2 hidden md:block">Cart</span>
-                {memorizedCartItemCount > 0 && (
-                  <span className="absolute top-[-8px] right-[-8px] bg-primary text-white rounded-full text-xs w-4 h-4 flex items-center justify-center">
-                    {memorizedCartItemCount}
+                <span>
+               {
+                user?cartItems.length:""
+               }
                   </span>
-                )}
+               
               </Link>
 
               <div className="relative" ref={profileRef}>
@@ -232,7 +217,7 @@ const ProfessionalNavbar = () => {
                 >
                   <RiUser3Line className="w-5 h-5" />
                   <span className="ml-2 hidden md:block">
-                    {userId ? `Hi, ${userName}` : "Profile"}
+                    {user ? `Hi, ${user.name}` : "Profile"}
                   </span>
                 </button>
 
@@ -243,7 +228,7 @@ const ProfessionalNavbar = () => {
                     exit={{ opacity: 0, y: -10 }}
                     className="absolute right-0 mt-2 w-48 bg-white border rounded-lg shadow-lg overflow-hidden z-50"
                   >
-                    {userId ? (
+                    {user ? (
                       <>
                         <Link
                           to="/orders"
@@ -354,7 +339,7 @@ const ProfessionalNavbar = () => {
                   onClick={() => setIsMenuOpen(false)}
                 >
                   <RiShoppingCart2Line className="w-5 h-5 mr-3" />
-                  Cart {memorizedCartItemCount > 0 && `(${memorizedCartItemCount})`}
+                0
                 </Link>
               </div>
             </div>

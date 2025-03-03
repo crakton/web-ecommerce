@@ -23,6 +23,8 @@ import { fetchProductById } from '../../config/api';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 import { prepareStackTrace } from 'postcss/lib/css-syntax-error';
+import { useDispatch, useSelector } from 'react-redux';
+import AddToCart from '../../components/user/addToCart';
 
 
 const ProductDetail = () => {
@@ -42,6 +44,9 @@ const ProductDetail = () => {
   const [reviews, setReviews] = useState([]);
   const [showReviewForm, setShowReviewForm] = useState(false);
   const [loading, setLoading] = useState(true);
+
+
+
   useEffect(() => {
     if (!productId) return; // Prevent API call if productId is invalid
 
@@ -112,23 +117,6 @@ const ProductDetail = () => {
     setStockStatus({ status, color, stock });
   };
 
-  const fetchRelatedProducts = async (category) => {
-    try {
-      const response = await fetch('https://api.merabestie.com/product/category', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ category }),
-      });
-      const data = await response.json();
-      if (data.success) {
-        setRelatedProducts(data.products.slice(0, 4));
-      }
-    } catch (error) {
-      console.error('Error fetching related products:', error);
-    }
-  };
 
   const updateRecentlyViewed = (productData) => {
     let viewedProducts = JSON.parse(localStorage.getItem('recentlyViewed')) || [];
@@ -148,52 +136,7 @@ const ProductDetail = () => {
     }
   };
 
-  const handleAddToCart = async () => {
-    const userId = sessionStorage.getItem('userId');
 
-
-
-    if (stockStatus?.stock === 0) {
-      toast.error('Sorry, this product is currently out of stock');
-      return;
-    }
-
-    // Ensure quantity is a number before sending to the server
-    const validQuantity = parseInt(quantity, 10); // Ensure `quantity` is a number
-    if (isNaN(validQuantity) || validQuantity <= 0) {
-      toast.error('Invalid quantity');
-      return;
-    }
-
-    try {
-      const response = await fetch('https://api.merabestie.com/cart/addtocart', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          userId,
-          productId,
-          quantity: validQuantity, // Send valid quantity here
-        }),
-      });
-
-      const data = await response.json();
-
-      if (data.success) {
-        toast.success(
-          <div className="flex items-center cursor-pointer" onClick={() => navigate('/cart')}>
-            Go to Cart →
-          </div>
-        );
-      } else {
-        toast.error(data.message || 'Product not saved to cart');
-      }
-    } catch (error) {
-      toast.error('Error adding product to cart');
-      console.error('Error adding to cart:', error);
-    }
-  };
 
 
   const handleWriteReview = () => {
@@ -379,15 +322,9 @@ const handleNextImage = () => {
 
                 {/* Add to Cart Button */}
                 <div className="flex justify-evenly items-center w-full gap-5">
-                  <button
-                    onClick={handleAddToCart}
-                    className="w-1/2 py-2 bg-primary text-sm text-white font-semibold rounded-lg hover:bg-mutedPrimary"
-                  >
-                    Add to Cart
-                  </button>
+                <AddToCart product={product} quantity={quantity} />
 
                   <button
-                    onClick={handleAddToCart}
                     className="w-1/2 py-2 bg-primary text-sm text-white font-semibold rounded-lg hover:bg-mutedPrimary"
                   >
                     Buy now

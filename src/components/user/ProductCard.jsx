@@ -1,8 +1,11 @@
 import React from "react";
 import { FaStar } from "react-icons/fa";
 import { Link } from "react-router-dom";
+import AddToCart from "./addToCart";
 
 const ProductCard = ({ product, onAddToCart, onBuyNow }) => {
+
+
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-transform duration-300 hover:-translate-y-1 relative">
       {/* Product Image with Overlay */}
@@ -43,12 +46,8 @@ const ProductCard = ({ product, onAddToCart, onBuyNow }) => {
 
         {/* Action Buttons */}
         <div className="mt-3 sm:mt-4 flex flex-col sm:flex-row gap-2 sm:space-x-4">
-          <button
-            className="w-full sm:w-auto bg-indigo-500 text-white px-3 py-1 rounded-md text-xs sm:text-sm hover:bg-indigo-600 focus:ring-2 focus:ring-indigo-400 transition"
-            onClick={() => onAddToCart(product.productId, 1)}
-          >
-            Add to Cart
-          </button>
+        <AddToCart product={product} quantity={1} />
+          
           <button
             className="w-full sm:w-auto bg-orange-500 text-white px-3 py-1 rounded-md text-xs sm:text-sm hover:bg-orange-600 focus:ring-2 focus:ring-orange-400 transition"
             onClick={() => onBuyNow(product)}

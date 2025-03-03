@@ -1,45 +1,51 @@
 import { useState } from "react";
 import { Eye, EyeOff, User, Mail, Phone, Lock } from 'lucide-react';
-import { useAuth } from '../../context/AuthContext';
+import { useDispatch, useSelector } from "react-redux";
+import { loginUser, registerUser } from "../../redux/slice/authSlice"; // Import Redux action
 import Navbar from "../../components/user/navbar/navbar";
 import { motion } from 'framer-motion';
 import { Helmet } from "react-helmet";
 
 export default function SignUp() {
+  const dispatch = useDispatch();
+  const { loading, error } = useSelector((state) => state.auth); // Get state from Redux
+
   const [showPassword, setShowPassword] = useState(false);
-  const { signup } = useAuth();
-  const [error, setError] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [name, setName] = useState('');
-  const [mobile, setMobile] = useState('');
+  const [phone, setPhone] = useState('');
+
+  const formData = { name, email, password, phone}
 
   const handleSubmit = async (e) => {
+    console.log(formData)
     e.preventDefault();
+
+    
+
     if (password !== confirmPassword) {
-      setError('Passwords do not match');
-      return;
+      return alert("Passwords do not match!");
     }
-    try {
-      await signup(name, email, password, mobile);
-      window.location.href = '/cart';
-    } catch (err) {
-      setError('Error signing up. Try again.');
-    }
+try {
+  
+  dispatch(registerUser(formData));
+  dispatch(loginUser(email,password))
+} catch (error) {
+  
+}
   };
+
 
   return (
     <>
-      <Helmet>
-        <title>Sign Up | Mera Bestie</title>
-      </Helmet>
       <div className="min-h-screen bg-gradient-to-br from-pink-50 to-pink-100 flex items-center justify-center p-4">
         <div className="fixed top-0 left-0 w-full z-50">
           <Navbar />
         </div>
         <motion.div 
-          className="w-full max-w-md bg-white shadow-2xl rounded-2xl overflow-hidden mt-auto"
+          className="w-full max-w-md bg-white shadow-2xl rounded-lg overflow-hidden mt-auto"
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ 
@@ -105,8 +111,8 @@ export default function SignUp() {
                   placeholder="Mobile Number"
                   required
                   className="w-full pl-10 pr-4 py-3 border border-primary rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition duration-300"
-                  value={mobile}
-                  onChange={(e) => setMobile(e.target.value)}
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
                 />
               </div>
 
@@ -150,6 +156,7 @@ export default function SignUp() {
               {/* Submit Button */}
               <motion.button
                 type="submit"
+                disabled={loading}
                 className="w-full bg-primary text-white py-3 rounded-lg font-semibold hover:bg-primary transition duration-300 transform active:scale-95"
                 whileTap={{ scale: 0.95 }}
               >

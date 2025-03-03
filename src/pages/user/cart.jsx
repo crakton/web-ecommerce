@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import CartItems from "../../components/user/cart/Cartitems";
 import RecentlyViewed from "../../components/user/cart/recentlyviewed";
@@ -7,8 +7,12 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Navbar from "../../components/user/navbar/navbar";
 import { Helmet } from "react-helmet";
 import SEOComponent from "../../components/SEO/SEOComponent";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchCart } from "../../redux/slice/cartSlice";
+
 
 const ShoppingCartPage = () => {
+
   return (
     <div className="bg-pink-50 min-h-screen">
       <SEOComponent />
