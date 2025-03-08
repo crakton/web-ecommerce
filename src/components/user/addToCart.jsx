@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { addToCart, removeFromCart } from "../../redux/slice/cartSlice";
+import { addToCart, fetchCart, removeFromCart } from "../../redux/slice/cartSlice";
 import { toast } from "react-toastify";
 import { useEffect } from "react";
 import { fetchUser } from "../../redux/slice/authSlice";
@@ -17,8 +17,10 @@ const AddToCart = ({ product }) => {
     }
   }, [dispatch, token, user]);
 
+  console.log(cart)
+
   // Check if product is already in cart
-  const isInCart = cart.some((item) => item.productId === product.productId);
+  const isInCart = cart?.cart?.productsInCart?.some((item) => item.productId === product.productId);
 
   const handleAddToCart = async () => {
     if (!user) {
@@ -28,6 +30,7 @@ const AddToCart = ({ product }) => {
 
     try {
       await dispatch(addToCart({ productId: product.productId, productQty: 1, userId: user.userId })).unwrap();
+      await dispatch(fetchCart(user?.user.Id))
       toast.success(`${product.name} added to cart!`);
     } catch (error) {
       toast.error(error || "Failed to add to cart.");
@@ -50,7 +53,7 @@ const AddToCart = ({ product }) => {
         isInCart ? "bg-gray-400 hover:bg-gray-500" : "bg-pink-600 hover:bg-pink-500"
       }`}
     >
-      {isInCart ? "Remove from Cart" : "Add to Cart"}
+      {isInCart ? "Added to Cart" : "Add to Cart"}
     </button>
   );
 };

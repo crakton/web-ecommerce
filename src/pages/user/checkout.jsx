@@ -7,17 +7,26 @@ import Navbar from '../../components/user/navbar/navbar';
 import { useLocation } from 'react-router-dom';
 import SEOComponent from '../../components/SEO/SEOComponent';
 import { API_URL, APP_DESC, APP_NAME, RAZORPAY_API } from '../../constants'
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchCart } from '../../redux/slice/cartSlice';
+import { fetchUser } from '../../redux/slice/authSlice';
+import api from '../../config/api';
 
 const Checkout = () => {
+
+  const carts = useSelector((state) => state.cart.items);
+  const user = useSelector((state) => state.auth.user);
+  const token = useSelector((state) => state.auth.token);
   const location = useLocation();
-  const total = parseFloat(location.state?.total || 0);
+  const total = parseFloat(carts?.cart?.total.toFixed(2) || 0);
   const discount = parseFloat(location.state?.discount || 0);
   const [shipping, setShipping] = useState(0)
   const [isProcessing, setIsProcessing] = useState(false);
   const navigate = useNavigate();
-  const [cartItems, setCartItems] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
+  const dispatch = useDispatch()
+
   const [address, setAddress] = useState({
     street: '',
     city: '',
@@ -45,119 +54,61 @@ const Checkout = () => {
     }
   }, []);
 
-  useEffect(() => {
-    fetchCartItems();
-  }, []);
+
+
 
   useEffect(() => {
-    if (Number(total) < 499) {
+    if (token) {
+      dispatch(fetchUser()); // Fetch user data when logged in
+    }
+  }, [dispatch, token]);
+
+
+  useEffect(() => {
+    if (user) {
+      dispatch(fetchCart(user.userId));
+    }
+  }, [dispatch, user]);
+
+  const cartItems = carts.cart.productsInCart
+
+
+
+
+
+
+
+  useEffect(() => {
+    if (total > 499) {
       setShipping(99);
     } else {
       setShipping(0);
     }
   }, [total])
 
-  const getCartItemsFromLocalStorage = () => {
-    try {
-      const localCart = localStorage.getItem('guestCart');
-      if (localCart) {
-        return JSON.parse(localCart);
-      }
-    } catch (error) {
-      console.error('Error parsing local cart:', error);
-    }
-    return [];
-  };
+
 
   const calculateTotalAmountInPaise = () => {
     const totalAmount = total + shipping; // Calculate total amount including shipping
     return Math.round(totalAmount * 100); // Convert to paise for Razorpay
   };
 
-  const fetchCartItems = async () => {
-    const userId = sessionStorage.getItem('userId');
 
-    try {
-      if (userId) {
-        // Fetch from backend if user is logged in
-        const cartResponse = await fetch(`${API_URL}/cart/get-cart`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ userId })
-        });
-        const cartData = await cartResponse.json();
-        console.log(cartData)
 
-        if (!cartData.success) {
-          setLoading(false);
-          return;
-        }
-
-        const groupedItems = cartData.cart.productsInCart.reduce((acc, item) => {
-          if (!acc[item.productId]) {
-            acc[item.productId] = {
-              productId: item.productId,
-              productQty: item.productQty
-            };
-          } else {
-            acc[item.productId].productQty += item.productQty;
-          }
-          return acc;
-        }, {});
-
-        const productPromises = Object.values(groupedItems).map(async (item) => {
-          console.log(item)
-          const productResponse = await fetch(`${API_URL}/:productId`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ productId: item.productId })
-          });
-          const productData = await productResponse.json();
-
-          if (productData.success) {
-            return {
-              ...productData.product,
-              quantity: item.productQty
-            };
-          }
-          return null;
-        });
-
-        const products = await Promise.all(productPromises);
-        setCartItems(products.filter(product => product !== null));
-      } else {
-        // Get cart items from localStorage if user is not logged in
-        const localCartItems = getCartItemsFromLocalStorage();
-
-        // Fetch product details for local cart items
-        const productPromises = localCartItems.map(async (item) => {
-          const productResponse = await fetch(`${API_URL}/:productId`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ productId: item.productId })
-          });
-          const productData = await productResponse.json();
-
-          if (productData.success) {
-            return {
-              ...productData.product,
-              quantity: item.quantity
-            };
-          }
-          return null;
-        });
-
-        const products = await Promise.all(productPromises);
-        setCartItems(products.filter(product => product !== null));
-      }
-    } catch (err) {
-      console.error('Error fetching cart items:', err);
-    } finally {
-      setLoading(false);
+  const groupedItems = cartItems.reduce((acc, item) => {
+    if (!acc[item.productId]) {
+      acc[item.productId] = {
+        productId: item.productId,
+        productQty: item.productQty
+      };
+    } else {
+      acc[item.productId].productQty += item.productQty;
     }
-  };
+    return acc;
+  }, {});
+
+
+
 
   const handleAddressChange = (e) => {
     const { name, value } = e.target;
@@ -203,7 +154,7 @@ const Checkout = () => {
 
   const payOrder = async () => {
     const userId = sessionStorage.getItem('userId');
-    if (userId) {
+    if (user.userId) {
       setIsProcessing(true);
       try {
         if (saveAddress && userId) {
@@ -223,7 +174,7 @@ const Checkout = () => {
           }
         }
         // Step 1: Create Order on Backend
-        const response = await fetch(`${API_URL}/orders/create-order`, {
+        const response = await api.post(`/orders/create-order`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ amount: calculateTotalAmountInPaise(), currency: 'INR', userId }), // Amount in paise
@@ -306,7 +257,7 @@ const Checkout = () => {
             date,
             time,
             address: Object.values(address).join(', '),
-            price: total+shipping,
+            price: total + shipping,
             productsOrdered,
             status: "Processing",
             paymentStatus: "Paid",
@@ -445,9 +396,9 @@ const Checkout = () => {
               <h2 className="text-4xl font-thin">Order Summary</h2>
             </div>
 
-            <div className="space-y-4 max-h-96 overflow-y-auto">
-              {cartItems.map((item) => (
-                <div key={item._id} className="flex justify-between items-center border-b pb-4">
+            <div className="space-y-4 max-h-96 overflow-y-auto no-scrollbar">
+              {cartItems.map((item, index) => (
+                <div key={index} className="flex justify-between items-center border-b pb-4">
                   <div className="flex items-center space-x-4">
                     <img
                       src={item.img[0] || item.img}
@@ -456,11 +407,11 @@ const Checkout = () => {
                     />
                     <div>
                       <h3 className="font-semibold text-gray-800">{item.name}</h3>
-                      <p className="text-sm text-gray-500">Qty: {item.quantity}</p>
+                      <p className="text-sm text-gray-500">Quantity: {item.quantity}</p>
                     </div>
                   </div>
                   <p className="font-medium text-gray-800 ">
-                    Rs. {(parseFloat(item.price.replace(/[^\d.]/g, '')) * item.quantity).toFixed(2)}
+                    ₦. {(item.price * item.quantity).toFixed(2)}
                   </p>
                 </div>
               ))}
@@ -469,7 +420,7 @@ const Checkout = () => {
             <div className="mt-6 space-y-4">
               <div className="flex justify-between text-gray-700">
                 <span>Subtotal</span>
-                <span className="font-semibold">Rs. {calculateSubtotal().toFixed(2)}</span>
+                <span className="font-semibold">₦. {total}</span>
               </div>
 
               {discount > 0 && (
@@ -479,7 +430,7 @@ const Checkout = () => {
                     <span>Discount ({discount}%)</span>
                   </div>
                   <span className="font-semibold text-green-600">
-                    - Rs. {calculateDiscountAmount()}
+                    - ₦ {calculateDiscountAmount()}
                   </span>
                 </div>
               )}
@@ -487,18 +438,17 @@ const Checkout = () => {
               <div className="flex justify-between text-gray-700">
                 <span>Shipping</span>
                 <span className="font-semibold text-green-600">
-                  {shipping > 0 ? `Rs. ${shipping}` : "Free"}
+                  {shipping > 0 ? `₦. ${shipping}` : "Free"}
                 </span>
               </div>
 
               <div className="flex justify-between text-xl font-bold border-t pt-4">
                 <span>Total</span>
-                <span className="font-thin tracking-widest">Rs. {total+shipping} </span>
+                <span className="font-thin tracking-widest">₦. {total + shipping} </span>
               </div>
 
               <button
                 onClick={payOrder}
-                disabled={!isAddressValid()}
                 className={`w-full flex items-center justify-center space-x-2 py-4 rounded-lg transition-all duration-300 ${isAddressValid()
                   ? 'bg-black text-white hover:bg-gray-800 hover:shadow-lg'
                   : 'bg-gray-300 cursor-not-allowed opacity-50'

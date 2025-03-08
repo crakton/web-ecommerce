@@ -16,6 +16,10 @@ import {
   Loader2,
   Image as ImageIcon,
 } from "lucide-react";
+import { useSelector,useDispatch } from "react-redux";
+import { createProduct } from "../../redux/slice/productSlice";
+
+
 
 const Sidebar = () => {
   const navigate = useNavigate();
@@ -37,6 +41,8 @@ const Sidebar = () => {
     soldStockValue: 0,
   });
   const location = useLocation();
+
+  const dispatch = useDispatch()
 
   useEffect(() => {
     const handleResize = () => {
@@ -68,21 +74,13 @@ const Sidebar = () => {
       icon: <ShoppingBag className="w-5 h-5" />,
       path: `/admin/orders/${sellerId}`,
     },
+
     {
-      name: "Complaints",
-      icon: <MessageSquare className="w-5 h-5" />,
-      path: `/admin/complaints/${sellerId}`,
-    },
-    {
-      name: "Customers",
+      name: "Users",
       icon: <Users className="w-5 h-5" />,
       path: `/admin/customers/${sellerId}`,
     },
-    {
-      name: "Calendar",
-      icon: <Calendar className="w-5 h-5" />,
-      path: `/admin/calendar/${sellerId}`,
-    },
+   
     { 
       name: "Coupons", 
       icon: <Ticket className="w-5 h-5" />, 
@@ -93,11 +91,6 @@ const Sidebar = () => {
       icon: <MessageSquare className="w-5 h-5" />,
       path: `/admin/reviews/${sellerId}`,
     },
-    {
-      name: "SEO",
-      icon: <MessageSquare className="w-5 h-5" />,
-     path: `/admin/SEO/${sellerId}`,
-    }
   ];
 
   const toggleSidebar = () => {
@@ -192,23 +185,9 @@ const Sidebar = () => {
 
   const handleSubmit = async () => {
     try {
-      if (productData.img.length === 0) {
-        setUploadStatus('Please upload at least one image');
-        return;
-      }
-
-      const response = await fetch(
-        "https://api.merabestie.com/create-product",
-        {
-          method: "POST",
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(productData),
-        }
-      );
-
-      if (response.ok) {
+      const response =  dispatch(createProduct(productData)); // Await the dispatch
+  
+      if (!response.error) { // Check if no error occurred
         setShowDialog(false);
         setProductData({
           name: "",
@@ -221,15 +200,16 @@ const Sidebar = () => {
           inStockValue: 0,
           soldStockValue: 0,
         });
+        setUploadStatus("Product created successfully!");
       } else {
-        const errorData = await response.json();
-        setUploadStatus('Error creating product: ' + errorData.message);
+        setUploadStatus("Error creating product: " + response.error.message);
       }
     } catch (error) {
       console.error("Error creating product:", error);
-      setUploadStatus('Error creating product: ' + error.message);
+      setUploadStatus("Error creating product: " + error.message);
     }
   };
+  
 
   return (
     <>
@@ -267,7 +247,7 @@ const Sidebar = () => {
                         <label className="flex-1 cursor-pointer group">
                           <div className="flex items-center justify-center h-36 px-4 transition-all border-2 border-dashed rounded-xl border-gray-300 group-hover:border-pink-400 group-hover:bg-pink-50/50">
                             <div className="flex flex-col items-center space-y-2 text-center">
-                              <ImageIcon className="w-8 h-8 text-gray-400 group-hover:text-secondary" />
+                              <ImageIcon className="w-8 h-8 text-gray-400 group-hover:text-primary" />
                               <span className="text-sm text-gray-500 group-hover:text-primary">
                                 {selectedFile ? selectedFile.name : 'Drop image here or click to browse'}
                               </span>
@@ -330,7 +310,7 @@ const Sidebar = () => {
                     </div>
                   </section>
         
-                  {/* Product Form */}
+                  {/* Product Modal */}
                   <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
                       <label className="text-sm font-medium text-gray-700">Product Name</label>
@@ -471,8 +451,8 @@ const Sidebar = () => {
       >
         <div className="flex items-center justify-between p-6 border-b">
           {isOpen && (
-            <div className="text-2xl font-bold bg-gradient-to-r from-secondary to-purple-500 bg-clip-text text-transparent">
-              Mera Bestie
+            <div className="text-2xl font-bold bg-gradient-to-r from-secondary to-primary bg-clip-text text-transparent">
+              Zang Global
             </div>
           )}
         </div>
@@ -487,7 +467,7 @@ const Sidebar = () => {
                     className={`flex items-center px-4 py-3 rounded-lg transition-all
                       ${location.pathname === item.path
                         ? "bg-pink-100 text-primary"
-                        : "text-gray-600 hover:bg-pink-50 hover:text-secondary"
+                        : "text-gray-600 hover:bg-pink-50 hover:text-primary"
                       }
                       ${isOpen ? "justify-start space-x-3" : "justify-center"}`}
                   >
@@ -504,7 +484,7 @@ const Sidebar = () => {
               <>
                 <button
                   onClick={() => setShowDialog(true)}
-                  className="w-full flex items-center justify-center px-4 py-2 bg-secondary text-white rounded-lg hover:bg-primary transition-colors"
+                  className="w-full flex items-center justify-center px-4 py-2 bg-green-600 text-green-100 rounded-lg hover:bg-primary transition-colors"
                 >
                   <Package className="w-5 h-5 mr-2" />
                   Add Product
@@ -512,7 +492,7 @@ const Sidebar = () => {
 
                 <Link
                   to="/"
-                  className="w-full flex items-center justify-center px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
+                  className="w-full flex items-center justify-center px-4 py-2 bg-secondary text-white rounded-lg hover:bg-mutedSecondary transition-colors"
                 >
                   Go to Website
                 </Link>
@@ -526,7 +506,7 @@ const Sidebar = () => {
                 </button>
 
                 <div className="text-center text-gray-400 text-sm">
-                  Mera Bestie Admin © 2024
+                  Zang Global Admin © 2024
                 </div>
               </>
             )}

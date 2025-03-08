@@ -18,12 +18,13 @@ import Navbar from '../../components/user/navbar/navbar';
 import { Helmet } from "react-helmet";
 import ReviewSection from './ReviewSection';
 import ReviewForm from './ReviewForm';
-import { fetchProductById } from '../../config/api';
+import api, { fetchProductById } from '../../config/api';
 
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 import { prepareStackTrace } from 'postcss/lib/css-syntax-error';
 import { useDispatch, useSelector } from 'react-redux';
+import axios from "axios";
 import AddToCart from '../../components/user/addToCart';
 
 
@@ -33,19 +34,33 @@ const ProductDetail = () => {
   const [product, setProduct] = useState(null);
   const [selectedImage, setSelectedImage] = useState(0); // Added state for selected image
   const [quantity, setQuantity] = useState(1);
-  const [showLoginDialog, setShowLoginDialog] = useState(false);
-  const [showAddAnimation, setShowAddAnimation] = useState(false);
   const [stockStatus, setStockStatus] = useState(null);
-  const [relatedProducts, setRelatedProducts] = useState([]);
   const [recentlyViewed, setRecentlyViewed] = useState([]);
-  const [showReviewDialog, setShowReviewDialog] = useState(false);
-  const [userName, setUserName] = useState('');
   const [rating, setRating] = useState(1);
   const [reviews, setReviews] = useState([]);
   const [showReviewForm, setShowReviewForm] = useState(false);
   const [loading, setLoading] = useState(true);
 
 
+  const submitReview = async (data) => {
+    try {
+      const response = await api.post(`/reviews/new`,data, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+  
+      console.log("Review submitted successfully:", response.data);
+      return response.data; 
+    } catch (error) {
+      console.error("Error submitting review:", error.response?.data || error.message);
+      throw error;
+    }
+  };
+
+  const user  = useSelector(state=>state.auth.user)
+  const userId = user?.userId
+  
 
   useEffect(() => {
     if (!productId) return; // Prevent API call if productId is invalid
@@ -65,22 +80,19 @@ const ProductDetail = () => {
     fetchProduct();
   }, [productId]);
 
+
+
   useEffect(() => {
     const fetchReviews = async () => {
       try {
-        const response = await fetch('https://api.merabestie.com/reviews/find-reviews', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ productId }),
-        });
+        const response = await api.get('/reviews')
         const data = await response.json();
         if (data.message === 'No reviews found for this product') {
           setReviews([]);
         }
         else {
           setReviews(data.reviews || []);
+          
         }
       } catch (error) {
         console.error('Error fetching reviews:', error);
@@ -117,18 +129,6 @@ const ProductDetail = () => {
     setStockStatus({ status, color, stock });
   };
 
-
-  const updateRecentlyViewed = (productData) => {
-    let viewedProducts = JSON.parse(localStorage.getItem('recentlyViewed')) || [];
-    viewedProducts = viewedProducts.filter((p) => p.productId !== productData.productId);
-    viewedProducts.unshift(productData);
-    if (viewedProducts.length > 5) {
-      viewedProducts.pop();
-    }
-    localStorage.setItem('recentlyViewed', JSON.stringify(viewedProducts));
-    setRecentlyViewed(viewedProducts);
-  };
-
   const handleQuantityChange = (change) => {
     const newQuantity = quantity + change;
     if (newQuantity >= 1 && newQuantity <= (stockStatus?.stock || 1)) {
@@ -139,13 +139,20 @@ const ProductDetail = () => {
 
 
 
-  const handleWriteReview = () => {
-    setShowReviewDialog(true);
+  const handleSubmitReview = async (e ,reviewData) => {
+    e.preventDefault();
+    console.log(reviewData, "Reviewing...")
+    const data =  {userId, productId, ...reviewData,}
+    try {
+      const newReview = await submitReview(data);
+      setReviews([newReview, ...reviews]);
+      setShowReviewForm(false);
+    } catch (error) {
+      console.error("Failed to submit review:", error.message);
+    }
   };
+  
 
-  const closeReviewDialog = () => {
-    setShowReviewDialog(false);
-  };
 
   const handlePreviousImage = () => {
   setSelectedImage((prevIndex) =>
@@ -197,7 +204,7 @@ const handleNextImage = () => {
       <Navbar />
       <ToastContainer />
 
-      <div className="min-h-screen  mt-[100px] ">
+      <div className="min-h-screen  mt-[150px] ">
         <div className="max-w-6xl mx-auto px-1 sm:px-3 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 50 }}
@@ -340,14 +347,13 @@ const handleNextImage = () => {
             onWriteReview={() => setShowReviewForm(true)}
           />
           {showReviewForm && (
-            <ReviewForm
-              productId={productId}
-              onClose={() => setShowReviewForm(false)}
-              onSubmitSuccess={(newReview) => {
-                setReviews([newReview, ...reviews]);
-                setShowReviewForm(false);
-              }}
-            />
+         <ReviewForm
+         productId={productId}
+         onClose={() => setShowReviewForm(false)}
+         onSubmitSuccess={handleSubmitReview}
+         handleSubmit={handleSubmitReview}
+       />
+       
           )}
           {/* Recently Viewed Section */}
           {recentlyViewed.length > 0 && (

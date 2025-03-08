@@ -6,10 +6,17 @@ import { Link } from 'react-router-dom';
 import api from "../../../config/api";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUser } from "../../../redux/slice/authSlice";
-import { fetchCart } from "../../../redux/slice/cartSlice";
+import { fetchCart, removeFromCart } from "../../../redux/slice/cartSlice";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const CartItems = () => {
   const [loading, setLoading] = useState(false);
+  const [removing, setRemoving] = useState(false);
+  const [removingItem, setRemovingItem] = useState(null);
+
+  const navigate = useNavigate()
+
   const [error, setError] = useState(null);
   const [voucher, setVoucher] = useState('');
   const [discountInfo, setDiscountInfo] = useState({
@@ -29,6 +36,18 @@ const CartItems = () => {
     }
   }, [dispatch, token]);
 
+  const handleRemoveFromCart = async (product) => {
+    setRemovingItem(product.productId);
+    try {
+      await dispatch(removeFromCart({ userId: user.userId, productId: product.productId })).unwrap();
+      toast.success(`${product.name} removed from cart!`);
+      dispatch(fetchCart(user.userId));
+    } catch (error) {
+      toast.error(error || "Failed to remove from cart.");
+    }
+    setRemovingItem(null);
+  };
+  
 
   const carts= useSelector((state) => state.cart.items);
 
@@ -40,7 +59,6 @@ const CartItems = () => {
 
 const cartItems = carts.cart.productsInCart
 
-console.log("from cart page", carts)
 
 
   const handleVoucherRedeem = async () => {
@@ -88,7 +106,7 @@ console.log("from cart page", carts)
         <img src={emptyCart} alt="Empty Cart" className="w-32 sm:w-48 h-32 sm:h-48 mb-4 object-contain" />
         <p className="text-base sm:text-lg text-gray-600 mb-4 text-center">{error || 'Your cart is empty'}</p>
         <Link 
-          to="/HomePage" 
+          to="/store" 
           className="px-6 py-2 bg-secondary text-white rounded-md hover:bg-primary transition-colors duration-200 text-sm sm:text-base"
         >
           Continue Shopping
@@ -97,8 +115,10 @@ console.log("from cart page", carts)
     );
   }
 
+
   return (
     <div className="space-y-4 sm:space-y-6">
+  
       {/* Cart Items Section */}
       <div className="bg-white shadow-sm rounded-lg overflow-hidden">
         <div className="p-3 sm:p-4 border-b">
@@ -119,12 +139,14 @@ console.log("from cart page", carts)
                     />
                   </div>
                   <button
-                   
-                    className="text-red-500 hover:text-red-600 transition-colors p-1"
-                    aria-label="Remove item"
-                  >
-                    <FontAwesomeIcon icon={faTrash} className="w-4 h-4" />
-                  </button>
+  onClick={() => handleRemoveFromCart(item)}
+  className="text-red-500 hover:text-red-600 transition-colors p-1"
+  aria-label="Remove item"
+  disabled={removingItem === item.productId}
+>
+  <FontAwesomeIcon icon={faTrash} className="w-4 h-4" />
+</button>
+
                 </div>
 
        
@@ -219,14 +241,16 @@ console.log("from cart page", carts)
             
             <div className="flex justify-between font-semibold text-gray-900 pt-3 border-t">
               <span>Total</span>
-              <span>₦{carts?.cart?.total ?? '0.00'}</span>
+              <span>₦{carts?.cart?.total?.toFixed(2) ?? '0.00'}</span>
             </div>
           </div>
 
           {/* Checkout Button */}
-          <button
-          
-            className="w-full bg-secondary text-white py-3 rounded-md hover:bg-primary transition-colors text-sm sm:text-base font-medium mt-4"
+          <button onClick={()=>{
+            navigate("/checkout")
+          }} 
+        
+            className="w-full bg-primary text-white py-3 rounded-md hover:bg-mutedPrimary transition-colors text-sm sm:text-base font-medium mt-4"
           >
             Proceed to Checkout
           </button>

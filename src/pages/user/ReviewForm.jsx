@@ -1,76 +1,64 @@
 import React, { useState } from 'react';
 import { FaStar } from 'react-icons/fa';
-
-const ReviewForm = ({ productId, onClose, onSubmitSuccess }) => {
+import { BsStar, BsStarFill, BsStarHalf } from 'react-icons/bs'
+const ReviewForm = ({ productId, onClose, onSubmitSuccess, handleSubmit }) => {
   const [rating, setRating] = useState(0);
-  const [reviewText, setReviewText] = useState('');
+  const [review, setReview] = useState('');
   const [hover, setHover] = useState(0);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      const response = await fetch('https://api.merabestie.com/reviews/save-review', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          productId,
-          rating,
-          review: reviewText,
-        }),
-      });
-      const data = await response.json();
-      if (data.success) {
-        onSubmitSuccess({
-          _id: data.reviewId, // Assuming the API returns a reviewId
-          rating,
-          review: reviewText,
-        });
-      } else {
-        console.error('Failed to submit review:', data.message);
-      }
-    } catch (error) {
-      console.error('Error submitting review:', error);
-    }
+  const reviewData={
+    review,
+    rating,
+  }
+
+  const handleStarClick = (index) => {
+    setRating((prev) => (prev === index + 1 ? index + 0.5 : index + 1));
+    
+
   };
+
+
+
+
+
 
   return (
     <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center z-50">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
         <h2 className="text-2xl font-semibold mb-4">Write a Review</h2>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={(e)=>handleSubmit(e,reviewData)}>
           <div className="flex flex-col items-center mb-4">
             <p className="text-sm text-gray-600 mb-2">Click on the stars to rate</p>
-            <div className="flex">
-              {[...Array(5)].map((star, index) => {
-                const ratingValue = index + 1;
-                return (
-                  <label key={index} className="cursor-pointer">
-                    <input
-                      type="radio"
-                      name="rating"
-                      className="hidden"
-                      value={ratingValue}
-                      onClick={() => setRating(ratingValue)}
-                    />
-                    <FaStar
-                      className="w-8 h-8 mr-1"
-                      color={ratingValue <= (hover || rating) ? "#ffc107" : "#e4e5e9"}
-                      onMouseEnter={() => setHover(ratingValue)}
-                      onMouseLeave={() => setHover(0)}
-                    />
-                  </label>
-                );
-              })}
+            <div className="flex mt-1 gap-1 text-[#FF9E3A] text-xs">
+              {Array(5)
+                .fill("_")
+                .map((_, index) => (
+                  <div
+                    key={index}
+                    onClick={() => handleStarClick(index)}
+                    className={`cursor-pointer ${
+                      index < rating ? "text-[#FF9E3A]" : "text-slate-500"
+                    } text-sm md:text-xs`}
+                  >
+                    {index < rating ? (
+                      index === Math.floor(rating) && rating % 1 !== 0 ? (
+                        <BsStarHalf />
+                      ) : (
+                        <BsStarFill />
+                      )
+                    ) : (
+                      <BsStar />
+                    )}
+                  </div>
+                ))}
             </div>
             <p className="text-sm text-gray-600 mt-2">
               Your rating: {rating > 0 ? `${rating}/5` : "Not rated yet"}
             </p>
           </div>
           <textarea
-            value={reviewText}
-            onChange={(e) => setReviewText(e.target.value)}
+            value={review}
+            onChange={(e) => setReview(e.target.value)}
             placeholder="Write your review"
             className="w-full p-3 mb-4 border border-gray-300 rounded-lg"
             rows="4"

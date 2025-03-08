@@ -18,9 +18,9 @@ import {
   RiLoginBoxLine,
 } from "react-icons/ri";
 import SearchBar from "./SearchBar";
-import { useSelector,useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import logo from "../../../assets/images/logoBlue.png"
-import { fetchUser,logout } from "../../../redux/slice/authSlice";
+import { fetchUser, logout } from "../../../redux/slice/authSlice";
 import { fetchCart } from "../../../redux/slice/cartSlice";
 
 const ProfessionalNavbar = () => {
@@ -44,6 +44,7 @@ const ProfessionalNavbar = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
   const token = useSelector((state) => state.auth.token);
+  const carts = useSelector((state) => state.cart.items);
 
   useEffect(() => {
     if (token) {
@@ -52,15 +53,15 @@ const ProfessionalNavbar = () => {
   }, [dispatch, token]);
 
 
-  const carts= useSelector((state) => state.cart.items);
+
 
   useEffect(() => {
     if (user) {
       dispatch(fetchCart(user.userId));
     }
-  }, [dispatch, user]);
+  }, [dispatch, user,carts]);
 
-const cartItems = carts.cart.productsInCart
+  const cartItems = carts?.cart?.productsInCart
 
   // Handle click outside for search and profile menu
   useEffect(() => {
@@ -77,9 +78,9 @@ const cartItems = carts.cart.productsInCart
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  
+
   const handleLogout = () => {
-    sessionStorage.removeItem("userId");
+    dispatch(logout()); // Fetch user data when logged inf
     window.location.reload();
   };
 
@@ -120,17 +121,15 @@ const cartItems = carts.cart.productsInCart
   ];
 
   return (
-    <nav className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
-      scrolled ? "bg-white shadow-md" : "bg-transparent"
-    }`}>
-      {/* Promo Banner - Hidden on mobile when scrolled */}
-      <div className={`bg-primary text-white py-2 text-center text-xs transition-all duration-300 ${
-        scrolled ? "hidden sm:block sm:h-auto sm:opacity-100" : "h-auto opacity-100"
+    <nav className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${scrolled ? "bg-white shadow-md" : "bg-transparent"
       }`}>
+      {/* Promo Banner - Hidden on mobile when scrolled */}
+      <div className={`bg-primary text-white py-2 text-center text-xs transition-all duration-300 ${scrolled ? "hidden sm:block sm:h-auto sm:opacity-100" : "h-auto opacity-100"
+        }`}>
         <div className="max-w-[1200px] mx-auto px-4 flex items-center justify-center">
           <RiGift2Line className="mr-2" />
           <span className="text-[10px] sm:text-xs">
-           Get your product, fast and reliable Delivery
+            Get your product, fast and reliable Delivery
           </span>
         </div>
       </div>
@@ -152,7 +151,7 @@ const cartItems = carts.cart.productsInCart
               to="/"
               className="text-2xl flex items-center transition mx-auto lg:mx-0"
             >
-              <img src={logo} width={120}/>
+              <img src={logo} width={120} />
             </Link>
 
             {/* Desktop Navigation - Hidden on mobile */}
@@ -164,9 +163,8 @@ const cartItems = carts.cart.productsInCart
                   onClick={() => name === "SHOP" && setIsShopDropdownOpen(true)}
                   onMouseLeave={() => name === "SHOP" && setIsShopDropdownOpen(false)}
                 >
-                  <Link to={path} className={`px-4 py-2 mx-2 flex items-center ${
-                    isActive(path) ? "text-primary" : "text-gray-800 hover:text-primary"
-                  } transition-colors duration-200`}>
+                  <Link to={path} className={`px-4 py-2 mx-2 flex items-center ${isActive(path) ? "text-primary" : "text-gray-800 hover:text-primary"
+                    } transition-colors duration-200`}>
                     <Icon className="w-5 h-5 mr-2" />
                     {name}
                   </Link >
@@ -201,13 +199,16 @@ const cartItems = carts.cart.productsInCart
                 className="relative text-gray-800 hover:text-primary transition flex items-center"
               >
                 <RiShoppingCart2Line className="w-5 h-5" />
-                <span className="ml-2 hidden md:block">Cart</span>
-                <span>
-               {
-                user?cartItems.length:""
-               }
+                <div className="flex gap-1 items-center">
+
+                  <span className="ml-2 hidden md:block">Cart</span>
+                  <span className="text-xs bg-green-200 text-green-600 flex items-center justify-center py-[0.5px] px-[5px] rounded-full">
+                    {
+                      user ? cartItems?.length : ""
+                    }
                   </span>
-               
+                </div>
+
               </Link>
 
               <div className="relative" ref={profileRef}>
@@ -306,11 +307,10 @@ const cartItems = carts.cart.productsInCart
                 >
                   <Link
                     to={path}
-                    className={`flex items-center px-6 py-3 ${
-                      isActive(path)
+                    className={`flex items-center px-6 py-3 ${isActive(path)
                         ? "text-primary bg-pink-50"
                         : "text-gray-800 hover:bg-pink-50 hover:text-primary"
-                    } transition-colors duration-200`}
+                      } transition-colors duration-200`}
                     onClick={() => setIsMenuOpen(false)}
                   >
                     <Icon className="w-5 h-5 mr-3" />
@@ -339,7 +339,7 @@ const cartItems = carts.cart.productsInCart
                   onClick={() => setIsMenuOpen(false)}
                 >
                   <RiShoppingCart2Line className="w-5 h-5 mr-3" />
-                0
+                  0
                 </Link>
               </div>
             </div>
@@ -348,7 +348,7 @@ const cartItems = carts.cart.productsInCart
       </AnimatePresence>
 
       {/* Search Overlay */}
-   {/* Previous code remains exactly the same until the Search Overlay section */}
+      {/* Previous code remains exactly the same until the Search Overlay section */}
 
       {/* Search Overlay */}
       <AnimatePresence>

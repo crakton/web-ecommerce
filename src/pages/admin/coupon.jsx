@@ -22,36 +22,6 @@ const CouponPage = () => {
   const [isEditing, setIsEditing] = useState(false); // Track if we are editing an existing coupon
 
   useEffect(() => {
-    const verifySeller = async () => {
-      if (!sellerId) {
-        navigate('/seller/login');
-        return;
-      }
-
-      try {
-        const response = await fetch('https://api.merabestie.com/admin/verify-seller', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ sellerId })
-        });
-
-        const data = await response.json();
-        
-        if (data.loggedIn !== 'loggedin') {
-          navigate('/seller/login');
-        }
-      } catch (error) {
-        console.error('Error verifying seller:', error);
-        navigate('/seller/login');
-      }
-    };
-
-    verifySeller();
-  }, [sellerId, navigate]);
-
-  useEffect(() => {
     fetchCoupons();
   }, []);
 

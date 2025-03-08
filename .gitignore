@@ -6,3 +6,4 @@ coverage
 .env.production
 .env.development
 yarn.lock
+build

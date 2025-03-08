@@ -5,6 +5,7 @@ module.exports = {
   ],
   theme: {
     extend: {
+      scrollbarWidth: { none: "none" },
       colors: {
         primary: "#2e3192",  // Deep blue
         secondary: "#eddb17", // Bright yellow

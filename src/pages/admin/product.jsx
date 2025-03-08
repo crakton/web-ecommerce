@@ -3,11 +3,12 @@ import { Pencil, Save, Search, ArrowUpDown, Trash, X, ChevronLeft, ChevronRight,
 import { Helmet } from "react-helmet";
 import { useParams, useNavigate } from 'react-router-dom';
 import Sidebar from '../../components/admin/sidebar';
+import { useDispatch, useSelector } from 'react-redux';
+import { getProducts } from '../../redux/slice/productSlice';
 
 const Product = () => {
   const { sellerId } = useParams();
   const navigate = useNavigate();
-  const [products, setProducts] = useState([]);
   const [editingId, setEditingId] = useState(null);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [showDetailModal, setShowDetailModal] = useState(false);
@@ -31,56 +32,22 @@ const Product = () => {
   const [uploadStatus, setUploadStatus] = useState('');
   const [selectedFile, setSelectedFile] = useState(null);
 
-  useEffect(() => {
-    const verifySeller = async () => {
-      if (!sellerId) {
-        navigate('/seller/login');
-        return;
-      }
 
-      try {
-        const response = await fetch('https://api.merabestie.com/admin/verify-seller', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ sellerId })
-        });
+  const dispatch = useDispatch()
 
-        const data = await response.json();
-        
-        if (data.loggedIn !== 'loggedin') {
-          navigate('/seller/login');
-        }
-      } catch (error) {
-        console.error('Error verifying seller:', error);
-        navigate('/seller/login');
-      }
-    };
-
-    verifySeller();
-  }, [sellerId, navigate]);
+    
+  // Redux State
+  const { products, loading,  } = useSelector((state) => state.product); 
+  const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
-    fetchProducts();
-  }, []);
+    dispatch(getProducts());
+  }, [dispatch, refresh]); // Refresh dependency added
 
-  const fetchProducts = async () => {
-    try {
-      const response = await fetch('https://api.merabestie.com/get-product');
-      const data = await response.json();
-      setProducts(data.products);
-    } catch (error) {
-      console.error('Error fetching products:', error);
-    }
-  };
+  const productData = products.data
+  console.log(productData, "from products")
 
-  const handleImageSelect = (e) => {
-    if (e.target.files[0]) {
-      setSelectedFile(e.target.files[0]);
-      setUploadStatus('');
-    }
-  };
+  
 
   const handleImageUpload = async () => {
     if (!selectedFile) {
@@ -131,7 +98,7 @@ const Product = () => {
           productId: product.productId
         })
       });
-      fetchProducts();
+      // fetchProducts();
     } catch (error) {
       console.log(error);
     }
@@ -184,7 +151,7 @@ const Product = () => {
       if (response.ok) {
         setEditingId(null);
         setShowDetailModal(false);
-        fetchProducts();
+        // fetchProducts();
       }
     } catch (error) {
       console.error('Error updating product:', error);
@@ -212,9 +179,9 @@ const Product = () => {
   };
 
   const sortedProducts = React.useMemo(() => {
-    if (!Array.isArray(products)) return [];
+    if (!Array.isArray(productData)) return [];
     
-    let sortableProducts = [...products];
+    let sortableProducts = [...productData];
     if (sortConfig.key !== null) {
       sortableProducts.sort((a, b) => {
         if (a[sortConfig.key] < b[sortConfig.key]) {
@@ -230,14 +197,18 @@ const Product = () => {
   }, [products, sortConfig]);
 
   const filteredProducts = sortedProducts.filter(product => 
-    product.productId?.toString().toLowerCase().includes(searchQuery.toLowerCase()) ||
-    product.name?.toLowerCase().includes(searchQuery.toLowerCase())
+    productData?.productId?.toString().toLowerCase().includes(searchQuery.toLowerCase()) ||
+    productData?.name?.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+console.log(sortedProducts,"sorted Products")
+  console.log(filteredProducts, ",these are filtered products")
+
 
   return (
     <div className="flex">
       <Helmet>
-        <title>Products | Admin | Mera Bestie</title>
+        <title>Products | Admin | Zang Global</title>
       </Helmet>
       <Sidebar />
       <div className="flex-1 p-8 ml-[5rem] lg:ml-64 bg-pink-50 min-h-screen">
@@ -291,7 +262,7 @@ const Product = () => {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {filteredProducts.map((product) => (
+              {sortedProducts.map((product) => (
                 <tr key={product.productId}>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     <button
@@ -502,7 +473,7 @@ const Product = () => {
                               type="file"
                               id="imageInput"
                               accept="image/*"
-                              onChange={handleImageSelect}
+                              // onChange={handleImageSelect}
                               className="hidden"
                               disabled={isUploading}
                             />

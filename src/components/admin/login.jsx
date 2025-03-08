@@ -12,110 +12,10 @@ const AdminLogin = () => {
   const [emailOrPhone, setEmailOrPhone] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const [otp, setOtp] = useState("");
-  const [otpSent, setOtpSent] = useState(false);
-  const [otpVerified, setOtpVerified] = useState(false);
+  const [otpVerified, setOtpVerified] = useState(true);
   const [showResendButton, setShowResendButton] = useState(false);
   const [error, setError] = useState("");
-  const [selectedMethod, setSelectedMethod] = useState(null);
-
-  const handleSendOtp = async () => {
-    if (!emailOrPhone) {
-      setError("Please enter your email.");
-      return;
-    }
-
-    try {
-      const response = await fetch(
-        "https://api.merabestie.com/otp/send-otp",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email: emailOrPhone,
-          }),
-        }
-      );
-
-      const data = await response.json();
-
-      if (response.ok) {
-        setOtpSent(true);
-        setError("");
-      } else {
-        setError(data.message || "Failed to send OTP. Please try again.");
-      }
-    } catch (error) {
-      setError("Something went wrong. Please try again.");
-      console.error("Error:", error);
-    }
-  };
-
-  const handleVerifyOtp = async (otp) => {
-    try {
-      const response = await fetch(
-        "https://api.merabestie.com/otp/verify-otp",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email: emailOrPhone,
-            otp,
-          }),
-        }
-      );
-
-      const data = await response.json();
-
-      if (response.ok && data.message === "OTP verification successful") {
-        setOtpVerified(true);
-        setError("");
-      } else if (data.message === "OTP has expired") {
-        setShowResendButton(true);
-        setError(data.message);
-      } else {
-        setError(data.message || "Invalid OTP. Please try again.");
-      }
-    } catch (error) {
-      setError("Something went wrong. Please try again.");
-      console.error("Error:", error);
-    }
-  };
-
-  const handleResendOtp = async () => {
-    try {
-      const response = await fetch(
-        "https://api.merabestie.com/otp/resend-otp",
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email: emailOrPhone,
-          }),
-        }
-      );
-
-      const data = await response.json();
-
-      if (response.ok) {
-        setOtpSent(true);
-        setShowResendButton(false);
-        setError("");
-      } else {
-        setError(data.message || "Failed to resend OTP. Please try again.");
-      }
-    } catch (error) {
-      setError("Something went wrong. Please try again.");
-      console.error("Error:", error);
-    }
-  };
-
+ 
   const handleLogin = async () => {
     if (!sellerId || !emailOrPhone || !password || !otpVerified) {
       setError("Please fill all fields and verify OTP.");
@@ -180,19 +80,8 @@ const AdminLogin = () => {
             )}
 
             <div className="space-y-6">
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <User className="text-primary" />
-                </div>
-                <input
-                  type="text"
-                  placeholder="Seller ID"
-                  required
-                  className="w-full pl-10 pr-4 py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition duration-300"
-                  value={sellerId}
-                  onChange={(e) => setSellerId(e.target.value)}
-                />
-              </div>
+              
+              
 
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -207,45 +96,12 @@ const AdminLogin = () => {
                   onChange={(e) => setEmailOrPhone(e.target.value)}
                 />
               </div>
-
-              {!otpSent ? (
-                <button
-                  type="button"
-                  className="w-full bg-primary hover:bg-secondary text-white py-3 rounded-lg font-semibold transition duration-300 transform active:scale-95"
-                  onClick={handleSendOtp}
-                >
-                  Send OTP
-                </button>
-              ) : (
-                <div className="relative">
-                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Lock className="text-primary" />
-                  </div>
-                  <input
-                    type="text"
-                    placeholder="Enter OTP"
-                    required
-                    maxLength="6"
-                    className="w-full pl-10 pr-4 py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition duration-300"
-                    value={otp}
-                    onChange={(e) => {
-                      const value = e.target.value.replace(/\D/g, "");
-                      if (value.length <= 6) {
-                        setOtp(value);
-                        if (value.length === 6) {
-                          handleVerifyOtp(value);
-                        }
-                      }
-                    }}
-                  />
-                </div>
-              )}
+              
 
               {showResendButton && (
                 <button
                   type="button"
                   className="w-full bg-primary hover:bg-secondary text-white py-3 rounded-lg font-semibold transition duration-300 transform active:scale-95"
-                  onClick={handleResendOtp}
                 >
                   Resend OTP
                 </button>
@@ -278,8 +134,6 @@ const AdminLogin = () => {
                   !otpVerified ? "opacity-50 cursor-not-allowed" : ""
                 }`}
                 whileTap={{ scale: 0.95 }}
-                onClick={handleLogin}
-                disabled={!otpVerified}
               >
                 Login
               </motion.button>

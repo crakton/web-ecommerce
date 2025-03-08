@@ -3,29 +3,29 @@ import { FaStar } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import AddToCart from "./addToCart";
 
-const ProductCard = ({ product, onAddToCart, onBuyNow }) => {
+const ProductCard = ({ product, onBuyNow }) => {
 
 
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-transform duration-300 hover:-translate-y-1 relative">
       {/* Product Image with Overlay */}
       <Link
-  to={`/product/${product.productId}`}
-  className="relative group block"
-  aria-label={`View details of ${product.name}`}
->
-  <img
-    src={product.img[0] || "/fallback-image.jpg"}
-    alt={product.name}
-    className="w-full h-36 sm:h-48 object-cover transition-transform duration-300 group-hover:scale-105"
-  />
-  <button
-    className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-0 group-hover:bg-opacity-75 text-white opacity-0 group-hover:opacity-100 transition-all duration-300 text-sm sm:text-base font-medium pointer-events-none"
-    tabIndex="-1"
-  >
-    Shop Now
-  </button>
-</Link>
+        to={`/product/${product.productId}`}
+        className="relative group block"
+        aria-label={`View details of ${product.name}`}
+      >
+        <img
+          src={product.img[0] || "/fallback-image.jpg"}
+          alt={product.name}
+          className="w-full h-32 object-cover transition-transform duration-300 group-hover:scale-105"
+        />
+        <button
+          className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-0 group-hover:bg-opacity-75 text-white opacity-0 group-hover:opacity-100 transition-all duration-300 text-sm sm:text-base font-medium pointer-events-none"
+          tabIndex="-1"
+        >
+          Shop Now
+        </button>
+      </Link>
 
 
       {/* Product Info */}
@@ -46,8 +46,8 @@ const ProductCard = ({ product, onAddToCart, onBuyNow }) => {
 
         {/* Action Buttons */}
         <div className="mt-3 sm:mt-4 flex flex-col sm:flex-row gap-2 sm:space-x-4">
-        <AddToCart product={product} quantity={1} />
-          
+          <AddToCart product={product} quantity={1} />
+
           <button
             className="w-full sm:w-auto bg-orange-500 text-white px-3 py-1 rounded-md text-xs sm:text-sm hover:bg-orange-600 focus:ring-2 focus:ring-orange-400 transition"
             onClick={() => onBuyNow(product)}

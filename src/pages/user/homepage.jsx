@@ -9,6 +9,9 @@ const ScrollProgress = () => {
   const [scrollProgress, setScrollProgress] = useState(0);
 
 
+  
+
+
   useEffect(() => {
     const updateScrollProgress = () => {
       const currentScroll = window.scrollY;
@@ -38,8 +41,8 @@ const ScrollProgress = () => {
 
 const Carousel = ({ slides, currentSlide }) => (
   <div className="relative w-full">
-    <div 
-      className="h-48 sm:h-64 md:h-96 w-full bg-cover bg-center transition-all duration-300" 
+    <div
+      className="h-48 sm:h-64 md:h-96 w-full bg-cover bg-center transition-all duration-300"
       style={{ backgroundImage: `url(${slides[currentSlide].image})` }}
     >
       <div className="absolute inset-0 bg-black bg-opacity-40">
@@ -55,7 +58,7 @@ const Carousel = ({ slides, currentSlide }) => (
 
 
 const ProductGrid = ({ title, products }) => {
-  const [visible,setVisible] = useState(false)
+  const [visible, setVisible] = useState(false)
 
   const memorizedUserId = useMemo(() => sessionStorage.getItem("userId"), []);
 
@@ -68,7 +71,7 @@ const ProductGrid = ({ title, products }) => {
       {visible && (
         <div className="fixed bottom-0 right-0 top-0 w-full sm:w-96 h-full bg-white shadow-2xl z-50 transform transition-all duration-300 ease-in-out">
           <div className="relative h-full flex flex-col">
-            <button 
+            <button
               onClick={() => visible(false)}
               className="absolute top-4 right-4 z-10 bg-red-500 text-white p-2 rounded-full hover:bg-red-600 transition-colors"
             >
@@ -80,15 +83,6 @@ const ProductGrid = ({ title, products }) => {
             <div className="flex-1 p-4 pt-16 overflow-y-auto">
               <CartItems />
             </div>
-
-          {/*   <div className="p-4 bg-white border-t">
-              <button 
-                className="w-full bg-green-500 text-white py-2 sm:py-3 rounded-lg hover:bg-green-600 transition-colors text-sm sm:text-base"
-                onClick={handleCheckout}
-              >
-                Proceed to Checkout
-              </button>
-            </div> */}
           </div>
         </div>
       )}
@@ -102,7 +96,7 @@ const ProductGrid = ({ title, products }) => {
         </a>
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-6">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-6">
         {products.map((product, index) => (
           <ProductCard
             key={index}
@@ -115,9 +109,30 @@ const ProductGrid = ({ title, products }) => {
 };
 
 const HomePage = () => {
-  const [currentSlide, setCurrentSlide] = useState(0);
+  const [currentSlide, setCurrentSlide] = useState(1);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % carouselSlides.length);
+    }, 5000); // Change slide every 3 seconds
+
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        const fetchedProducts = await fetchProducts();
+        setProducts(fetchedProducts.data);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, []);
 
   const carouselSlides = [
     {
@@ -157,8 +172,6 @@ const HomePage = () => {
       </div>
     );
   }
-
-  console.log(products)
 
   return (
     <div className="bg-gray-50 min-h-screen">

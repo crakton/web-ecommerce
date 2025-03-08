@@ -9,13 +9,30 @@ import {
     XCircle 
     
 } from 'lucide-react';
-import { FaRupeeSign } from 'react-icons/fa';
+import { FaMoneyBill, FaRupeeSign } from 'react-icons/fa';
+
+import { useSelector, useDispatch } from 'react-redux';
+import { getProducts } from '../../redux/slice/productSlice';
 
 const Dashboard = () => {
     const [ordersData, setOrdersData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [refresh,setRefresh] = useState(false)
+    const dispatch = useDispatch()
+
+    
+  // Redux State
+  const { products, loading,  } = useSelector((state) => state.product); 
+
+  // Local state for refreshing manually
+  const [refresh, setRefresh] = useState(false);
+
+  useEffect(() => {
+    dispatch(getProducts());
+  }, [dispatch, refresh]); // Refresh dependency added
+
+  
+
 
     const getOrderData = async () => {
         try {
@@ -64,7 +81,7 @@ const Dashboard = () => {
     // Loading State
     if (isLoading) {
         return (
-            <div className="flex items-center justify-center min-h-screen bg-pink-50">
+            <div className="flex items-center justify-center min-h-screen bg-slate-50">
                 <div className="text-center">
                     <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-primary mx-auto mb-4"></div>
                     <p className="text-secondary text-xl">Loading Dashboard...</p>
@@ -73,33 +90,33 @@ const Dashboard = () => {
         );
     }
 
-    // Error State
-    if (error) {
-        return (
-            <div className="flex items-center justify-center min-h-screen bg-pink-50">
-                <div className="bg-white p-8 rounded-xl shadow-2xl text-center">
-                    <XCircle className="mx-auto h-16 w-16 text-primary mb-4" />
-                    <h2 className="text-2xl font-bold text-secondary mb-4">Dashboard Error</h2>
-                    <p className="text-gray-600 mb-6">{error}</p>
-                    <button 
-                        onClick={getOrderData} 
-                        className="px-6 py-2 bg-primary text-white rounded-lg hover:bg-secondary transition"
-                    >
-                        Try Again
-                    </button>
-                </div>
-            </div>
-        );
-    }
+    // // Error State
+    // if (error) {
+    //     return (
+    //         <div className="flex items-center justify-center min-h-screen bg-pink-50">
+    //             <div className="bg-white p-8 rounded-xl shadow-2xl text-center">
+    //                 <XCircle className="mx-auto h-16 w-16 text-primary mb-4" />
+    //                 <h2 className="text-2xl font-bold text-secondary mb-4">Dashboard Error</h2>
+    //                 <p className="text-gray-600 mb-6">{error}</p>
+    //                 <button 
+    //                     onClick={getOrderData} 
+    //                     className="px-6 py-2 bg-primary text-white rounded-lg hover:bg-secondary transition"
+    //                 >
+    //                     Try Again
+    //                 </button>
+    //             </div>
+    //         </div>
+    //     );
+    // }
 
     // Dashboard Render
     return (
-        <div className="min-h-screen bg-pink-100 p-6 lg:p-10">
+        <div className="min-h-screen bg-slate-100 p-6 lg:p-10">
             <div className="container mx-auto">
                 <div className="flex justify-between items-center mb-8">
                     <div>
-                        <h1 className="text-3xl font-bold text-pink-800">Dashboard</h1>
-                        <p className="text-secondary">Welcome back to Mera Bestie Admin!</p>
+                        <h1 className="text-3xl font-bold text-primary">Dashboard</h1>
+                        <p className="text-mutedPrimary">Welcome back to Zang Global Admin!</p>
                     </div>
                     <button className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-secondary transition flex items-center" onClick={e=>{setRefresh(!refresh)}}>
                         <TrendingUp className="mr-2 h-5 w-5" /> Refresh Data
@@ -122,15 +139,15 @@ const Dashboard = () => {
                             change: 100 
                         },
                         { 
-                            icon: <FaRupeeSign className="text-primary" />, 
+                            icon: <FaMoneyBill className="text-primary" />, 
                             title: "Revenue Generated", 
-                            value: `₹${totalRevenue.toLocaleString()}`, 
+                            value: `₦${totalRevenue.toLocaleString()}`, 
                             change: 15 
                         },
                         { 
                             icon: <Package className="text-primary" />, 
                             title: "Total Products", 
-                            value: 89, 
+                            value: products?.data?.length || 0, 
                             change: 5 
                         }
                     ].map((metric, index) => (
@@ -147,7 +164,7 @@ const Dashboard = () => {
                                 </span>
                             </div>
                             <h3 className="text-gray-500 text-sm mb-2">{metric.title}</h3>
-                            <p className="text-2xl font-bold text-secondary">{metric.value}</p>
+                            <p className="text-2xl font-bold text-primary">{metric.value}</p>
                         </div>
                     ))}
                 </div>
@@ -198,7 +215,7 @@ const Dashboard = () => {
                                 </ResponsiveContainer>
                             </div>
                             <div className="text-center mt-4">
-                                <p className="text-3xl font-bold text-secondary">{chart.percentage}%</p>
+                                <p className="text-3xl font-bold">{chart.percentage}%</p>
                                 <p className="text-primary">{chart.description}</p>
                             </div>
                         </div>

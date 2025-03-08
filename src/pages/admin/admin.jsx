@@ -14,7 +14,7 @@ const Admin = () => {
     return (
         <div className="flex h-screen overflow-hidden">
             <Helmet>
-                <title>Admin | Mera Bestie</title>
+                <title>Admin | Zang Global</title>
             </Helmet>
             <div 
                 className={`fixed inset-0 z-40 lg:hidden bg-black/50 transition-opacity duration-300 
