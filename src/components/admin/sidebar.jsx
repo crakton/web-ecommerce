@@ -16,7 +16,7 @@ import {
   Loader2,
   Image as ImageIcon,
 } from "lucide-react";
-import { useSelector,useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { createProduct } from "../../redux/slice/productSlice";
 
 
@@ -28,7 +28,7 @@ const Sidebar = () => {
   const [showDialog, setShowDialog] = useState(false);
   const [uploadStatus, setUploadStatus] = useState('');
   const [isUploading, setIsUploading] = useState(false);
-  const [selectedFile, setSelectedFile] = useState(null);
+  const [selectedFile, setSelectedFile] = useState([]);
   const [productData, setProductData] = useState({
     name: "",
     price: "",
@@ -80,11 +80,11 @@ const Sidebar = () => {
       icon: <Users className="w-5 h-5" />,
       path: `/admin/customers/${sellerId}`,
     },
-   
-    { 
-      name: "Coupons", 
-      icon: <Ticket className="w-5 h-5" />, 
-      path: `/seller/coupons/${sellerId}` 
+
+    {
+      name: "Coupons",
+      icon: <Ticket className="w-5 h-5" />,
+      path: `/seller/coupons/${sellerId}`
     },
     {
       name: "Reviews",
@@ -107,58 +107,23 @@ const Sidebar = () => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setProductData({ ...productData, [name]: value });
+    console.log(productData)
   };
 
-  const handleImageSelect = (e) => {
-    if (e.target.files[0]) {
-      setSelectedFile(e.target.files[0]);
-      setUploadStatus('');
-    }
-  };
+  const handleImageSelect = (event) => {
+    const files = Array.from(event.target.files);
+    const fileURLs = files.map(file => URL.createObjectURL(file)); // Generate preview URLs
 
-  const handleImageUpload = async () => {
-    if (!selectedFile) {
-      setUploadStatus('Please select an image first');
-      return;
-    }
-
-    const formData = new FormData();
-    formData.append('image', selectedFile);
-
-    try {
-      setIsUploading(true);
-      setUploadStatus('Uploading...');
-
-      const response = await fetch('https://api.merabestie.com/image/image-upload', {
-        method: 'POST',
-        body: formData,
-      });
-      const data = await response.json();
-      
-      if (data.success) {
-        setProductData(prev => ({
-          ...prev,
-          img: [...prev.img, data.imageUrl]
-        }));
-        setUploadStatus('Upload successful');
-        setSelectedFile(null);
-        const fileInput = document.getElementById('imageInput');
-        if (fileInput) fileInput.value = '';
-      } else {
-        setUploadStatus('Upload failed: ' + data.message);
-      }
-    } catch (error) {
-      setUploadStatus('Upload failed: ' + error.message);
-    } finally {
-      setIsUploading(false);
-    }
-  };
-
-  const removeImage = (indexToRemove) => {
-    setProductData(prev => ({
-      ...prev,
-      img: prev.img.filter((_, index) => index !== indexToRemove)
+    setSelectedFile(files);
+    setProductData(prevData => ({
+        ...prevData,
+        img: fileURLs  // ✅ Store image URLs instead
     }));
+};
+
+  
+  const removeImage = (index) => {
+    setSelectedFile((prev) => prev.filter((_, i) => i !== index));
   };
 
   const handleLogout = async () => {
@@ -183,12 +148,15 @@ const Sidebar = () => {
     }
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault()
     try {
-      const response =  dispatch(createProduct(productData)); // Await the dispatch
-  
+      setIsUploading(true)
+      const response = dispatch(createProduct(productData)); // Await the dispatch
+      console.log(productData)
+
       if (!response.error) { // Check if no error occurred
-        setShowDialog(false);
+
         setProductData({
           name: "",
           price: "",
@@ -206,10 +174,11 @@ const Sidebar = () => {
       }
     } catch (error) {
       console.error("Error creating product:", error);
+      setIsUploading(false)
       setUploadStatus("Error creating product: " + error.message);
     }
   };
-  
+
 
   return (
     <>
@@ -223,224 +192,224 @@ const Sidebar = () => {
 
       {/* Product Dialog */}
       {showDialog && (
-            <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-              <div className="bg-white rounded-xl shadow-xl w-full max-w-3xl max-h-[90vh] overflow-y-auto animate-in fade-in-0 zoom-in-95">
-                {/* Header */}
-                <div className="border-b p-6">
-                  <div className="flex items-center justify-between">
-                    <h2 className="text-2xl font-semibold text-gray-800">Add New Product</h2>
-                    <button
-                      onClick={() => setShowDialog(false)}
-                      className="rounded-full p-2 hover:bg-gray-100 transition-colors"
-                    >
-                      <X className="w-5 h-5 text-gray-500" />
-                    </button>
-                  </div>
-                </div>
-                
-                <div className="p-6 space-y-8">
-                  {/* Image Upload Section */}
-                  <section className="space-y-4">
-                    <h3 className="text-base font-semibold text-gray-800">Product Images</h3>
-                    <div className="space-y-4">
-                      <div className="flex items-center gap-4">
-                        <label className="flex-1 cursor-pointer group">
-                          <div className="flex items-center justify-center h-36 px-4 transition-all border-2 border-dashed rounded-xl border-gray-300 group-hover:border-pink-400 group-hover:bg-pink-50/50">
-                            <div className="flex flex-col items-center space-y-2 text-center">
-                              <ImageIcon className="w-8 h-8 text-gray-400 group-hover:text-primary" />
-                              <span className="text-sm text-gray-500 group-hover:text-primary">
-                                {selectedFile ? selectedFile.name : 'Drop image here or click to browse'}
-                              </span>
-                            </div>
-                            <input
-                              type="file"
-                              accept="image/*"
-                              onChange={handleImageSelect}
-                              className="hidden"
-                              disabled={isUploading}
-                            />
-                          </div>
-                        </label>
-                        <button
-                          onClick={handleImageUpload}
-                          disabled={!selectedFile || isUploading}
-                          className={`px-4 py-2.5 rounded-lg flex items-center gap-2 transition-all ${
-                            !selectedFile || isUploading
-                              ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
-                              : 'bg-secondary hover:bg-primary text-white shadow-sm'
-                          }`}
-                        >
-                          {isUploading ? (
-                            <Loader2 className="w-5 h-5 animate-spin" />
-                          ) : (
-                            <Upload className="w-5 h-5" />
-                          )}
-                          <span className="font-medium">{isUploading ? 'Uploading...' : 'Upload'}</span>
-                        </button>
-                      </div>
-                      
-                      {uploadStatus && (
-                        <p className={`text-sm font-medium ${
-                          uploadStatus.includes('failed') || uploadStatus.includes('Error')
-                            ? 'text-primary'
-                            : 'text-green-600'
-                        }`}>
-                          {uploadStatus}
-                        </p>
-                      )}
-        
-                      {/* Image Preview Grid */}
-                      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                        {productData.img.map((url, index) => (
-                          <div key={index} className="relative group rounded-xl overflow-hidden shadow-sm">
-                            <img
-                              src={url}
-                              alt={`Product ${index + 1}`}
-                              className="w-full h-24 object-cover"
-                            />
-                            <button
-                              onClick={() => removeImage(index)}
-                              className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-200"
-                            >
-                              <X className="w-6 h-6 text-white" />
-                            </button>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </section>
-        
-                  {/* Product Modal */}
-                  <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium text-gray-700">Product Name</label>
-                      <input
-                        type="text"
-                        name="name"
-                        value={productData.name}
-                        onChange={handleInputChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-secondary transition-shadow outline-none"
-                        placeholder="Enter product name"
-                      />
-                    </div>
-        
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium text-gray-700">Price</label>
-                      <input
-                        type="number"
-                        name="price"
-                        value={productData.price}
-                        onChange={handleInputChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-secondary transition-shadow outline-none"
-                        placeholder="Enter price"
-                      />
-                    </div>
-        
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium text-gray-700">Category</label>
-                      <select
-                        name="category"
-                        value={productData.category}
-                        onChange={handleInputChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-secondary transition-shadow outline-none"
-                      >
-                        <option value="">Select Category</option>
-                        <option value="fashion">Fashion</option>
-                        <option value="gift-items">Gift Items</option>
-                        <option value="greeting-cards">Greeting Cards</option>
-                        <option value="stationary">Stationary</option>
-                      </select>
-                    </div>
-        
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium text-gray-700">Rating</label>
-                      <input
-                        type="number"
-                        name="rating"
-                        value={productData.rating}
-                        onChange={handleInputChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-secondary transition-shadow outline-none"
-                        min={0}
-                        max={5}
-                        step={0.1}
-                        placeholder="Enter rating (0-5)"
-                      />
-                    </div>
-        
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium text-gray-700">Product ID</label>
-                      <div className="flex gap-2">
-                        <input
-                          type="text"
-                          name="productId"
-                          value={productData.productId}
-                          readOnly
-                          className="flex-1 px-3 py-2 border border-gray-300 rounded-lg bg-gray-50 outline-none"
-                          placeholder="Click generate to create ID"
-                        />
-                        <button
-                          onClick={generateProductId}
-                          className="px-4 py-2 bg-secondary text-white rounded-lg hover:bg-primary transition-colors shadow-sm font-medium"
-                        >
-                          Generate
-                        </button>
-                      </div>
-                    </div>
-        
-                    <div className="space-y-2">
-                      <label className="text-sm font-medium text-gray-700">Stock Information</label>
-                      <div className="grid grid-cols-2 gap-3">
-                        <input
-                          type="number"
-                          name="inStockValue"
-                          value={productData.inStockValue}
-                          onChange={handleInputChange}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-secondary transition-shadow outline-none"
-                          placeholder="In Stock"
-                        />
-                        <input
-                          type="number"
-                          name="soldStockValue"
-                          value={productData.soldStockValue}
-                          onChange={handleInputChange}
-                          className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-secondary transition-shadow outline-none"
-                          placeholder="Sold Stock"
-                        />
-                      </div>
-                    </div>
-                  </section>
-        
-                  <div className="space-y-2">
-                    <label className="text-sm font-medium text-gray-700">Description</label>
-                    <textarea
-                      name="description"
-                      value={productData.description}
-                      onChange={handleInputChange}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-secondary transition-shadow outline-none"
-                      rows={4}
-                      placeholder="Enter product description"
-                    />
-                  </div>
-        
-                  {/* Form Actions */}
-                  <div className="flex items-center justify-end gap-3 pt-6 border-t">
-                    <button
-                      onClick={() => setShowDialog(false)}
-                      className="px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors font-medium"
-                    >
-                      Cancel
-                    </button>
-                    <button
-                      onClick={handleSubmit}
-                      disabled={isUploading}
-                      className="px-4 py-2 bg-secondary text-white rounded-lg hover:bg-primary transition-colors disabled:bg-pink-300 shadow-sm font-medium"
-                    >
-                      Save Product
-                    </button>
-                  </div>
-                </div>
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl shadow-xl w-full max-w-3xl max-h-[90vh] overflow-y-auto animate-in fade-in-0 zoom-in-95">
+            {/* Header */}
+            <div className="border-b p-6">
+              <div className="flex items-center justify-between">
+                <h2 className="text-2xl font-semibold text-gray-800">Add New Product</h2>
+                <button
+                  onClick={() => setShowDialog(false)}
+                  className="rounded-full p-2 hover:bg-gray-100 transition-colors"
+                >
+                  <X className="w-5 h-5 text-gray-500" />
+                </button>
               </div>
             </div>
+
+            <div className="p-6 space-y-8">
+              {/* Image Upload Section */}
+              <section className="space-y-4">
+  <h3 className="text-base font-semibold text-gray-800">Product Images</h3>
+  <div className="space-y-4">
+    <div className="flex items-center gap-4">
+      <label className="flex-1 cursor-pointer group">
+        <div className="flex items-center justify-center h-36 px-4 transition-all border-2 border-dashed rounded-xl border-gray-300 group-hover:border-pink-400 group-hover:bg-pink-50/50">
+          <div className="flex flex-col items-center space-y-2 text-center">
+            <ImageIcon className="w-8 h-8 text-gray-400 group-hover:text-primary" />
+            <span className="text-sm text-gray-500 group-hover:text-primary">
+              {selectedFile.length > 0
+                ? `${selectedFile.length} images selected`
+                : "Drop images here or click to browse"}
+            </span>
+          </div>
+          <input
+            type="file"
+            accept="image/*"
+            multiple  // Allow multiple files
+            onChange={handleImageSelect}
+            className="hidden"
+            disabled={isUploading}
+          />
+        </div>
+      </label>
+      <button
+    
+        disabled={selectedFile.length === 0 || isUploading}
+        className={`px-4 py-2.5 rounded-lg flex items-center gap-2 transition-all ${
+          selectedFile.length === 0 || isUploading
+            ? "bg-gray-200 text-gray-500 cursor-not-allowed"
+            : "bg-secondary hover:bg-primary text-white shadow-sm"
+        }`}
+      >
+        {isUploading ? (
+          <Loader2 className="w-5 h-5 animate-spin" />
+        ) : (
+          <Upload className="w-5 h-5" />
+        )}
+        <span className="font-medium">{isUploading ? "Uploading..." : "Upload"}</span>
+      </button>
+    </div>
+
+    {/* Image Preview Grid */}
+    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+      {selectedFile.map((file, index) => (
+        <div key={index} className="relative group rounded-xl overflow-hidden shadow-sm">
+          <img
+            src={URL.createObjectURL(file)}
+            alt={`Preview ${index + 1}`}
+            className="w-full h-24 object-cover"
+          />
+          <button
+            onClick={() => removeImage(index)}
+            className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-200"
+          >
+            <X className="w-6 h-6 text-white" />
+          </button>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+              {/* Product Modal */}
+              <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-gray-700">Product Name</label>
+                  <input
+                    type="text"
+                    name="name"
+                    value={productData.name}
+                    onChange={handleInputChange}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-secondary transition-shadow outline-none"
+                    placeholder="Enter product name"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-gray-700">Price</label>
+                  <input
+                    type="number"
+                    name="price"
+                    value={productData.price}
+                    onChange={handleInputChange}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-secondary transition-shadow outline-none"
+                    placeholder="Enter price"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-gray-700">Category</label>
+                  <select
+                    name="category"
+                    value={productData.category}
+                    onChange={handleInputChange}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-secondary transition-shadow outline-none"
+                  >
+                    <option value="">Select Category</option>
+                    <option value="fashion">Fashion</option>
+                    <option value="gift-items">Gift Items</option>
+                    <option value="greeting-cards">Greeting Cards</option>
+                    <option value="stationary">Stationary</option>
+                  </select>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-gray-700">Rating</label>
+                  <input
+                    type="number"
+                    name="rating"
+                    value={productData.rating}
+                    onChange={handleInputChange}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-secondary transition-shadow outline-none"
+                    min={0}
+                    max={5}
+                    step={0.1}
+                    placeholder="Enter rating (0-5)"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-gray-700">Product ID</label>
+                  <div className="flex gap-2">
+                    <input
+                      type="text"
+                      name="productId"
+                      value={productData.productId}
+                      readOnly
+                      className="flex-1 px-3 py-2 border border-gray-300 rounded-lg bg-gray-50 outline-none"
+                      placeholder="Click generate to create ID"
+                    />
+                    <button
+                      onClick={generateProductId}
+                      className="px-4 py-2 bg-secondary text-white rounded-lg hover:bg-primary transition-colors shadow-sm font-medium"
+                    >
+                      Generate
+                    </button>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-medium text-gray-700">Stock Information</label>
+                  <div className="grid grid-cols-2 gap-3">
+                    <input
+                      type="number"
+                      name="inStockValue"
+                      value={productData.inStockValue}
+                      onChange={handleInputChange}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-secondary transition-shadow outline-none"
+                      placeholder="In Stock"
+                    />
+                    <input
+                      type="number"
+                      name="soldStockValue"
+                      value={productData.soldStockValue}
+                      onChange={handleInputChange}
+                      className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-secondary transition-shadow outline-none"
+                      placeholder="Sold Stock"
+                    />
+                  </div>
+                </div>
+              </section>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-gray-700">Description</label>
+                <textarea
+                  name="description"
+                  value={productData.description}
+                  onChange={handleInputChange}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-secondary transition-shadow outline-none"
+                  rows={4}
+                  placeholder="Enter product description"
+                />
+              </div>
+
+              {/* Form Actions */}
+              <div className="flex items-center justify-end gap-3 pt-6 border-t">
+                <button
+                  onClick={() => setShowDialog(false)}
+                  className="px-4 py-2 text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors font-medium"
+                >
+                  Cancel
+                </button>
+                <button
+                      onClick={handleSubmit}
+                      className={`px-4 py-2.5 rounded-lg flex items-center gap-2 transition-all ${!selectedFile || isUploading
+                          ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
+                          : 'bg-green-600 hover:bg-green-400 text-white shadow-sm'
+                        }`}
+                    >
+                      {isUploading ? (
+                        <Loader2 className="w-5 h-5 animate-spin" />
+                      ) : (
+                        <Upload className="w-5 h-5" />
+                      )}
+                      <span className="font-medium">{isUploading ? 'Creating...' : 'Create Product'}</span>
+                    </button>
+              </div>
+            </div>
+          </div>
+        </div>
       )}
 
       {/* Sidebar */}
@@ -451,7 +420,7 @@ const Sidebar = () => {
       >
         <div className="flex items-center justify-between p-6 border-b">
           {isOpen && (
-            <div className="text-2xl font-bold bg-gradient-to-r from-secondary to-primary bg-clip-text text-transparent">
+            <div className="text-2xl font-bold text-primary">
               Zang Global
             </div>
           )}

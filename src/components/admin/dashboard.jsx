@@ -170,7 +170,7 @@ const Dashboard = () => {
                 </div>
 
                 {/* Charts Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     {[
                         { 
                             title: "Order Status", 
@@ -193,10 +193,10 @@ const Dashboard = () => {
                     ].map((chart, index) => (
                         <div 
                             key={index} 
-                            className="bg-white rounded-xl shadow-lg p-6 border-t-4 border-primary"
+                            className="bg-white rounded-xl shadow-lg p-2 border-t-4 border-primary"
                         >
                             <h2 className="text-lg font-semibold text-pink-700 mb-4">{chart.title}</h2>
-                            <div className="h-64 relative">
+                            <div className="h-52 relative">
                                 <ResponsiveContainer width="100%" height="100%">
                                     <PieChart>
                                         <Pie 

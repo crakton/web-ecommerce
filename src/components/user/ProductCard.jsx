@@ -39,8 +39,19 @@ const ProductCard = ({ product, onBuyNow }) => {
             ₦{product.price.toLocaleString()}
           </span>
           <div className="flex items-center">
-            <FaStar className="text-yellow-400 text-xs sm:text-sm mr-1" />
+            {
+              product?.rating === 0? "":
+           
+
+            <>
+            
+
+
+              <FaStar className="text-yellow-400 text-xs sm:text-sm mr-1" />
             <span className="text-xs sm:text-sm">{product.rating}</span>
+            </>
+
+}
           </div>
         </div>
 
