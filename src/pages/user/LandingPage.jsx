@@ -4,7 +4,6 @@ import { FaCheckCircle, FaFacebook, FaInstagram, FaTwitter, FaLinkedin } from "r
 import { TbCircleChevronsDown } from "react-icons/tb";
 import { FiMenu, FiX } from "react-icons/fi";
 import Carousel from "../../components/user/Carousel";
-import sampleImg from "../../assets/images/zang.jpg";
 import { whyUs } from "../../constants";
 import Navbar from "../../components/user/navbar/LandingNavBar";
 import { motion } from "framer-motion";
@@ -12,6 +11,8 @@ import ContactUs from "./contact";
 import logo2 from "../../assets/images/logoYellow.png"
 
 import {TypeAnimation} from "react-type-animation"
+import Hero from "../../components/user/Hero";
+import About from "../../components/user/About";
 
 
 // export const LandingNavbar = () => {
@@ -127,30 +128,7 @@ const Achievements = () => {
   return (
     <main className="md:px-2">
       <Navbar />
-      <section id="welcome" className="h-screen flex flex-col md:flex-row items-center justify-around bg-primary p-10">
-        <div className="flex flex-col gap-6 text-center md:text-left">
-
-          <h3 className="text-4xl font-bold text-secondary">Bringing Power to Your Hands</h3>
-
-          <TypeAnimation
-      sequence={[
-        // Same substring at the start will only be typed out once, initially
-        'We produce  for Power Banks',
-        1000, // wait 1s before replacing "Mice" with "Hamsters"
-        'We produce  for Power USB cables',
-        1000,
-        'We offer Services for IT training',
-        1000,
-      ]}
-      wrapper="span"
-      speed={50}
-      className="text-mutedSecondary font-bold text-2xl"
-      repeat={Infinity}
-    />
-          <Link className="bg-secondary text-primary px-6 py-2 rounded-md font-bold w-fit mx-auto md:mx-0" to="/store">Shop Now</Link>
-        </div>
-        <img src={sampleImg} className="md:w-[40%] md:h-[80%] rounded-lg shadow-lg" alt="company" />
-      </section>
+     <Hero />
 
       {/* why us */}
       <section id="why-us" className="bg-mutedSecondary text-primary flex flex-col items-center justify-center md:h-[70vh] p-16 w-full">
@@ -171,8 +149,9 @@ const Achievements = () => {
       {/* Carousel */}
       <section className=" bg-primary">
         <Carousel />
-        <ContactUs />
       </section>
+      <About />
+        <ContactUs />
       <footer className="bg-background text-secondary py-8 px-6 md:px-16">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center">
           <div className="text-center md:text-left">
