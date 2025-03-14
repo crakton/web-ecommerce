@@ -15,7 +15,7 @@ const loadCart = () => {
 // Fetch Cart from API
 export const fetchCart = createAsyncThunk("cart/fetchCart", async (userId, { rejectWithValue }) => {
   try {
-    const response = await api.get(`/cart/${userId}`);
+    const response = await api.get(`/carts/${userId}`);
     localStorage.setItem("cart", JSON.stringify(response.data)); // Sync with storage
     return response.data;
   } catch (error) {
@@ -24,9 +24,9 @@ export const fetchCart = createAsyncThunk("cart/fetchCart", async (userId, { rej
 });
 
 // Add to Cart
-export const addToCart = createAsyncThunk("cart/addToCart", async ({ productId, productQty = 1, userId }, { rejectWithValue }) => {
+export const addToCart = createAsyncThunk("carts/addToCart", async ({ productId, productQty = 1, userId }, { rejectWithValue }) => {
   try {
-    const response = await api.post("/cart/add", { productId, productQty, userId });
+    const response = await api.post("/carts/add", { productId, productQty, userId });
     toast.success(`added to cart!`);
     return response.data;
   } catch (error) {
@@ -35,9 +35,9 @@ export const addToCart = createAsyncThunk("cart/addToCart", async ({ productId, 
 });
 
 // Remove from Cart
-export const removeFromCart = createAsyncThunk("cart/removeFromCart", async ({ userId, productId }, { rejectWithValue }) => {
+export const removeFromCart = createAsyncThunk("carts/removeFromCart", async ({ userId, productId }, { rejectWithValue }) => {
   try {
-    await api.delete(`/cart/remove/${userId}/${productId}`);
+    await api.delete(`/carts/remove/${userId}/${productId}`);
     const cart = localStorage.getItem("cart")
     console.log(cart, "From Local Storage")
     

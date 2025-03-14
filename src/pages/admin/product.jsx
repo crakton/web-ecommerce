@@ -252,6 +252,12 @@ console.log(sortedProducts,"sorted Products")
                     <ArrowUpDown size={14} className="ml-1" />
                   </div>
                 </th>
+                <th onClick={() => handleSort('quantity')} className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider cursor-pointer">
+                  <div className="flex items-center">
+                    Quantity
+                    <ArrowUpDown size={14} className="ml-1" />
+                  </div>
+                </th>
                 <th onClick={() => handleSort('price')} className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider cursor-pointer">
                   <div className="flex items-center">
                     Price
@@ -274,6 +280,9 @@ console.log(sortedProducts,"sorted Products")
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     {product.category || '-'}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    {product.inStockValue || '-'}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     {product.price || '-'}

@@ -49,8 +49,7 @@ const ProductDetail = () => {
           "Content-Type": "application/json",
         },
       });
-  
-      console.log("Review submitted successfully:", response.data);
+      console.log("Review Added Successfully")
       return response.data; 
     } catch (error) {
       console.error("Error submitting review:", error.response?.data || error.message);
@@ -86,15 +85,9 @@ const ProductDetail = () => {
     const fetchReviews = async () => {
       try {
         const response = await api.get(`/reviews/product/${productId}`)
-        const data = await response?.json();
-        console.log(response, "")
-        if (data.message === 'No reviews found for this product') {
-          setReviews([]);
-        }
-        else {
-          setReviews(data.reviews || []);
-          
-        }
+        const data = await response?.data;
+        console.log(data, " Getting product reviews")
+        setReviews(data)
       } catch (error) {
         console.error('Error fetching reviews:', error);
       }
@@ -167,6 +160,8 @@ const handleNextImage = () => {
   );
 };
 
+
+console.log(reviews, "reviews")
 
   if (!product) {
     return (

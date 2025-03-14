@@ -283,9 +283,12 @@ const ProfessionalNavbar = () => {
             className="lg:hidden fixed inset-y-0 left-0 w-64 z-50 bg-white shadow-xl"
           >
             <div className="flex justify-between items-center p-4 border-b">
-              <span className="font-['Bodoni_MT'] text-xl sm:text-2xl font-bold text-primary">
-                Menu
-              </span>
+            <Link
+              to="/"
+              className="text-2xl flex items-center transition mx-auto lg:mx-0"
+            >
+              <img src={logo} width={100} />
+            </Link>
               <motion.button
                 whileHover={{ rotate: 90 }}
                 whileTap={{ scale: 0.9 }}
