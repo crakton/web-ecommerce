@@ -167,36 +167,36 @@ const Orders = () => {
         <title>Orders | Admin | Mera Bestie</title>
       </Helmet>
       <Sidebar />
-      <div className="flex-1 p-8 ml-[5rem] lg:ml-64 bg-pink-50 min-h-screen">
+      <div className="flex-1 p-8 ml-[5rem] lg:ml-64  min-h-screen">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-pink-700 mb-4">Order Management</h1>
+          <h1 className="text-3xl font-bold text-primary mb-4">Order Management</h1>
           <div className="w-full max-w-md mx-auto">
             <div className="relative">
               <input
                 type="text"
                 placeholder="Search by order ID or customer name..."
-                className="w-full pl-10 pr-4 py-3 border-2 border-pink-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-300"
+                className="w-full pl-10 pr-4 py-3 border-2 border-mutedPrimary rounded-lg focus:outline-none focus:ring-[1px] focus:ring-primary"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
-              <Search className="absolute left-3 top-3.5 text-pink-400" size={20} />
+              <Search className="absolute left-3 top-3.5 text-mutedPrimary" size={20} />
             </div>
           </div>
         </div>
 
         <div className="bg-white rounded-xl shadow-lg overflow-x-auto">
           <table className="min-w-full table-auto">
-            <thead className="bg-pink-100">
+            <thead className="bg-primary">
               <tr>
                 {['orderId', 'date', 'time', 'name', 'email', 'price', 'status'].map((key) => (
                   <th 
                     key={key}
                     onClick={() => handleSort(key)} 
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider cursor-pointer hover:bg-pink-200 transition"
+                    className="px-6 py-3 text-left text-xs font-medium text-secondary uppercase tracking-wider cursor-pointer hover:bg-pink-200 transition"
                   >
                     <div className="flex items-center">
                       {key.charAt(0).toUpperCase() + key.slice(1)}
-                      <ArrowUpDown size={14} className="ml-1 text-pink-500" />
+                      <ArrowUpDown size={14} className="ml-1 text-mutedSecondary" />
                     </div>
                   </th>
                 ))}

@@ -20,7 +20,7 @@ const Navbar = () => {
           width={100} 
           height={50} 
           alt="Company Logo" 
-          loading="lazy" 
+          loading="lazy"
           className="h-auto"
         />
       </Link>
@@ -54,12 +54,12 @@ const Navbar = () => {
         transform ${mobileMenuOpen ? "translate-x-0" : "-translate-x-full"} transition-transform duration-300 ease-in-out`}
         role="navigation"
       >
-        <a href="#welcome" className="text-secondary hover:text-background" onClick={closeMenu}>Home</a>
-        <a href="#why-us" className="text-secondary hover:text-background" onClick={closeMenu}>Why Us</a>
-        <a href="#achievements" className="text-secondary hover:text-background" onClick={closeMenu}>Achievements</a>
-        <a href="#about" className="text-secondary hover:text-background" onClick={closeMenu}>About Us</a>
+        <a href="/#welcome" className="text-secondary hover:text-background" onClick={closeMenu}>Home</a>
+        <a href="/#why-us" className="text-secondary hover:text-background" onClick={closeMenu}>Why Us</a>
+        <a href="/#achievements" className="text-secondary hover:text-background" onClick={closeMenu}>Achievements</a>
+        <a href="/#about" className="text-secondary hover:text-background" onClick={closeMenu}>About Us</a>
 
-        <a href="#contact" className="text-secondary hover:text-background" onClick={closeMenu}>Contact</a>
+        <a href="/#contact" className="text-secondary hover:text-background" onClick={closeMenu}>Contact</a>
         <Link to="/blogs" className="text-secondary hover:text-background" onClick={closeMenu}>Blog</Link>
       </div>
       

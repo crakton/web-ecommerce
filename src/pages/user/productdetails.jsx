@@ -85,8 +85,9 @@ const ProductDetail = () => {
   useEffect(() => {
     const fetchReviews = async () => {
       try {
-        const response = await api.get('/reviews')
-        const data = await response.json();
+        const response = await api.get(`/reviews/product/${productId}`)
+        const data = await response?.json();
+        console.log(response, "")
         if (data.message === 'No reviews found for this product') {
           setReviews([]);
         }

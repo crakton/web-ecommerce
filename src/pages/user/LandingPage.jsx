@@ -1,18 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 import { FaCheckCircle, FaFacebook, FaInstagram, FaTwitter, FaLinkedin } from "react-icons/fa";
-import { TbCircleChevronsDown } from "react-icons/tb";
-import { FiMenu, FiX } from "react-icons/fi";
 import Carousel from "../../components/user/Carousel";
 import { whyUs } from "../../constants";
-import Navbar from "../../components/user/navbar/LandingNavBar";
+import Navbar from "../../components/user/Landing/LandingNavBar";
 import { motion } from "framer-motion";
 import ContactUs from "./contact";
 import logo2 from "../../assets/images/logoYellow.png"
-
-import {TypeAnimation} from "react-type-animation"
-import Hero from "../../components/user/Hero";
-import About from "../../components/user/About";
+import Hero from "../../components/user/Landing/Hero";
+import About from "../../components/user/Landing/About";
 
 
 // export const LandingNavbar = () => {

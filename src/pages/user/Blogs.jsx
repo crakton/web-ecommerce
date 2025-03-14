@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import blogs from "../../blogData";
 import BlogCard from "../../components/user/BlogCard";
-import Navbar from "../../components/user/navbar/LandingNavBar";
+import Navbar from "../../components/user/Landing/LandingNavBar";
 const Blogs = () => {
   const [searchQuery, setSearchQuery] = useState("");
 

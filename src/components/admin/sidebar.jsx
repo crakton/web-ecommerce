@@ -414,7 +414,7 @@ const Sidebar = () => {
 
       {/* Sidebar */}
       <div
-        className={`fixed left-0 top-0 h-screen bg-gradient-to-b from-pink-50 to-white shadow-xl transition-all duration-300 
+        className={`fixed left-0 top-0 h-screen bg- shadow-xl transition-all duration-300 
                   lg:translate-x-0 lg:w-64 z-40
                   ${isOpen ? "translate-x-0 w-64" : "-translate-x-full w-64 lg:translate-x-0 lg:w-20"}`}
       >
@@ -435,8 +435,8 @@ const Sidebar = () => {
                     to={item.path}
                     className={`flex items-center px-4 py-3 rounded-lg transition-all
                       ${location.pathname === item.path
-                        ? "bg-pink-100 text-primary"
-                        : "text-gray-600 hover:bg-pink-50 hover:text-primary"
+                        ? "bg-mutedSecondary text-primary"
+                        : "text-gray-600 hover:bg-mutedPrimary hover:text-mutedSecondary"
                       }
                       ${isOpen ? "justify-start space-x-3" : "justify-center"}`}
                   >
