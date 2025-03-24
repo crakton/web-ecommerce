@@ -1,4 +1,15 @@
 import image from "./assets/images/review.jpg"
+import FederalGovernment from "./assets/images/partners/FederalGovernment.png";
+import Amahoro from "./assets/images/partners/Amahoro.png";
+import Plasmida from "./assets/images/partners/Plasmida.png";
+import WesternUnion from "./assets/images/partners/WesternUnionFoundation.png";
+import WatsonInstitute from "./assets/images/partners/WatsonInstitute.png";
+import Ecowas from "./assets/images/partners/Ecowas.png";
+import EnergyGlobe from "./assets/images/partners/EnergyGlobe.jpg";
+import Ariel from "./assets/images/partners/ZangGlobal.jpeg";
+import NationalWinner from "./assets/images/partners/nationalWinner2022_Nigeria.png";
+import Awards from "./assets/images/partners/Awards.jpg";
+
 
 
 export const API_URL = process.env.API_URL || "https://api.merabestie.com"
@@ -141,3 +152,28 @@ export const testimonialData = [
         services: "Manager",
     },
 ];
+
+
+
+export const partnerAwardData = {
+    partners: [
+        { name: "Federal Government of Nigeria", image: FederalGovernment },
+        { name: "Amahoro", image: Amahoro },
+        { name: "Plateau State Microfinance Development Agency (PLASMIDA)", image: Plasmida },
+        { name: "Western Union Foundation", image: WesternUnion },
+        { name: "Watson Institute USA", image: WatsonInstitute },
+        { name: "ECOWAS", image: Ecowas },
+        { name: "Energy Globe", image: EnergyGlobe },
+        { name: "Ariel", image: Ariel }
+      ],
+      awards: [
+        { title: "Energy Globe National Award", year: 2022, image: NationalWinner },
+        { title: "Most Innovative Tech Environmental Solutions", year: 2022, organization: "Alphablue Foundation", image: Awards },
+        { title: "Startup Award", year: 2021, organization: "ECOWAS", image: Ecowas },
+        { title: "Unsung Heroes Award", year: 2019, image: Awards },
+        { title: "National MSMEs Award of Excellence in Technology Innovation", year: 2019, image: Awards },
+        { title: "The Future Awards Africa Prize for Technology", year: 2019, image: Awards }
+      ]
+
+  };
+  

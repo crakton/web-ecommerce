@@ -1,0 +1,50 @@
+import { FaFacebook, FaInstagram, FaTwitter, FaLinkedin } from "react-icons/fa";
+import logo from "../../../assets/images/whiteLogo.png"
+
+const Footer = () => {
+  return (
+    <footer className="bg-gray-900 text-white py-8 px-6 md:px-16">
+      <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center">
+        {/* Logo and Tagline */}
+        <div className="text-center md:text-left">
+          <img src = {logo} height={60} width={150} alt="Zang Global Logo" />
+          <p className="text-sm mt-2 opacity-75">Bringing Power to Your Hands</p>
+        </div>
+
+        {/* Contact Information */}
+        <div className="text-center my-4 md:my-0">
+          <h2 className="text-lg font-semibold">Contact Us</h2>
+          <p className="text-sm opacity-75">Bukuru, Jos South, Plateau State, Nigeria</p>
+          <p className="text-sm opacity-75">Tel: <a href="tel:+2349015648441" className="hover:text-gray-400">+234 901 564 8441</a></p>
+          <p className="text-sm opacity-75">Email: <a href="mailto:Ld604068@gmail.com" className="hover:text-gray-400">Ld604068@gmail.com</a></p>
+        </div>
+
+        {/* Social Media Links */}
+        <div className="text-center">
+          <h2 className="text-lg font-semibold">Follow Us</h2>
+          <div className="flex justify-center space-x-4 mt-2 text-2xl">
+            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
+              <FaFacebook className="hover:text-gray-400 cursor-pointer" />
+            </a>
+            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
+              <FaInstagram className="hover:text-gray-400 cursor-pointer" />
+            </a>
+            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
+              <FaTwitter className="hover:text-gray-400 cursor-pointer" />
+            </a>
+            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">
+              <FaLinkedin className="hover:text-gray-400 cursor-pointer" />
+            </a>
+          </div>
+        </div>
+      </div>
+
+      {/* Copyright Section */}
+      <div className="text-center text-sm mt-6 border-t border-gray-700 pt-4 opacity-75">
+        &copy; {new Date().getFullYear()} Zang Global. All Rights Reserved.
+      </div>
+    </footer>
+  );
+};
+
+export default Footer;

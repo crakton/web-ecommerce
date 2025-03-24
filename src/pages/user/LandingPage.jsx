@@ -8,6 +8,8 @@ import ContactUs from "./contact";
 import logo2 from "../../assets/images/logoYellow.png"
 import Hero from "../../components/user/Landing/Hero";
 import About from "../../components/user/Landing/About";
+import PartnersAndAwards from "../../components/user/Landing/PartnersAndAwards";
+import Footer from "../../components/user/Landing/Footer";
 
 
 const LandingPage = () => {
@@ -116,32 +118,9 @@ const LandingPage = () => {
       </section>
       <About />
       <ContactUs />
-      <footer className="bg-background text-secondary py-8 px-6 md:px-16">
-        <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center">
-          <div className="text-center md:text-left">
-            <img src={logo2} height={60} width={150} alt="logo" />
-            <p className="text-sm mt-2">Bringing Power to Your Hands</p>
-          </div>
-          <div className="text-center my-4 md:my-0">
-            <h2 className="text-xl font-semibold">Contact Us</h2>
-            <p className="text-sm">Bukuru, Jos South, Plateau State, Nigeria</p>
-            <p className="text-sm">Tel: +2349015648441</p>
-            <p className="text-sm">Email: Ld604068@gmail.com</p>
-          </div>
-          <div className="text-center">
-            <h2 className="text-xl font-semibold">Follow Us</h2>
-            <div className="flex justify-center space-x-4 mt-2 text-2xl">
-              <FaFacebook className="hover:text-background cursor-pointer" />
-              <FaInstagram className="hover:text-background cursor-pointer" />
-              <FaTwitter className="hover:text-background cursor-pointer" />
-              <FaLinkedin className="hover:text-background cursor-pointer" />
-            </div>
-          </div>
-        </div>
-        <div className="text-center text-sm mt-6 border-t border-secondary pt-4">
-          &copy; {new Date().getFullYear()} Zang Global. All Rights Reserved.
-        </div>
-      </footer>
+      <PartnersAndAwards />
+      <Footer />
+     
     </main>
   );
 };
