@@ -175,7 +175,6 @@ const HomePage = () => {
 
   return (
     <div className="bg-gray-50 min-h-screen">
-      {/* <SEOComponent /> */}
       <ScrollProgress />
       <Navbar />
       <main className="pb-8">

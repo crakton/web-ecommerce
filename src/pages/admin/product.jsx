@@ -4,7 +4,8 @@ import { Helmet } from "react-helmet";
 import { useParams, useNavigate } from 'react-router-dom';
 import Sidebar from '../../components/admin/sidebar';
 import { useDispatch, useSelector } from 'react-redux';
-import { getProducts } from '../../redux/slice/productSlice';
+import { deleteProduct, getProducts } from '../../redux/slice/productSlice';
+import { fetchProducts } from '../../config/api';
 
 const Product = () => {
   const { sellerId } = useParams();
@@ -44,7 +45,7 @@ const Product = () => {
     dispatch(getProducts());
   }, [dispatch, refresh]); // Refresh dependency added
 
-  const productData = products.data
+  const productData = products?.data
   console.log(productData, "from products")
 
   
@@ -88,21 +89,16 @@ const Product = () => {
   };
 
   const handleDelete = async (product) => {
+    console.log("Deleting...", product.name);
     try {
-      await fetch('https://api.merabestie.com/delete-product', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          productId: product.productId
-        })
-      });
-      // fetchProducts();
+        await dispatch(deleteProduct(product.productId));
+        console.log("Deleting successful, refreshing product list...");
+        setRefresh(prev => !prev); // Toggle refresh state
     } catch (error) {
-      console.log(error);
+        console.log(error);
     }
-  };
+};
+
 
   const handleDeleteImage = async (imageUrl) => {
     try {

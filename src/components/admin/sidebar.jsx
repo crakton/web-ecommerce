@@ -17,7 +17,8 @@ import {
   Image as ImageIcon,
 } from "lucide-react";
 import { useSelector, useDispatch } from "react-redux";
-import { createProduct } from "../../redux/slice/productSlice";
+import { createProduct } from "../../redux/slice/productSlice"
+import { toast } from "react-toastify";
 
 
 
@@ -35,10 +36,8 @@ const Sidebar = () => {
     img: [],
     category: "",
     description: "",
-    rating: 0,
-    productId: "",
     inStockValue: 0,
-    soldStockValue: 0,
+    visibility:true
   });
   const location = useLocation();
 
@@ -163,12 +162,17 @@ const Sidebar = () => {
           img: [],
           category: "",
           description: "",
-          rating: 0,
+          // rating: 0,
           productId: "",
           inStockValue: 0,
-          soldStockValue: 0,
+          // soldStockValue: 0,
+
         });
+      
         setUploadStatus("Product created successfully!");
+        toast.success(` product ${productData.name} created successfully`);
+
+        setIsUploading(false)
       } else {
         setUploadStatus("Error creating product: " + response.error.message);
       }
@@ -210,7 +214,7 @@ const Sidebar = () => {
             <div className="p-6 space-y-8">
               {/* Image Upload Section */}
               <section className="space-y-4">
-  <h3 className="text-base font-semibold text-gray-800">Product Images</h3>
+  <h3 className="text-base font-semibold text-gray-800">Product img</h3>
   <div className="space-y-4">
     <div className="flex items-center gap-4">
       <label className="flex-1 cursor-pointer group">
@@ -219,8 +223,8 @@ const Sidebar = () => {
             <ImageIcon className="w-8 h-8 text-gray-400 group-hover:text-primary" />
             <span className="text-sm text-gray-500 group-hover:text-primary">
               {selectedFile.length > 0
-                ? `${selectedFile.length} images selected`
-                : "Drop images here or click to browse"}
+                ? `${selectedFile.length} img selected`
+                : "Drop img here or click to browse"}
             </span>
           </div>
           <input
@@ -235,7 +239,7 @@ const Sidebar = () => {
       </label>
       <button
     
-        disabled={selectedFile.length === 0 || isUploading}
+        // disabled={selectedFile.length === 0 || isUploading}
         className={`px-4 py-2.5 rounded-lg flex items-center gap-2 transition-all ${
           selectedFile.length === 0 || isUploading
             ? "bg-gray-200 text-gray-500 cursor-not-allowed"
@@ -314,7 +318,7 @@ const Sidebar = () => {
                   </select>
                 </div>
 
-                <div className="space-y-2">
+                {/* <div className="space-y-2">
                   <label className="text-sm font-medium text-gray-700">Rating</label>
                   <input
                     type="number"
@@ -327,9 +331,9 @@ const Sidebar = () => {
                     step={0.1}
                     placeholder="Enter rating (0-5)"
                   />
-                </div>
+                </div> */}
 
-                <div className="space-y-2">
+                {/* <div className="space-y-2">
                   <label className="text-sm font-medium text-gray-700">Product ID</label>
                   <div className="flex gap-2">
                     <input
@@ -347,7 +351,7 @@ const Sidebar = () => {
                       Generate
                     </button>
                   </div>
-                </div>
+                </div> */}
 
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-gray-700">Stock Information</label>

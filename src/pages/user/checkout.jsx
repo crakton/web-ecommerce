@@ -5,7 +5,6 @@ import confetti from 'canvas-confetti';
 import { Helmet } from "react-helmet";
 import Navbar from '../../components/user/navbar/navbar';
 import { useLocation } from 'react-router-dom';
-import SEOComponent from '../../components/SEO/SEOComponent';
 import { API_URL, APP_DESC, APP_NAME, RAZORPAY_API } from '../../constants'
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchCart } from '../../redux/slice/cartSlice';
@@ -303,7 +302,6 @@ const Checkout = () => {
 
   return (
     <div className="bg-gray-50 min-h-screen">
-      <SEOComponent />
       <Helmet>
         <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
       </Helmet>

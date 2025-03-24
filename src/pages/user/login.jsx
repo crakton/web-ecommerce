@@ -34,7 +34,7 @@ const Login = () => {
 
   return (
     <>
-      <SEOComponent />
+      {/* <SEOComponent /> */}
       <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4 mt-16">
         <div className="fixed top-0 left-0 w-full z-50">
           <Navbar />

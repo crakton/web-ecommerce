@@ -3,7 +3,6 @@ import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaPaperPlane } from "react-icons/f
 import { motion } from "framer-motion";
 import Navbar from "../../components/user/navbar/navbar";
 import { Helmet } from "react-helmet";
-import SEOComponent from "../../components/SEO/SEOComponent";
 import { useLocation } from "react-router-dom";
 
 
@@ -54,7 +53,6 @@ const pathLocation = useLocation()
 
   return (
     <>
-    <SEOComponent/>
     <div className={`${pathLocation.pathname ==="/"?"hidden":""}`}>
 
     <Navbar className='z-0 mb-auto' />

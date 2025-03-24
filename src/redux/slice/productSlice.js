@@ -24,7 +24,8 @@ export const getProductById = createAsyncThunk("product/getById", async (product
 // Create Product
 export const createProduct = createAsyncThunk("product/createProduct", async (productData, { rejectWithValue }) => {
   try {
-    const response = await api.post("/products", productData);
+    const response = await api.post("/products/new", productData);
+    getProducts()
     return response.data;
   } catch (error) {
     return rejectWithValue(error.response?.data || error.message);
@@ -34,7 +35,7 @@ export const createProduct = createAsyncThunk("product/createProduct", async (pr
 // Update Product
 export const updateProduct = createAsyncThunk("product/updateProduct", async ({ productId, productData }, { rejectWithValue }) => {
   try {
-    const response = await api.put(`/products/${productId}`, productData);
+    const response = await api.put(`/products/${productId}, productData`);
     return response.data;
   } catch (error) {
     return rejectWithValue(error.response?.data || error.message);
@@ -54,7 +55,7 @@ export const deleteProduct = createAsyncThunk("product/deleteProduct", async (pr
 
 
 const productSlice = createSlice({
-  name: "product",
+  name: "products",
   initialState: { products: [], product: null, loading: false, error: null },
   reducers: {},
   extraReducers: (builder) => {
@@ -93,8 +94,9 @@ const productSlice = createSlice({
         state.error = null;
       })
       .addCase(createProduct.fulfilled, (state, action) => {
+        console.log("New Product:", action.payload); // Debugging
         state.loading = false;
-        state.products.push(action.payload);
+        state.products = Array.isArray(state.products) ? [...state.products, action.payload] : [action.payload];
       })
       .addCase(createProduct.rejected, (state, action) => {
         state.loading = false;
@@ -124,7 +126,7 @@ const productSlice = createSlice({
       })
       .addCase(deleteProduct.fulfilled, (state, action) => {
         state.loading = false;
-        state.products = state.products.filter((product) => product.id !== action.payload);
+        state.products = Array.isArray(state.products)? state.products.filter((product) => product.id !== action.payload):console.log("product Not an Array");
       })
       .addCase(deleteProduct.rejected, (state, action) => {
         state.loading = false;

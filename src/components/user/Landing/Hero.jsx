@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import sampleImg from "../../../assets/images/zang.jpg";
 import React from "react";
+import { TypeAnimation } from "react-type-animation";
 
 function Hero() {
   return (
@@ -19,6 +20,27 @@ function Hero() {
           commitment to harnessing cutting-edge technologies and creative
           solutions empowers communities to thrive while protecting our planet.
         </p>
+
+        <TypeAnimation
+          sequence={[
+            // Same substring at the start will only be typed out once, initially
+            'We produce Power Banks',
+            1000, // wait 1s before replacing "Mice" with "Hamsters"
+            'We produce Cables',
+            1000,
+            'We offer IT Training',
+            1000,
+            'Quality and Reliable Services',
+            1000,
+            'Fast and secure Payment/Delivery Services',
+            1000
+          ]}
+          wrapper="span"
+          speed={50}
+          style={{ fontSize: '1.5em', display: 'inline-block', color: "#eddb17", fontWeight: "bold" }}
+          repeat={Infinity}
+        />
+
 
         <Link
           className="bg-secondary text-primary px-6 py-3 rounded-md font-bold text-lg transition duration-300 hover:bg-opacity-80 mx-auto md:mx-0 w-fit"

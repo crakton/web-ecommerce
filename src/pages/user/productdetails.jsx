@@ -86,7 +86,6 @@ const ProductDetail = () => {
       try {
         const response = await api.get(`/reviews/product/${productId}`)
         const data = await response?.data;
-        console.log(data, " Getting product reviews")
         setReviews(data)
       } catch (error) {
         console.error('Error fetching reviews:', error);
@@ -159,9 +158,6 @@ const handleNextImage = () => {
     prevIndex === product.img.length - 1 ? 0 : prevIndex + 1
   );
 };
-
-
-console.log(reviews, "reviews")
 
   if (!product) {
     return (

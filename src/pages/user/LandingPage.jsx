@@ -10,47 +10,16 @@ import Hero from "../../components/user/Landing/Hero";
 import About from "../../components/user/Landing/About";
 
 
-// export const LandingNavbar = () => {
-//   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-//   return (
-//     <nav className="fixed top-0 left-0 w-full bg-primary shadow-lg py-4 px-5 flex justify-between items-center z-50">
-//       <div className="text-secondary text-xl md:text-2xl font-bold flex items-center gap-2">
-//         <TbCircleChevronsDown size={30} /> Zamda Global
-//       </div>
-//       <div className="hidden text-secondary md:flex space-x-6">
-//         <a href="#welcome" className="hover:text-background">Home</a>
-//         <a href="#why-us" className="hover:text-background">Why Us</a>
-//         <a href="#progress" className="hover:text-background">Progress</a>
-//         <a href="#contact" className="hover:text-background">Contact</a>
-//         <Link to="/blogs" className="hover:text-background">Blog</Link>
-//       </div>
-//       <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="md:hidden text-secondary text-3xl">
-//         {mobileMenuOpen ? <FiX /> : <FiMenu />}
-//       </button>
-//       {mobileMenuOpen && (
-//         <div className="fixed top-0 left-0 w-64 h-full bg-primary shadow-lg flex flex-col items-center py-10 space-y-6 z-50">
-//           <a href="#welcome" className="text-secondary hover:text-background">Home</a>
-//           <a href="#why-us" className="text-secondary hover:text-background">Why Us</a>
-//           <a href="#progress" className="text-secondary hover:text-background">Progress</a>
-//           <a href="#contact" className="text-secondary hover:text-background">Contact</a>
-//           <Link to="/blogs" className="text-secondary hover:text-background">Blog</Link>
-//         </div>
-//       )}
-//     </nav>
-//   );
-// };
-
 const LandingPage = () => {
 
   const Counter = ({ value }) => {
     const [count, setCount] = useState(0);
-  
+
     useEffect(() => {
       let start = 0;
       const end = parseInt(value);
       if (start === end) return;
-  
+
       let totalDuration = 2000;
       let incrementTime = totalDuration / end;
       let timer = setInterval(() => {
@@ -58,72 +27,72 @@ const LandingPage = () => {
         setCount(start);
         if (start === end) clearInterval(timer);
       }, incrementTime);
-  
+
       return () => clearInterval(timer);
     }, [value]);
-  
-  return <motion.span whileInView={{ scale: 1.2 }} transition={{ duration: 0.5 }}>{count}+</motion.span>;
-    
+
+    return <motion.span whileInView={{ scale: 1.2 }} transition={{ duration: 0.5 }}>{count}+</motion.span>;
+
   };
 
 
 
 
-const Achievements = () => {
-  return (
-    <section
-      id="achievements"
-      className="w-full h-screen md:h-[60vh] flex flex-col bg-primary px-6 md:px-10 items-center justify-center py-16"
-    >
-      <motion.h2
-        className="text-3xl md:text-4xl font-bold text-secondary mb-8"
-        initial={{ opacity: 0, y: -50 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
+  const Achievements = () => {
+    return (
+      <section
+        id="achievements"
+        className="w-full h-screen md:h-[60vh] flex flex-col bg-primary px-6 md:px-10 items-center justify-center py-16"
       >
-        Our Achievements
-      </motion.h2>
-
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-5xl">
-        <motion.div
-          className="bg-mutedSecondary text-background p-6 rounded-lg flex flex-col items-center shadow-lg"
-          initial={{ opacity: 0, y: 50 }}
+        <motion.h2
+          className="text-3xl md:text-4xl font-bold text-secondary mb-8"
+          initial={{ opacity: 0, y: -50 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
+          transition={{ duration: 0.8 }}
         >
-          <Counter value={99} />
-          <p>Projects Completed</p>
-        </motion.div>
+          Our Achievements
+        </motion.h2>
 
-        <motion.div
-          className="bg-mutedSecondary text-background p-6 rounded-lg flex flex-col items-center shadow-lg"
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-        >
-          <Counter value={10} />
-          <p>Years of Experience</p>
-        </motion.div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-5xl">
+          <motion.div
+            className="bg-mutedSecondary text-background p-6 rounded-lg flex flex-col items-center shadow-lg"
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+          >
+            <Counter value={99} />
+            <p>Projects Completed</p>
+          </motion.div>
 
-        <motion.div
-          className="bg-mutedSecondary text-background p-6 rounded-lg flex flex-col items-center shadow-lg"
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
-        >
-          <Counter value={30} />
-          <p>Offices Nationwide</p>
-        </motion.div>
-      </div>
-    </section>
-  );
-};
-  
-  
+          <motion.div
+            className="bg-mutedSecondary text-background p-6 rounded-lg flex flex-col items-center shadow-lg"
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+          >
+            <Counter value={10} />
+            <p>Years of Experience</p>
+          </motion.div>
+
+          <motion.div
+            className="bg-mutedSecondary text-background p-6 rounded-lg flex flex-col items-center shadow-lg"
+            initial={{ opacity: 0, y: 50 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+          >
+            <Counter value={30} />
+            <p>Offices Nationwide</p>
+          </motion.div>
+        </div>
+      </section>
+    );
+  };
+
+
   return (
     <main className="md:px-2">
       <Navbar />
-     <Hero />
+      <Hero />
 
       {/* why us */}
       <section id="why-us" className="bg-mutedSecondary text-primary flex flex-col items-center justify-center md:h-[70vh] p-16 w-full">
@@ -139,18 +108,18 @@ const Achievements = () => {
         </div>
       </section>
 
-<Achievements />
+      <Achievements />
 
       {/* Carousel */}
       <section className=" bg-primary">
         <Carousel />
       </section>
       <About />
-        <ContactUs />
+      <ContactUs />
       <footer className="bg-background text-secondary py-8 px-6 md:px-16">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center">
           <div className="text-center md:text-left">
-            <img src={logo2} height={60} width={150} />
+            <img src={logo2} height={60} width={150} alt="logo" />
             <p className="text-sm mt-2">Bringing Power to Your Hands</p>
           </div>
           <div className="text-center my-4 md:my-0">
