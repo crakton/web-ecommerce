@@ -7,9 +7,9 @@ const PartnersAndAwards = () => {
       <h2 className="text-xl font-bold mb-4 text-secondary">Our Partners</h2>
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
         {partnerAwardData.partners.map((partner, index) => (
-          <div key={index} className="flex flex-col items-center p-4 rounded-lg bg-mutedPrimary shadow-lg">
-            <img src={partner.image} alt={partner.name} className="w-24 h-24 object-contain" />
-            <p className="text-sm mt-2 text-background font-semibold">{partner.name}</p>
+          <div key={index} className="flex flex-col items-center p-4 rounded-lg">
+            <img src={partner.image} alt={partner.name} className="w-28 h-28 object-contain" />
+            {/* <p className="text-sm mt-2 text-background font-semibold">{partner.name}</p> */}
           </div>
         ))}
       </div>
