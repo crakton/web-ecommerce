@@ -189,7 +189,10 @@ const pathLocation = useLocation()
                   { 
                     icon: <FaPhone className="text-mutedPrimary text-lg" />, 
                     title: "Phone", 
-                    detail: "2349031743810; 2347016705792" 
+                    detail: <p className="flex flex-col">+2349031743810<span>
+                      +2347016705792
+                      </span>
+                      </p>
                   },
                   { 
                     icon: <FaEnvelope className="text-blue text-xl" />, 
