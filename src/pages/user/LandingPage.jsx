@@ -16,30 +16,35 @@ const LandingPage = () => {
 
   const Counter = ({ value }) => {
     const [count, setCount] = useState(0);
-
-    useEffect(() => {
+  
+    const startCounting = () => {
+      setCount(0); // Reset count before starting again
       let start = 0;
       const end = parseInt(value);
       if (start === end) return;
-
-      let totalDuration = 2000;
+  
+      let totalDuration = 10000;
       let incrementTime = totalDuration / end;
       let timer = setInterval(() => {
         start += 1;
         setCount(start);
         if (start === end) clearInterval(timer);
       }, incrementTime);
-
+  
       return () => clearInterval(timer);
-    }, [value]);
-
-    return <motion.span whileInView={{ scale: 1.2 }} transition={{ duration: 0.5 }}>{count}+</motion.span>;
-
+    };
+  
+    return (
+      <motion.span
+        whileInView={{ scale: 1.2 }}
+        transition={{ duration: 0.5 }}
+        onViewportEnter={startCounting} // Restart count on entering viewport
+      >
+        {count}+
+      </motion.span>
+    );
   };
-
-
-
-
+  
   const Achievements = () => {
     return (
       <section
@@ -54,7 +59,7 @@ const LandingPage = () => {
         >
           Our Achievements
         </motion.h2>
-
+  
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-5xl">
           <motion.div
             className="bg-mutedSecondary text-background p-6 rounded-lg flex flex-col items-center shadow-lg"
@@ -65,7 +70,7 @@ const LandingPage = () => {
             <Counter value={99} />
             <p>Projects Completed</p>
           </motion.div>
-
+  
           <motion.div
             className="bg-mutedSecondary text-background p-6 rounded-lg flex flex-col items-center shadow-lg"
             initial={{ opacity: 0, y: 50 }}
@@ -75,7 +80,7 @@ const LandingPage = () => {
             <Counter value={10} />
             <p>Years of Experience</p>
           </motion.div>
-
+  
           <motion.div
             className="bg-mutedSecondary text-background p-6 rounded-lg flex flex-col items-center shadow-lg"
             initial={{ opacity: 0, y: 50 }}
@@ -89,6 +94,8 @@ const LandingPage = () => {
       </section>
     );
   };
+  
+
 
 
   return (

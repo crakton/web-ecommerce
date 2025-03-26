@@ -3,20 +3,20 @@ import logo from "../../../assets/images/whiteLogo.png"
 
 const Footer = () => {
   return (
-    <footer className="bg-gray-900 text-white py-8 px-6 md:px-16">
+    <footer className="bg-gray-900 text-white h-[40vh] py-8 px-6 md:px-16">
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center">
         {/* Logo and Tagline */}
         <div className="text-center md:text-left">
-          <img src = {logo} height={60} width={150} alt="Zang Global Logo" />
-          <p className="text-sm mt-2 opacity-75">Bringing Power to Your Hands</p>
+          <img src = {logo} height={60} width={150} alt="Zang Global Logo" className="object-contain" />
+          <p className="text-sm  mt-2 opacity-75">The Power Of Innovation </p>
         </div>
 
         {/* Contact Information */}
         <div className="text-center my-4 md:my-0">
           <h2 className="text-lg font-semibold">Contact Us</h2>
-          <p className="text-sm opacity-75">Bukuru, Jos South, Plateau State, Nigeria</p>
-          <p className="text-sm opacity-75">Tel: <a href="tel:+2349015648441" className="hover:text-gray-400">+234 901 564 8441</a></p>
-          <p className="text-sm opacity-75">Email: <a href="mailto:Ld604068@gmail.com" className="hover:text-gray-400">Ld604068@gmail.com</a></p>
+          <p className="text-sm opacity-75">No. 4 Lion Gate IV Plaza Opposite ITF Centre for Excellence, Bukuru Express Way, Jos, Plateau State, Nigeria</p>
+          <p className="text-sm opacity-75">Tel: <a href="tel:+2349015648441" className="hover:text-gray-400">2349031743810, 2347016705792</a></p>
+          <p className="text-sm opacity-75">Email: <a href="mailto:Ld604068@gmail.com" className="hover:text-gray-400"> info@zangglobal.com</a></p>
         </div>
 
         {/* Social Media Links */}

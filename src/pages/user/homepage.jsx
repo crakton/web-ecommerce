@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import Footer from "../../components/user/footer/footer";
 import Navbar from "../../components/user/navbar/navbar";
 import CartItems from "../../components/user/cart/Cartitems";
 import { fetchProducts } from '../../config/api';
 import ProductCard from '../../components/user/ProductCard';
+import Footer from '../../components/user/Landing/Footer';
 
 const ScrollProgress = () => {
   const [scrollProgress, setScrollProgress] = useState(0);
