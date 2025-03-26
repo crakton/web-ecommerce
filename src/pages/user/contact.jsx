@@ -177,7 +177,7 @@ const pathLocation = useLocation()
             initial={{ x: 50, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            className="bg-white rounded-md rounded p-3 shadow-2xl flex flex-col justify-between"
+            className="bg-white rounded-md  p-3 shadow-2xl flex flex-col justify-between"
           >
             <div>
               <div className="flex items-center mb-6">
@@ -189,17 +189,17 @@ const pathLocation = useLocation()
                   { 
                     icon: <FaPhone className="text-mutedPrimary text-lg" />, 
                     title: "Phone", 
-                    detail: "+1 (555) 123-4567" 
+                    detail: "2349031743810; 2347016705792" 
                   },
                   { 
                     icon: <FaEnvelope className="text-blue text-xl" />, 
                     title: "Email", 
-                    detail: "support@merabestie.com" 
+                    detail: " info@zangglobal.com" 
                   },
                   { 
                     icon: <FaMapMarkerAlt className="text-blue text-xl" />, 
                     title: "Address", 
-                    detail: "Lion Gate Plaza, 4 Bukuru Expy, opposite ITF Centre for Excellence, Jos 930103, Plateau" 
+                    detail: "No. 4 Lion Gate IV Plaza Opposite ITF Centre for Excellence, Bukuru Express Way, Jos, Plateau State, Nigeria" 
                   }
                 ].map((contact, index) => (
                   <motion.div 
