@@ -3,7 +3,7 @@ import logo from "../../../assets/images/whiteLogo.png"
 
 const Footer = () => {
   return (
-    <footer className="bg-gray-900 text-white h-[40vh] py-8 px-6 md:px-16">
+    <footer className="bg-gray-900 text-white py-8 px-6 md:px-16">
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center">
         {/* Logo and Tagline */}
         <div className="text-center md:text-left">
@@ -23,16 +23,16 @@ const Footer = () => {
         <div className="text-center">
           <h2 className="text-lg font-semibold">Follow Us</h2>
           <div className="flex justify-center space-x-4 mt-2 text-2xl">
-            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer">
+            <a href="https://www.facebook.com/zangglobal " target="_blank" rel="noopener noreferrer">
               <FaFacebook className="hover:text-gray-400 cursor-pointer" />
             </a>
-            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer">
+            <a href="https://www.instagram.com/zangglobal" target="_blank" rel="noopener noreferrer">
               <FaInstagram className="hover:text-gray-400 cursor-pointer" />
             </a>
-            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
+            <a href=" https://www.x.com/zangglobal" target="_blank" rel="noopener noreferrer">
               <FaTwitter className="hover:text-gray-400 cursor-pointer" />
             </a>
-            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">
+            <a href=" https://www.linkedin.com/company/zang-global" target="_blank" rel="noopener noreferrer">
               <FaLinkedin className="hover:text-gray-400 cursor-pointer" />
             </a>
           </div>
