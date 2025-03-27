@@ -9,7 +9,7 @@ const AssistiveTechPage = () => {
       </header>
 
       {/* Main Content */}
-      <main className="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg mt-6">
+      <main className="max-w-4xl  mx-auto p-6 bg-white shadow-md rounded-lg mt-6">
         <h2 className="text-2xl font-semibold mb-4">Computer Foot Mouse</h2>
         <p className="text-gray-700 mb-4">
           The Computer Foot Mouse is an innovative device designed to improve
@@ -27,10 +27,7 @@ const AssistiveTechPage = () => {
         <p className="text-gray-700 font-semibold">Join us in making a difference.</p>
       </main>
 
-      {/* Footer */}
-      <footer className="bg-blue-600 text-white text-center py-4 mt-6">
-        &copy; 2025 Assistive Tech | All Rights Reserved
-      </footer>
+      
     </div>
   );
 };

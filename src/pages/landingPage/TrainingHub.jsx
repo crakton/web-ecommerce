@@ -19,34 +19,33 @@ const TrainingHub = () => {
   </div>
 </header>
 
-      <main className="mt-8 space-y-8">
-        <section className="bg-white shadow-lg p-6 rounded-lg">
-          <h2 className="text-2xl font-semibold text-blue-600">E-waste Recycling into Sustainable Products</h2>
+      <main className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 space-x-3 ">
+       
+      
+        
+        
+         <section className="bg-mutedSecondary shadow-lg p-6 rounded-lg">
+          <h2 className="text-2xl font-semibold text-primary">E-waste Recycling into Sustainable Products</h2>
           <p className="mt-2 text-gray-700">
             Learn how to transform electronic waste into sustainable products. This program covers collection, dismantling, and recycling e-waste, along with innovative methods for repurposing materials.
           </p>
         </section>
 
-        <section className="bg-white shadow-lg p-6 rounded-lg">
-          <h2 className="text-2xl font-semibold text-blue-600">Solar System Design, Installation, and Maintenance</h2>
+        <section className="bg-mutedSecondary shadow-lg p-6 rounded-lg">
+          <h2 className="text-2xl font-semibold text-primary">Solar System Design, Installation, and Maintenance</h2>
           <p className="mt-2 text-gray-700">
             Dive into solar energy with comprehensive training on system design, installation, and maintenance. Learn best practices for promoting renewable energy solutions in communities.
           </p>
         </section>
 
-        <section className="bg-white shadow-lg p-6 rounded-lg">
-          <h2 className="text-2xl font-semibold text-blue-600">AI and Robotics for Sustainable Development</h2>
+        <section className="bg-mutedSecondary shadow-lg p-6 rounded-lg">
+          <h2 className="text-2xl font-semibold text-primary">AI and Robotics for Sustainable Development</h2>
           <p className="mt-2 text-gray-700">
             Explore the intersection of AI, robotics, and sustainability. Learn how modern technologies enhance efficiency in waste management, energy conservation, and resource optimization.
           </p>
         </section>
+        
       </main>
-
-      <footer className="mt-12 text-center bg-blue-600 text-white py-6 rounded-lg">
-        <h2 className="text-xl font-semibold">Partner with Us</h2>
-        <p className="mt-2">Join us in empowering marginalized communities through innovative training programs.</p>
-        <Link to={"/#contact"} className="mt-4 bg-white text-blue-600 font-bold py-2 px-6 rounded-lg hover:bg-gray-200">Contact Us</Link>
-      </footer>
     </div>
   );
 };
