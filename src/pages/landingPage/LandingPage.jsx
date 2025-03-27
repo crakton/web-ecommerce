@@ -20,7 +20,7 @@ const LandingPage = () => {
       const end = parseInt(value);
       if (start === end) return;
   
-      let totalDuration = 10000;
+      let totalDuration = 3000;
       let incrementTime = totalDuration / end;
       let timer = setInterval(() => {
         start += 1;

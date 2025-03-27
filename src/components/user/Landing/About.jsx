@@ -8,14 +8,14 @@ function About() {
       <div className="max-w-5xl mx-auto text-center md:text-left">
         
         {/* About Us */}
-        <h2 className="text-3xl md:text-4xl font-bold text-secondary">About Us</h2>
+        <h2 className="text-3xl md:text-4xl font-bold text-mutedSecondary">About Us</h2>
         <p className="text-mutedSecondary text-base md:text-lg mt-4 leading-relaxed">
           We are a social enterprise dedicated to tackling some of the most pressing issues facing our world today. As a social purpose-driven organization, we are addressing critical challenges such as e-waste, energy poverty, and unemployment, with the goal of creating a more sustainable future for all.
         </p>
 
         {/* Vision */}
         <div className="mt-12">
-          <h3 className="text-2xl font-bold text-secondary">Vision</h3>
+          <h3 className="text-2xl font-bold text-mutedSecondary">Vision</h3>
           <p className="text-mutedSecondary text-base md:text-lg mt-2 leading-relaxed">
             We envision a world where transformative solutions pave the way for a sustainable future that benefits everyone.
           </p>
@@ -23,7 +23,7 @@ function About() {
 
         {/* Mission */}
         <div className="mt-12">
-          <h3 className="text-2xl font-bold text-secondary">Mission</h3>
+          <h3 className="text-2xl font-bold text-mutedSecondary">Mission</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
             {[
               { icon: <FaLightbulb />, title: "Social Technology & Innovations", desc: "Leveraging cutting-edge solutions to address pressing social challenges." },
@@ -45,7 +45,7 @@ function About() {
 
         {/* Our Values (Cards) */}
         <div className="mt-12">
-          <h3 className="text-2xl font-bold text-secondary">Our Values</h3>
+          <h3 className="text-2xl font-bold text-mutedSecondary">Our Values</h3>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-6 mt-6">
             {[
               { icon: <FaGlobe />, title: "Sustainability" },
@@ -65,7 +65,7 @@ function About() {
 
         {/* Global Challenges (SDGs) */}
         <div className="mt-12">
-          <h3 className="text-2xl font-bold text-secondary">Global Challenges We Are Tackling</h3>
+          <h3 className="text-2xl font-bold text-mutedSecondary">Global Challenges We Are Tackling</h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-6">
             {[
               { icon: <MdOutlineElectricBolt />, title: "SDG 7" },
