@@ -21,16 +21,48 @@ export const getProductById = createAsyncThunk("product/getById", async (product
   }
 });
 
+
 // Create Product
-export const createProduct = createAsyncThunk("product/createProduct", async (productData, { rejectWithValue }) => {
-  try {
-    const response = await api.post("/products/new", productData);
-    getProducts()
-    return response.data;
-  } catch (error) {
-    return rejectWithValue(error.response?.data || error.message);
+// Assuming you have an `api` instance setup for backend requests
+
+export const createProduct = createAsyncThunk(
+  "product/createProduct",
+  async (productData, { rejectWithValue }) => {
+    try {
+      if (!productData.img || productData.img.length === 0) {
+        return rejectWithValue("No images selected.");
+      }
+
+      // Upload images to backend (which handles Cloudinary)
+      const formData = new FormData();
+      productData.img.forEach((file) => formData.append("img", file)); // Match backend field name
+
+      const uploadResponse = await api.post("/platforms/image-upload/", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
+      if (!uploadResponse.data.success) {
+        return rejectWithValue(uploadResponse.data.message || "Image upload failed");
+      }
+
+      // Cloudinary URLs received from backend
+      const uploadedImages = uploadResponse.data.imageUrls; 
+
+      // Add uploaded image URLs to productData
+      const updatedProductData = { ...productData, img: uploadedImages };
+
+      // Send product data with Cloudinary image URLs to backend
+      const response = await api.post("/products/new", updatedProductData);
+
+      // Fetch latest products (assuming getProducts is defined elsewhere)
+      getProducts();
+
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
   }
-});
+);
 
 // Update Product
 export const updateProduct = createAsyncThunk("product/updateProduct", async ({ productId, productData }, { rejectWithValue }) => {
@@ -126,7 +158,7 @@ const productSlice = createSlice({
       })
       .addCase(deleteProduct.fulfilled, (state, action) => {
         state.loading = false;
-        state.products = Array.isArray(state.products)? state.products.filter((product) => product.id !== action.payload):console.log("product Not an Array");
+        state.products = Array.isArray(state.products) ? state.products.filter((product) => product.id !== action.payload) : console.log("product Not an Array");
       })
       .addCase(deleteProduct.rejected, (state, action) => {
         state.loading = false;

@@ -37,7 +37,7 @@ const Sidebar = () => {
     category: "",
     description: "",
     inStockValue: 0,
-    visibility:true
+    visibility: true
   });
   const location = useLocation();
 
@@ -98,11 +98,6 @@ const Sidebar = () => {
     }
   };
 
-  const generateProductId = () => {
-    const randomId = Math.floor(100000 + Math.random() * 900000).toString();
-    setProductData({ ...productData, productId: randomId });
-  };
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setProductData({ ...productData, [name]: value });
@@ -111,78 +106,61 @@ const Sidebar = () => {
 
   const handleImageSelect = (event) => {
     const files = Array.from(event.target.files);
-    const fileURLs = files.map(file => URL.createObjectURL(file)); // Generate preview URLs
-
-    setSelectedFile(files);
-    setProductData(prevData => ({
-        ...prevData,
-        img: fileURLs  // ✅ Store image URLs instead
-    }));
-};
-
   
+    if (files.length === 0) return;
+  
+    // Generate preview URLs for UI
+    const fileURLs = files.map(file => URL.createObjectURL(file)); 
+  
+    setSelectedFile(files); // ✅ Store actual files for Cloudinary upload
+    setProductData(prevData => ({
+      ...prevData,
+      img: files // ✅ Use "imgs" for both preview & uploaded URLs
+    }));
+  };
+  
+
   const removeImage = (index) => {
     setSelectedFile((prev) => prev.filter((_, i) => i !== index));
   };
 
-  const handleLogout = async () => {
-    try {
-      const response = await fetch(
-        "https://api.merabestie.com/admin/logout",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-          body: JSON.stringify({ sellerId }),
-        }
-      );
-
-      if (response.ok) {
-        navigate("/seller/login");
-      }
-    } catch (error) {
-      console.error("Error logging out:", error);
-    }
-  };
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     try {
-      setIsUploading(true)
-      const response = dispatch(createProduct(productData)); // Await the dispatch
-      console.log(productData)
-
-      if (!response.error) { // Check if no error occurred
-
+      setIsUploading(true);
+  
+      // Await the dispatch and destructure response
+      const response = await dispatch(createProduct(productData));
+  
+      // Redux Toolkit stores results inside `response.payload`
+      if (response.meta.requestStatus === "fulfilled") {
         setProductData({
           name: "",
           price: "",
           img: [],
           category: "",
           description: "",
-          // rating: 0,
           productId: "",
           inStockValue: 0,
-          // soldStockValue: 0,
-
         });
-      
+  
         setUploadStatus("Product created successfully!");
-        toast.success(` product ${productData.name} created successfully`);
-
-        setIsUploading(false)
+        toast.success(`Product ${productData.name} created successfully`);
       } else {
-        setUploadStatus("Error creating product: " + response.error.message);
+        setUploadStatus("Error creating product: " + response.payload);
+        toast.error(`Error creating product: ${response.payload}`);
       }
     } catch (error) {
       console.error("Error creating product:", error);
-      setIsUploading(false)
       setUploadStatus("Error creating product: " + error.message);
+      toast.error(`Error creating product: ${error.message}`);
+    } finally {
+      setIsUploading(false);
     }
   };
-
+  
+  
 
   return (
     <>
@@ -214,67 +192,66 @@ const Sidebar = () => {
             <div className="p-6 space-y-8">
               {/* Image Upload Section */}
               <section className="space-y-4">
-  <h3 className="text-base font-semibold text-gray-800">Product img</h3>
-  <div className="space-y-4">
-    <div className="flex items-center gap-4">
-      <label className="flex-1 cursor-pointer group">
-        <div className="flex items-center justify-center h-36 px-4 transition-all border-2 border-dashed rounded-xl border-gray-300 group-hover:border-pink-400 group-hover:bg-pink-50/50">
-          <div className="flex flex-col items-center space-y-2 text-center">
-            <ImageIcon className="w-8 h-8 text-gray-400 group-hover:text-primary" />
-            <span className="text-sm text-gray-500 group-hover:text-primary">
-              {selectedFile.length > 0
-                ? `${selectedFile.length} img selected`
-                : "Drop img here or click to browse"}
-            </span>
-          </div>
-          <input
-            type="file"
-            accept="image/*"
-            multiple  // Allow multiple files
-            onChange={handleImageSelect}
-            className="hidden"
-            disabled={isUploading}
-          />
-        </div>
-      </label>
-      <button
-    
-        // disabled={selectedFile.length === 0 || isUploading}
-        className={`px-4 py-2.5 rounded-lg flex items-center gap-2 transition-all ${
-          selectedFile.length === 0 || isUploading
-            ? "bg-gray-200 text-gray-500 cursor-not-allowed"
-            : "bg-secondary hover:bg-primary text-white shadow-sm"
-        }`}
-      >
-        {isUploading ? (
-          <Loader2 className="w-5 h-5 animate-spin" />
-        ) : (
-          <Upload className="w-5 h-5" />
-        )}
-        <span className="font-medium">{isUploading ? "Uploading..." : "Upload"}</span>
-      </button>
-    </div>
+                <h3 className="text-base font-semibold text-gray-800">Product img</h3>
+                <div className="space-y-4">
+                  <div className="flex items-center gap-4">
+                    <label className="flex-1 cursor-pointer group">
+                      <div className="flex items-center justify-center h-36 px-4 transition-all border-2 border-dashed rounded-xl border-gray-300 group-hover:border-pink-400 group-hover:bg-pink-50/50">
+                        <div className="flex flex-col items-center space-y-2 text-center">
+                          <ImageIcon className="w-8 h-8 text-gray-400 group-hover:text-primary" />
+                          <span className="text-sm text-gray-500 group-hover:text-primary">
+                            {selectedFile.length > 0
+                              ? `${selectedFile.length} img selected`
+                              : "Drop img here or click to browse"}
+                          </span>
+                        </div>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          multiple  // Allow multiple files
+                          onChange={handleImageSelect}
+                          className="hidden"
+                          disabled={isUploading}
+                        />
+                      </div>
+                    </label>
+                    <button
 
-    {/* Image Preview Grid */}
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-      {selectedFile.map((file, index) => (
-        <div key={index} className="relative group rounded-xl overflow-hidden shadow-sm">
-          <img
-            src={URL.createObjectURL(file)}
-            alt={`Preview ${index + 1}`}
-            className="w-full h-24 object-cover"
-          />
-          <button
-            onClick={() => removeImage(index)}
-            className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-200"
-          >
-            <X className="w-6 h-6 text-white" />
-          </button>
-        </div>
-      ))}
-    </div>
-  </div>
-</section>
+                      // disabled={selectedFile.length === 0 || isUploading}
+                      className={`px-4 py-2.5 rounded-lg flex items-center gap-2 transition-all ${selectedFile.length === 0 || isUploading
+                        ? "bg-gray-200 text-gray-500 cursor-not-allowed"
+                        : "bg-secondary hover:bg-primary text-white shadow-sm"
+                        }`}
+                    >
+                      {isUploading ? (
+                        <Loader2 className="w-5 h-5 animate-spin" />
+                      ) : (
+                        <Upload className="w-5 h-5" />
+                      )}
+                      <span className="font-medium">{isUploading ? "Uploading..." : "Upload"}</span>
+                    </button>
+                  </div>
+
+                  {/* Image Preview Grid */}
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    {selectedFile.map((file, index) => (
+                      <div key={index} className="relative group rounded-xl overflow-hidden shadow-sm">
+                        <img
+                          src={URL.createObjectURL(file)}
+                          alt={`Preview ${index + 1}`}
+                          className="w-full h-24 object-cover"
+                        />
+                        <button
+                          onClick={() => removeImage(index)}
+                          className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-200"
+                        >
+                          <X className="w-6 h-6 text-white" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </section>
 
               {/* Product Modal */}
               <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -317,42 +294,6 @@ const Sidebar = () => {
                     <option value="stationary">Stationary</option>
                   </select>
                 </div>
-
-                {/* <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700">Rating</label>
-                  <input
-                    type="number"
-                    name="rating"
-                    value={productData.rating}
-                    onChange={handleInputChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-secondary transition-shadow outline-none"
-                    min={0}
-                    max={5}
-                    step={0.1}
-                    placeholder="Enter rating (0-5)"
-                  />
-                </div> */}
-
-                {/* <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700">Product ID</label>
-                  <div className="flex gap-2">
-                    <input
-                      type="text"
-                      name="productId"
-                      value={productData.productId}
-                      readOnly
-                      className="flex-1 px-3 py-2 border border-gray-300 rounded-lg bg-gray-50 outline-none"
-                      placeholder="Click generate to create ID"
-                    />
-                    <button
-                      onClick={generateProductId}
-                      className="px-4 py-2 bg-secondary text-white rounded-lg hover:bg-primary transition-colors shadow-sm font-medium"
-                    >
-                      Generate
-                    </button>
-                  </div>
-                </div> */}
-
                 <div className="space-y-2">
                   <label className="text-sm font-medium text-gray-700">Stock Information</label>
                   <div className="grid grid-cols-2 gap-3">
@@ -397,19 +338,19 @@ const Sidebar = () => {
                   Cancel
                 </button>
                 <button
-                      onClick={handleSubmit}
-                      className={`px-4 py-2.5 rounded-lg flex items-center gap-2 transition-all ${!selectedFile || isUploading
-                          ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
-                          : 'bg-green-600 hover:bg-green-400 text-white shadow-sm'
-                        }`}
-                    >
-                      {isUploading ? (
-                        <Loader2 className="w-5 h-5 animate-spin" />
-                      ) : (
-                        <Upload className="w-5 h-5" />
-                      )}
-                      <span className="font-medium">{isUploading ? 'Creating...' : 'Create Product'}</span>
-                    </button>
+                  onClick={handleSubmit}
+                  className={`px-4 py-2.5 rounded-lg flex items-center gap-2 transition-all ${!selectedFile || isUploading
+                    ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
+                    : 'bg-green-600 hover:bg-green-400 text-white shadow-sm'
+                    }`}
+                >
+                  {isUploading ? (
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                  ) : (
+                    <Upload className="w-5 h-5" />
+                  )}
+                  <span className="font-medium">{isUploading ? 'Creating...' : 'Create Product'}</span>
+                </button>
               </div>
             </div>
           </div>
@@ -471,7 +412,7 @@ const Sidebar = () => {
                 </Link>
 
                 <button
-                  onClick={handleLogout}
+                  onClick={""}
                   className="w-full flex items-center justify-center px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-primary transition-colors"
                 >
                   <LogOut className="w-5 h-5 mr-2" />
