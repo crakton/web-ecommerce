@@ -1,15 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { FaCheckCircle, FaFacebook, FaInstagram, FaTwitter, FaLinkedin } from "react-icons/fa";
+import React, { useState } from "react";
+import { FaCheckCircle} from "react-icons/fa";
 import Carousel from "../../components/user/Carousel";
 import { whyUs } from "../../constants";
-import Navbar from "../../components/user/Landing/LandingNavBar";
 import { motion } from "framer-motion";
-import ContactUs from "./contact";
-import logo2 from "../../assets/images/logoYellow.png"
+import ContactUs from "../user/contact";
 import Hero from "../../components/user/Landing/Hero";
 import About from "../../components/user/Landing/About";
 import PartnersAndAwards from "../../components/user/Landing/PartnersAndAwards";
-import Footer from "../../components/user/Landing/Footer";
 
 
 const LandingPage = () => {
@@ -100,7 +97,7 @@ const LandingPage = () => {
 
   return (
     <main className="md:px-2">
-      <Navbar />
+      {/* <Navbar /> */}
       <Hero />
 
       {/* why us */}
@@ -124,9 +121,12 @@ const LandingPage = () => {
         <Carousel />
       </section>
       <About />
+      <div id="contact">
+
       <ContactUs />
+      </div>
       <PartnersAndAwards />
-      <Footer />
+      {/* <Footer /> */}
      
     </main>
   );

@@ -25,13 +25,16 @@ import GiftBox from "./pages/user/gift-box";
 import Reviews from "./pages/admin/review";
 // import SEO from "./pages/admin/SEO";
 import { ToastContainer } from 'react-toastify';
-import LandingPage from "./pages/user/LandingPage";
-import Blogs from "./pages/user/Blogs";
-import BlogView from "./pages/user/BlogView";
 import { Provider } from "react-redux";
 import store from "./redux/store"
 import React from "react";
 import LearnMore from "./pages/user/learnmore";
+import BlogView from "./pages/landingPage/BlogView";
+import Blogs from "./pages/landingPage/Blogs";
+import LandingPage from "./pages/landingPage/LandingPage";
+import MainLayout from "./layouts/LandingLayout";
+import TrainingHub from "./pages/landingPage/TrainingHub";
+import AssistiveTechPage from "./pages/landingPage/AssistiveTech";
 
 
 
@@ -57,11 +60,9 @@ function App() {
         <BrowserRouter>
           <Routes>
 
-            <Route path="/" element={<LandingPage />} />
-            <Route path="/blogs" element={<Blogs />} />
+
             <Route path="/admin" element={<Admin />} />
 
-            <Route path="/blog/:id" element={<BlogView />} />
             <Route path="/store" element={<HomePage />} />
             <Route path="/about" element={<About />} />
             <Route path="/shop" element={<Shop />} />
@@ -88,6 +89,16 @@ function App() {
             <Route path="/admin/reviews/:sellerId" element={<Reviews />} />
             {/* <Route path="/admin/SEO/:sellerId" element={<SEO />} /> */}
             <Route path="/learnmore" element={<LearnMore />} />
+
+            <Route element={<MainLayout />}>
+              <Route path="/" element={<LandingPage />} />
+              <Route path="/blogs" element={<Blogs />} />
+              <Route path="/blog/:id" element={<BlogView />} />
+              <Route path="training" element={<TrainingHub />} />
+              <Route path="/assistive-tech" element={<AssistiveTechPage />} />
+
+
+            </Route>
 
 
             <Route path="*" element={<NotFoundPage />} />

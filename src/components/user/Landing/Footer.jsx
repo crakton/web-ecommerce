@@ -7,7 +7,7 @@ const Footer = () => {
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center">
         {/* Logo and Tagline */}
         <div className="text-center md:text-left">
-          <img src = {logo} height={60} width={150} alt="Zang Global Logo" className="object-contain" />
+          <img src={logo} height={60} width={150} alt="Zang Global Logo" className="object-contain" />
           <p className="text-sm  mt-2 opacity-75">The Power Of Innovation </p>
         </div>
 
@@ -18,9 +18,9 @@ const Footer = () => {
           <p className="text-sm opacity-75">Tel: <a href="tel:+2349031743810" className="hover:text-gray-400">+2349031743810, +2347016705792</a></p>
           <p className="text-sm opacity-75">Email: <a href="mailto:info@zangglobal.com" className="hover:text-gray-400"> info@zangglobal.com</a></p>
           <p className="flex items-center my-2  gap-4">
-              <FaWhatsapp  size={25} className="hover:text-gray-400 cursor-pointer" />
-              <p>+2348101496175</p>
-            </p>
+            <FaWhatsapp size={25} className="hover:text-gray-400 cursor-pointer" />
+            <p>+2348101496175</p>
+          </p>
         </div>
 
         {/* Social Media Links */}
