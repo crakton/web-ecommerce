@@ -22,6 +22,7 @@ import { useSelector, useDispatch } from "react-redux";
 import logo from "../../../assets/images/logoBlue.png"
 import { fetchUser, logout } from "../../../redux/slice/authSlice";
 import { fetchCart } from "../../../redux/slice/cartSlice";
+import { FaCog } from "react-icons/fa";
 
 const ProfessionalNavbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -126,7 +127,7 @@ const ProfessionalNavbar = () => {
       {/* Promo Banner - Hidden on mobile when scrolled */}
       <div className={`bg-primary text-white py-2 text-center text-xs transition-all duration-300 ${scrolled ? "hidden sm:block sm:h-auto sm:opacity-100" : "h-auto opacity-100"
         }`}>
-        <div className="max-w-[1200px] mx-auto px-4 flex items-center justify-center">
+        <div className="max-w-[1500px] px-4 flex items-center justify-center">
           <RiGift2Line className="mr-2" />
           <span className="text-[10px] sm:text-xs">
             Get your product, fast and reliable Delivery
@@ -136,7 +137,7 @@ const ProfessionalNavbar = () => {
 
       {/* Main Navigation */}
       <div className="bg-white border-b">
-        <div className="max-w-[1200px] mx-auto px-4">
+        <div className=" px-3">
           <div className="h-[60px] sm:h-[70px] flex items-center justify-between">
             {/* Mobile Menu Toggle */}
             <button
@@ -155,7 +156,7 @@ const ProfessionalNavbar = () => {
             </Link>
 
             {/* Desktop Navigation - Hidden on mobile */}
-            <div className="hidden lg:flex items-center justify-center absolute left-1/2 transform -translate-x-1/2">
+            {/* <div className="hidden lg:flex items-center justify-center absolute left-1/2 transform -translate-x-1/2">
               {navLinks.map(({ path, name, icon: Icon }) => (
                 <div
                   key={path}
@@ -183,16 +184,16 @@ const ProfessionalNavbar = () => {
                   )}
                 </div>
               ))}
-            </div>
+            </div> */}
 
             {/* Action Icons */}
             <div className="flex items-center space-x-3 sm:space-x-6">
-              <button
+              <Link to={"/search"}
                 className="text-gray-800 hover:text-primary transition"
-                onClick={toggleSearch}
+              
               >
                 <RiSearchLine className="w-5 h-5" />
-              </button>
+              </Link>
 
               <Link
                 to="/cart"
@@ -237,6 +238,13 @@ const ProfessionalNavbar = () => {
                         >
                           <RiFileList3Line className="w-4 h-4 mr-2" />
                           My Orders
+                        </Link>
+                        <Link
+                          to="/orders"
+                          className="flex items-center px-4 py-2 hover:bg-pink-50 transition"
+                        >
+                          <FaCog className="w-4 h-4 mr-2" />
+                          Profile Settings
                         </Link>
                         <button
                           onClick={handleLogout}

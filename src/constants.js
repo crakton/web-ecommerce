@@ -5,10 +5,21 @@ import Plasmida from "./assets/images/partners/Plasmida.png";
 import WesternUnion from "./assets/images/partners/WesternUnionFoundation.png";
 import WatsonInstitute from "./assets/images/partners/WatsonInstitute.png";
 import Ecowas from "./assets/images/partners/Ecowas.png";
-import EnergyGlobe from "./assets/images/partners/EnergyGlobe.jpg";
-import Ariel from "./assets/images/partners/ZangGlobal.jpeg";
+import EnergyGlobe from "./assets/images/partners/EnergyGlobe.png";
+import Ariel from "./assets/images/partners/ActionforRefugeeLife.png";
 import NationalWinner from "./assets/images/partners/nationalWinner2022_Nigeria.png";
-import Awards from "./assets/images/partners/Awards.jpg";
+import unsung from "./assets/images/partners/Unsung.png";
+import future from "./assets/images/partners/future.png";
+import inovative from "./assets/images/partners/MostInnovativeTech.png";
+import msme from "./assets/images/partners/MSME.jpg";
+
+import sarah from "./assets/images/teams/Sarah.png"
+import friday from "./assets/images/teams/Friday.jpg"
+import vivian from "./assets/images/teams/Vivian.jpeg"
+import lyop from "./assets/images/teams/Lyop.jpg"
+import luka from "./assets/images/teams/Luka.JPG"
+
+
 
 
 export const API_URL = process.env.API_URL || "https://api.merabestie.com"
@@ -164,12 +175,21 @@ export const partnerAwardData = {
       ],
       awards: [
         { title: "Energy Globe National Award", year: 2022, image: NationalWinner },
-        { title: "Most Innovative Tech Environmental Solutions", year: 2022, organization: "Alphablue Foundation", image: Awards },
+        { title: "Most Innovative Tech Environmental Solutions", year: 2022, organization: "Alphablue Foundation", image: inovative },
         { title: "Startup Award", year: 2021, organization: "ECOWAS", image: Ecowas },
-        { title: "Unsung Heroes Award", year: 2019, image: Awards },
-        { title: "National MSMEs Award of Excellence in Technology Innovation", year: 2019, image: Awards },
-        { title: "The Future Awards Africa Prize for Technology", year: 2019, image: Awards }
+        { title: "Unsung Heroes Award", year: 2019, image: unsung },
+        { title: "National MSMEs Award of Excellence in Technology Innovation", year: 2019, image: msme },
+        { title: "The Future Awards Africa Prize for Technology", year: 2019, image: future }
       ]
 
   };
   
+
+
+  export const teamMembers = [
+    { name: "Zang Luka", title: "Founder and CEO", image: luka },
+    { name: "Lyop Samson", title: "Co-Founder", image: lyop },
+    { name: "Vivian Daniel", title: "Operations Manager", image: vivian },
+    { name: "Sarah Mafulul", title: "Financial Officer", image: sarah },
+    { name: "Friday Mamman", title: "Auditor", image: friday }
+  ];

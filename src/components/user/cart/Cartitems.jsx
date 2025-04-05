@@ -107,7 +107,7 @@ const cartItems = carts.cart.productsInCart
         <p className="text-base sm:text-lg text-gray-600 mb-4 text-center">{error || 'Your cart is empty'}</p>
         <Link 
           to="/store" 
-          className="px-6 py-2 bg-secondary text-white rounded-md hover:bg-primary transition-colors duration-200 text-sm sm:text-base"
+          className="px-6 py-2 bg-primary text-white rounded-md hover:bg-primary transition-colors duration-200 text-sm sm:text-base"
         >
           Continue Shopping
         </Link>

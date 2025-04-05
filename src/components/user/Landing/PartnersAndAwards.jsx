@@ -4,7 +4,7 @@ const PartnersAndAwards = () => {
   return (
     <div className=" mx-auto w-full p-6 bg-primary text-neutralGray">
       {/* Partners Section */}
-      <h2 className="text-xl font-bold mb-4 text-secondary">Our Partners</h2>
+      <h2 className="text-xl font-bold mb-4 text-secondary">Our Partners and Supporters</h2>
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
         {partnerAwardData.partners.map((partner, index) => (
           <div key={index} className="flex flex-col items-center p-4 rounded-lg">

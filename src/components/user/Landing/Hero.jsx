@@ -1,16 +1,57 @@
 import { Link } from "react-router-dom";
 import sampleImg from "../../../assets/images/zang.jpg";
-import React from "react";
+import backgroundimage from "../../../assets/images/Home.jpg";
+import React, { useState, useEffect } from "react";
 import { TypeAnimation } from "react-type-animation";
 
 function Hero() {
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  const images = [
+    sampleImg, // Add other images here
+    backgroundimage,
+    sampleImg, // Add other images here
+  ];
+
+  const nextSlide = () => {
+    setCurrentImageIndex((prevIndex) =>
+      prevIndex === images.length - 1 ? 0 : prevIndex + 1
+    );
+  };
+
+  const prevSlide = () => {
+    setCurrentImageIndex((prevIndex) =>
+      prevIndex === 0 ? images.length - 1 : prevIndex - 1
+    );
+  };
+
+  useEffect(() => {
+    const interval = setInterval(nextSlide, 5000); // Change image every 5 seconds
+
+    return () => {
+      clearInterval(interval); // Clean up the interval when the component unmounts
+    };
+  }, []);
+
   return (
     <section
       id="welcome"
-      className="h-screen flex flex-col-reverse md:flex-row items-center justify-center bg-primary px-6 md:px-16 lg:px-24 py-10 gap-10"
+      className="h-screen flex flex-col md:flex-row items-center justify-center bg-primary px-6 md:px-16 lg:px-24 py-10 gap-10 relative"
+      style={{
+        backgroundImage: `url(${images[currentImageIndex]})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        transition: 'background-image 1s ease-in-out',
+      }}
     >
+      {/* Overlay with mutedPrimary color */}
+      <div
+        className="absolute inset-0 bg-primary opacity-70"
+      
+      ></div>
+
       {/* Left Content */}
-      <div className="flex flex-col gap-6 text-center md:text-left max-w-lg">
+      <div className="flex flex-col gap-6 text-center md:text-left max-w-lg z-10">
         <h3 className="text-3xl md:text-4xl font-bold text-secondary">
           The Power of Innovation
         </h3>
@@ -23,24 +64,26 @@ function Hero() {
 
         <TypeAnimation
           sequence={[
-            // Same substring at the start will only be typed out once, initially
-            'We produce Power Banks',
-            1000, // wait 1s before replacing "Mice" with "Hamsters"
-            'We produce Cables',
+            'We produce high quality power banks',
             1000,
-            'We offer IT Training',
+            'We produce USB cables',
             1000,
-            'Quality and Reliable Services',
+            'We offer Solar Lanterns',
             1000,
-            'Fast and secure Payment/Delivery Services',
-            1000
+            'We offer Mobile Phone Chargers',
+            1000,
+            'We offer Quality and Reliable Services',
+            1000,
+            'We offer green skills training programs to marginalized communities',
+            1000,
+            'We recycle e-waste into sustainable products',
+            1000,
           ]}
           wrapper="span"
           speed={50}
           style={{ fontSize: '1.5em', display: 'inline-block', color: "#eddb17", fontWeight: "bold" }}
           repeat={Infinity}
         />
-
 
         <Link
           className="bg-secondary text-primary px-6 py-3 rounded-md font-bold text-lg transition duration-300 hover:bg-opacity-80 mx-auto md:mx-0 w-fit"
@@ -50,13 +93,15 @@ function Hero() {
         </Link>
       </div>
 
-      {/* Right Image */}
-      <div className="w-full md:w-[45%] flex justify-center">
-        <img
-          src={sampleImg}
-          className="w-full max-w-sm md:max-w-md lg:max-w-lg h-auto rounded-lg shadow-lg"
-          alt="company"
-        />
+      {/* Right Content (Random but Suitable Content) */}
+      <div className="flex flex-col items-center justify-center z-10 text-center bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
+        <h2 className="text-2xl font-semibold text-primary mb-4">Our Latest Product</h2>
+        <p className="text-mutedSecondary mb-6">
+          Explore our new range of eco-friendly power solutions designed to power your devices while protecting the planet. Discover more today!
+        </p>
+        <button className="bg-secondary text-primary px-4 py-2 rounded-md font-semibold transition duration-300 hover:bg-opacity-80">
+          Learn More
+        </button>
       </div>
     </section>
   );

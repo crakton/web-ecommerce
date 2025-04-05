@@ -8,7 +8,8 @@ function BlogCard({blog}) {
     className="bg-white shadow-md rounded-lg overflow-hidden hover:shadow-lg transition-shadow duration-300"
   >
     <img
-      src={blog.image}
+      src={blog.thumbnail
+      }
       alt={blog.title}
       className="w-full h-48 object-cover"
     />

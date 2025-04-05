@@ -7,6 +7,7 @@ import ContactUs from "../user/contact";
 import Hero from "../../components/user/Landing/Hero";
 import About from "../../components/user/Landing/About";
 import PartnersAndAwards from "../../components/user/Landing/PartnersAndAwards";
+import OurTeam from "../../components/user/Landing/Team";
 
 
 const LandingPage = () => {
@@ -20,7 +21,7 @@ const LandingPage = () => {
       const end = parseInt(value);
       if (start === end) return;
   
-      let totalDuration = 3000;
+      let totalDuration = 1000;
       let incrementTime = totalDuration / end;
       let timer = setInterval(() => {
         start += 1;
@@ -64,8 +65,8 @@ const LandingPage = () => {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
           >
-            <Counter value={99} />
-            <p>Projects Completed</p>
+            <Counter value={1600} />
+            <p>Tons of e-waste diverted from landfill </p>
           </motion.div>
   
           <motion.div
@@ -74,8 +75,8 @@ const LandingPage = () => {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
           >
-            <Counter value={10} />
-            <p>Years of Experience</p>
+            <Counter value={40000} />
+            <p>Sustainable product users</p>
           </motion.div>
   
           <motion.div
@@ -84,8 +85,8 @@ const LandingPage = () => {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
           >
-            <Counter value={30} />
-            <p>Offices Nationwide</p>
+            <Counter value={300} />
+            <p>Trained IDPs on green skills </p>
           </motion.div>
         </div>
       </section>
@@ -125,6 +126,8 @@ const LandingPage = () => {
 
       <ContactUs />
       </div>
+
+    <OurTeam />
       <PartnersAndAwards />
       {/* <Footer /> */}
      

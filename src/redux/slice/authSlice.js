@@ -9,7 +9,7 @@ export const loginUser = createAsyncThunk("auth/login", async (userData, { rejec
     // Save token and user data in localStorage
     localStorage.setItem("token", response.data.token);
     localStorage.setItem("user", JSON.stringify(response.data.user));
-    localStorage.setItem("userId", response.data.user.id); // Store userId separately
+    localStorage.setItem("userId", response.data.userId); // Store userId separately
 
     return response.data;
   } catch (error) {
@@ -25,7 +25,7 @@ export const registerUser = createAsyncThunk("auth/register", async (userData, {
     console.log("Registration Response:", response.data);
     localStorage.setItem("token", response.data.token);
     localStorage.setItem("user", JSON.stringify(response.data.user));
-    localStorage.setItem("userId", response.data.user.id);
+    localStorage.setItem("userId", response.data.user.userId);
 
     return response.data;
   } catch (error) {
@@ -41,9 +41,13 @@ export const fetchUser = createAsyncThunk("auth/fetchUser", async (_, { rejectWi
     const userId = localStorage.getItem("userId");
 
     if (!token) throw new Error("No token found");
-    if (!userId) throw new Error("No user ID found");
+    if (!userId){
+      
+      console.log("user Id not reachable")
+      throw new Error("No user ID found")
+    };
 
-    const response = await api.get(`/auth/user/${userId}`, {
+    const response = await api.get(`/auth/profile/${userId}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
 

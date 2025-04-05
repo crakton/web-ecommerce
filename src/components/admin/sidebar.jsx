@@ -6,7 +6,6 @@ import {
   ShoppingBag,
   MessageSquare,
   Users,
-  Calendar,
   Menu,
   LayoutDashboard,
   LogOut,
@@ -16,7 +15,7 @@ import {
   Loader2,
   Image as ImageIcon,
 } from "lucide-react";
-import { useSelector, useDispatch } from "react-redux";
+import {  useDispatch } from "react-redux";
 import { createProduct } from "../../redux/slice/productSlice"
 import { toast } from "react-toastify";
 

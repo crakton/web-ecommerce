@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import Navbar from "../../components/user/navbar/navbar";
 import CartItems from "../../components/user/cart/Cartitems";
 import { fetchProducts } from '../../config/api';
 import ProductCard from '../../components/user/ProductCard';
-import Footer from '../../components/user/Landing/Footer';
+import Checkout from './checkout';
 
 const ScrollProgress = () => {
   const [scrollProgress, setScrollProgress] = useState(0);
@@ -60,11 +59,10 @@ const Carousel = ({ slides, currentSlide }) => (
 const ProductGrid = ({ title, products }) => {
   const [visible, setVisible] = useState(false)
 
-  const memorizedUserId = useMemo(() => sessionStorage.getItem("userId"), []);
 
-  const handleBuyNow = async (product) => {
-    window.location.href = "/cart";
-  };
+  console.log("Products from Grid", products)
+
+
 
   return (
     <section className="container mx-auto px-4 py-6 sm:py-8">
@@ -97,7 +95,7 @@ const ProductGrid = ({ title, products }) => {
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-6">
-        {products.map((product, index) => (
+        {products?.map((product, index) => (
           <ProductCard
             key={index}
             product={product}
@@ -111,7 +109,7 @@ const ProductGrid = ({ title, products }) => {
 const HomePage = () => {
   const [currentSlide, setCurrentSlide] = useState(1);
   const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -123,9 +121,11 @@ const HomePage = () => {
 
   useEffect(() => {
     (async () => {
+      setLoading(true)
       try {
         const fetchedProducts = await fetchProducts();
         setProducts(fetchedProducts.data);
+        setLoading(false)
       } catch (error) {
         console.error("Error fetching products:", error);
       } finally {
@@ -152,18 +152,6 @@ const HomePage = () => {
     }
   ];
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const fetchedProducts = await fetchProducts();
-        setProducts(fetchedProducts.data);
-      } catch (error) {
-        console.error("Error fetching products:", error);
-      } finally {
-        setLoading(false);
-      }
-    })();
-  }, []);
 
   if (loading) {
     return (
@@ -176,12 +164,11 @@ const HomePage = () => {
   return (
     <div className="bg-gray-50 min-h-screen">
       <ScrollProgress />
-      <Navbar />
       <main className="pb-8">
         <Carousel slides={carouselSlides} currentSlide={currentSlide} />
         <ProductGrid title="Top Picks" products={products} />
+        {/* <Checkout />5 */}
       </main>
-      <Footer />
     </div>
   );
 };
