@@ -51,14 +51,14 @@ const BlogView = () => {
         )}
 
         {/* Back Button */}
-        <div className="mt-8 text-center">
+        {/* <div className="mt-8 text-center">
           <a
             href="/blogs"
             className="px-6 py-2 bg-blue-500 text-white rounded-md shadow hover:bg-blue-600 transition-colors duration-300"
           >
             Back to Blogs
           </a>
-        </div>
+        </div> */}
       </div>
     </div>
   );

@@ -39,17 +39,7 @@ import StoreLayout from "./layouts/StoreLayout";
 import SearchPage from "./pages/user/Search";
 
 function App() {
-  // const dispatch = useDispatch();
-  // const user = useSelector((state) => state.auth.user);
-
-  // useEffect(() => {
-  //   if (user) {
-  //     dispatch(fetchCart(user.userId)); // Fetch cart when user logs in
-  //   }
-  // }, [dispatch, user])
   return (
-    // Wrap the entire app in AuthProvider
-
     <React.StrictMode>
       <Provider store={store}>
         <ToastContainer />

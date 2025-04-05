@@ -35,9 +35,9 @@ export const createProduct = createAsyncThunk(
 
       // Upload images to backend (which handles Cloudinary)
       const formData = new FormData();
-      productData.img.forEach((file) => formData.append("img", file)); // Match backend field name
+      productData.img.forEach((file) => formData.append("files", file)); // Match backend field name
 
-      const uploadResponse = await api.post("/platforms/image-upload/", formData, {
+      const uploadResponse = await api.post("/upload/doc-upload/", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
