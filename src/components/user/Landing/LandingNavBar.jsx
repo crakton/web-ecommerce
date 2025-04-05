@@ -61,6 +61,13 @@ const Navbar = () => {
         >
           Contact
         </a>
+        <a
+          href="/store"
+          className="hover:text-mutedSecondary"
+          onClick={closeMenu}
+        >
+          Shop
+        </a>
         <Link
           to="/blogs"
           className="hover:text-mutedSecondary"
@@ -182,7 +189,19 @@ const Navbar = () => {
           onClick={closeMenu}
         >
           Home
+
+
         </a>
+
+
+        <a
+          href="/store"
+          className="hover:text-mutedSecondary"
+          onClick={closeMenu}
+        >
+          Shop
+        </a>
+
         <a
           href="/#contact"
           className="hover:text-mutedSecondary"

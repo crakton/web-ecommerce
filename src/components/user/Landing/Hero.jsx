@@ -85,12 +85,7 @@ function Hero() {
           repeat={Infinity}
         />
 
-        <Link
-          className="bg-secondary text-primary px-6 py-3 rounded-md font-bold text-lg transition duration-300 hover:bg-opacity-80 mx-auto md:mx-0 w-fit"
-          to="/store"
-        >
-          Shop Now
-        </Link>
+       
       </div>
 
       {/* Right Content (Random but Suitable Content) */}
