@@ -94,7 +94,7 @@ function Hero() {
       </div>
 
       {/* Right Content (Random but Suitable Content) */}
-      <div className="flex flex-col items-center justify-center z-10 text-center bg-white p-6 rounded-lg shadow-lg max-w-sm w-full">
+      <div className="flex flex-col items-center justify-center z-10 text-center bg-mutedPrimary p-6 rounded-lg shadow-lg max-w-sm w-full">
         <h2 className="text-2xl font-semibold text-primary mb-4">Our Latest Product</h2>
         <p className="text-mutedSecondary mb-6">
           Explore our new range of eco-friendly power solutions designed to power your devices while protecting the planet. Discover more today!
