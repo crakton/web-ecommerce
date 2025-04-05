@@ -225,24 +225,24 @@ const Navbar = () => {
             Company ▾
           </button>
           {dropdownOpen === "Company" && (
-            <div className="flex flex-col text-sm bg-white text-primary rounded-md transition duration-300">
+            <div className="flex flex-col text-sm bg-mutedSecondary text-primary rounded-md transition duration-300">
               <a
                 href="/#why-us"
-                className="px-4 py-2 hover:bg-gray-100"
+                className="px-4 py-2 border-b-[1px] border-mutedPrimary hover:bg-gray-100"
                 onClick={closeMenu}
               >
                 Why Us
               </a>
               <a
                 href="/#achievements"
-                className="px-4 py-2 hover:bg-gray-100"
+                className="px-4 py-2 border-b-[1px] border-mutedPrimary hover:bg-gray-100"
                 onClick={closeMenu}
               >
                 Achievements
               </a>
               <a
                 href="/#about"
-                className="px-4 py-2 hover:bg-gray-100"
+                className="px-4 py-2 border-b-[1px] border-mutedPrimary hover:bg-gray-100"
                 onClick={closeMenu}
               >
                 About Us
