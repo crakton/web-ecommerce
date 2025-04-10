@@ -47,7 +47,7 @@ export const createProduct = createAsyncThunk(
       }
       
       // Cloudinary URLs received from backend
-      const uploadedImages = uploadResponse.data.imageUrl; 
+      const uploadedImages = uploadResponse.data.imageUrl || uploadResponse.data.imageUrls; 
       
       // Add uploaded image URLs to productData
       console.log(uploadedImages, uploadResponse.data)

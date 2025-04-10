@@ -112,7 +112,6 @@ const Checkout = () => {
       if (paymentProcess.closed) {
         console.log("window closed" ," Attempting payment verification")
         // Attempt to verify payment now
-        api.post("/payments/verify-payment", { reference });
       }
       const paymentVerification =  await api.post("/payments/verify-payment/", orderProcess.reference)
       console.log(paymentProcess)
