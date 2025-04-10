@@ -251,7 +251,7 @@ const SEO = () => {
   return (
     <div className="flex">
       <Helmet>
-        <title>SEO Management | Admin | Mera Bestie</title>
+        <title>SEO Management | Admin | Zang Global</title>
       </Helmet>
       <Sidebar />
       <div className="flex-1 p-8 ml-[5rem] lg:ml-64 bg-pink-50 min-h-screen">

@@ -29,6 +29,7 @@ const Blogs = () => {
       {/* Overlay */}
       <div className="absolute inset-0 bg-black opacity-50"></div>
 
+
       {/* Blog Heading */}
       <div className="relative py-20 text-center z-10">
         <h1 className="text-4xl font-extrabold text-white mb-4">Blogs</h1>
@@ -48,7 +49,6 @@ const Blogs = () => {
         />
       </div>
     </div>
-
       {/* Blog Grid Section */}
       <div className="container mx-auto px-4 py-8">
         <h2 className="text-2xl font-semibold text-center text-gray-800 mb-8">Our Blogs</h2>

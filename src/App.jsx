@@ -22,7 +22,7 @@ import DashboardPage from "./pages/admin/dashboard";
 import Order from "./pages/user/orders";
 import GiftBox from "./pages/user/gift-box";
 import Reviews from "./pages/admin/review";
-// import SEO from "./pages/admin/SEO";
+import SEO from "./pages/admin/SEO";
 import { ToastContainer } from "react-toastify";
 import { Provider } from "react-redux";
 import store from "./redux/store";
@@ -64,7 +64,7 @@ function App() {
               element={<CalendarPage />}
             />
             <Route path="/admin/reviews/:sellerId" element={<Reviews />} />
-            {/* <Route path="/admin/SEO/:sellerId" element={<SEO />} /> */}
+            <Route path="/admin/SEO/:sellerId" element={<SEO />} />
             <Route path="/learnmore" element={<LearnMore />} />
 
             <Route element={<StoreLayout />}>

@@ -164,7 +164,7 @@ const Orders = () => {
   return (
     <div className="flex">
       <Helmet>
-        <title>Orders | Admin | Mera Bestie</title>
+        <title>Orders | Admin | Zang Global</title>
       </Helmet>
       <Sidebar />
       <div className="flex-1 p-8 ml-[5rem] lg:ml-64  min-h-screen">

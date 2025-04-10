@@ -167,7 +167,7 @@ const AdminSignup = () => {
   return (
     <>
       <Helmet>
-        <title>Admin Signup | Mera Bestie</title>
+        <title>Admin Signup | Zang Global</title>
       </Helmet>
       <Navbar />
       <div className="min-h-screen bg-gradient-to-br from-pink-50 to-pink-100 px-4 py-8 sm:px-6 lg:px-8">

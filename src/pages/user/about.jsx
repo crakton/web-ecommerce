@@ -51,7 +51,7 @@ function About() {
               dataAos="fade-right"
             >
               <p className="text-gray-600 mb-4 leading-relaxed">
-                At Mera Bestie, we are more than just a company. We are a community dedicated to creating meaningful connections and providing exceptional experiences.
+                At Zang Global, we are more than just a company. We are a community dedicated to creating meaningful connections and providing exceptional experiences.
               </p>
               <p className="text-gray-600 leading-relaxed">
                 Our journey is driven by passion, innovation, and a commitment to understanding and meeting the unique needs of our clients.
@@ -111,7 +111,7 @@ function About() {
           <div className="mt-16 text-center">
             <img
               src="src/assets/bg shop.png"
-              alt="Mera Bestie Team"
+              alt="Zang Global Team"
               className="rounded-2xl shadow-2xl mx-auto max-w-4xl h-auto transform transition duration-500 hover:scale-[1.01]"
             />
           </div>
@@ -125,7 +125,7 @@ function About() {
               <span className="text-gray-800 block text-2xl mt-2">Together, We Create Extraordinary Experiences</span>
             </h2>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              At Mera Bestie, every interaction is an opportunity to inspire, connect, and grow. We invite you to be part of our story.
+              At Zang Global, every interaction is an opportunity to inspire, connect, and grow. We invite you to be part of our story.
             </p>
           </div>
         </div>

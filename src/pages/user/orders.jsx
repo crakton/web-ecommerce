@@ -87,7 +87,7 @@ const Order = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-100 to-purple-100 mt-16">
       <Helmet>
-        <title>My Orders | Mera Bestie</title>
+        <title>My Orders | Zang Global</title>
       </Helmet>
       <Navbar />
       

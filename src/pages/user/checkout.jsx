@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchCart } from "../../redux/slice/cartSlice";
 import { fetchUser } from "../../redux/slice/authSlice";
 import PaystackPayment from "../../components/user/PaystackPayment";
+import api from "../../config/api";
 
 const Checkout = () => {
   const location = useLocation();
@@ -87,6 +88,40 @@ const Checkout = () => {
     }
     return [];
   };
+
+
+  const handlePayment = async () => {
+    const orderData = {
+      userId: user.userId,
+      cartId: carts.cart.cartId,
+      address: JSON.stringify(address),
+      email: user.email,
+      paymentMethod: "Online",
+      name: user.name,
+    };
+  
+    try {
+      const response = await api.post("/orders/checkout", orderData);
+      const paymentData = response.data?.data;
+  
+      const orderProcess = await api.post("/payments/process-payment", paymentData);
+      const paystackUrl = orderProcess.data.data.authorization_url
+      const paymentProcess = window.open(paystackUrl)
+      const reference = orderProcess.reference
+
+      if (paymentProcess.closed) {
+        console.log("window closed" ," Attempting payment verification")
+        // Attempt to verify payment now
+        api.post("/payments/verify-payment", { reference });
+      }
+      const paymentVerification =  await api.post("/payments/verify-payment/", orderProcess.reference)
+      console.log(paymentProcess)
+      console.log(paymentVerification)
+    } catch (error) {
+      console.error("Payment Error:", error.response?.data || error.message);
+    }
+  };
+  
 
   const handleAddressChange = (e) => {
     const { name, value } = e.target;
@@ -364,8 +399,8 @@ const Checkout = () => {
               </div>
 
               <div
-                disabled={!isAddressValid()}
-                className={`w-full flex items-center justify-center space-x-2 py-4 rounded-lg transition-all duration-300 ${
+                onClick={()=>setIsProcessing(true)}
+                className={`w-full flex items-center  justify-center space-x-2 py-4 rounded-lg transition-all duration-300 ${
                   isAddressValid()
                     ? "bg-black text-white hover:bg-gray-800 hover:shadow-lg"
                     : "bg-gray-300 cursor-not-allowed opacity-50"
@@ -374,9 +409,9 @@ const Checkout = () => {
                 {isProcessing ? (
                   <Loader2 className="animate-spin" />
                 ) : (
-                  <CreditCard className="w-6 h-6" />
+                  <PaystackPayment email={user.email} setIsProcessing={setIsProcessing} handleOrderSuccess={handleOrderSuccess} amount={total} />
+                
                 )}
-                <PaystackPayment amount={total} email={user?.email} />
               </div>
             </div>
           </div>

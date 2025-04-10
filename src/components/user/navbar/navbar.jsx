@@ -23,6 +23,7 @@ import logo from "../../../assets/images/logoBlue.png"
 import { fetchUser, logout } from "../../../redux/slice/authSlice";
 import { fetchCart } from "../../../redux/slice/cartSlice";
 import { FaCog } from "react-icons/fa";
+import { Home } from "lucide-react";
 
 const ProfessionalNavbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -114,10 +115,10 @@ const ProfessionalNavbar = () => {
   ];
 
   const categories = [
-    { name: "Fashion", path: "/fashion" },
-    { name: "Gift Items", path: "/gift-boxes" },
-    { name: "Books", path: "/books" },
-    { name: "Stationery", path: "/stationery" },
+    { name: "cables", path: "/fashion" },
+    { name: "Powerbanks", path: "/gift-boxes" },
+    { name: "Solar Lanterns", path: "/books" },
+    { name: "Chagers", path: "/stationery" },
     { name: "All Products", path: "/shop" },
   ];
 
@@ -125,7 +126,7 @@ const ProfessionalNavbar = () => {
     <nav className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${scrolled ? "bg-white shadow-md" : "bg-transparent"
       }`}>
       {/* Promo Banner - Hidden on mobile when scrolled */}
-      <div className={`bg-primary text-white py-2 text-center text-xs transition-all duration-300 ${scrolled ? "hidden sm:block sm:h-auto sm:opacity-100" : "h-auto opacity-100"
+      {/* <div className={`bg-primary text-white py-2 text-center text-xs transition-all duration-300 ${scrolled ? "hidden sm:block sm:h-auto sm:opacity-100" : "h-auto opacity-100"
         }`}>
         <div className="max-w-[1500px] px-4 flex items-center justify-center">
           <RiGift2Line className="mr-2" />
@@ -133,7 +134,7 @@ const ProfessionalNavbar = () => {
             Get your product, fast and reliable Delivery
           </span>
         </div>
-      </div>
+      </div> */}
 
       {/* Main Navigation */}
       <div className="bg-white border-b">
@@ -188,6 +189,11 @@ const ProfessionalNavbar = () => {
 
             {/* Action Icons */}
             <div className="flex items-center space-x-3 sm:space-x-6">
+            <Link to={"/store"} className={`px-4 py-2 mx-2 flex items-center ${isActive("/") ? "text-primary" : "text-gray-800 hover:text-primary"
+                    } transition-colors duration-200`}>
+                    <RiHome2Line  className="w-5 h-5 mr-2" />
+                    Home
+                  </Link >
               <Link to={"/search"}
                 className="text-gray-800 hover:text-primary transition"
               

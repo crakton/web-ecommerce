@@ -7,7 +7,7 @@ const NotFoundPage = () => {
   return (
     <>
       <Helmet>
-        <title>404 | Mera Bestie</title>
+        <title>404 | Zang Global</title>
       </Helmet>
       <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center px-4 overflow-hidden relative mt-16">
         {/* Background Pattern */}

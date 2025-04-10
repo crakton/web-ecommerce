@@ -54,27 +54,55 @@ const Navbar = () => {
         >
           Home
         </a>
-        <a
-          href="/#contact"
-          className="hover:text-mutedSecondary"
-          onClick={closeMenu}
-        >
-          Contact
-        </a>
-        <a
-          href="/store"
-          className="hover:text-mutedSecondary"
-          onClick={closeMenu}
-        >
-          Shop
-        </a>
-        <Link
-          to="/blogs"
-          className="hover:text-mutedSecondary"
-          onClick={closeMenu}
-        >
-          Blog
-        </Link>
+
+        {/* Technology Dropdown */}
+        <div className="relative dropdown">
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              toggleDropdown("Technology");
+            }}
+            className="hover:text-mutedSecondary"
+          >
+            Technology ▾
+          </button>
+          <div
+            className={`absolute left-[-60px] mt-2 min-w-[180px] bg-mutedSecondary text-gray-700 rounded-lg shadow-xl overflow-hidden transform transition-all duration-200 z-50 ${
+              dropdownOpen === "Technology"
+                ? "opacity-100 scale-100"
+                : "opacity-0 scale-95 pointer-events-none"
+            }`}
+          >
+            <Link
+              to="/blog/11"
+              className="block px-5 py-3 text-sm hover:bg-gray-100  border-b-[1px] border-mutedPrimary hover:text-primary transition duration-200"
+              onClick={closeMenu}
+            >
+              Manufacturing
+            </Link>
+            <Link
+              to="/blog/12"
+              className="block px-5 py-3 text-sm hover:bg-gray-100  border-b-[1px] border-mutedPrimary hover:text-primary transition duration-200"
+              onClick={closeMenu}
+            >
+              Circular Economy
+            </Link>
+            <Link
+              to="/training"
+              className="block px-5  border-b-[1px] border-mutedPrimary  py-3 text-sm hover:bg-gray-100 hover:text-primary transition duration-200"
+              onClick={closeMenu}
+            >
+              Training Hub
+            </Link>
+            <Link
+              to="/blog/1"
+              className="block px-5 py-3 text-sm hover:bg-gray-100  border-b-[1px] border-mutedPrimary hover:text-primary transition duration-200"
+              onClick={closeMenu}
+            >
+              Assistive Tech
+            </Link>
+          </div>
+        </div>
 
         {/* Company Dropdown */}
         <div className="relative dropdown">
@@ -85,7 +113,7 @@ const Navbar = () => {
             }}
             className="hover:text-mutedSecondary"
           >
-            Company ▾
+            About Us ▾
           </button>
           <div
             className={`absolute left-0 mt-2 min-w-[180px] bg-mutedSecondary text-gray-700 rounded-lg shadow-xl overflow-hidden transform transition-all duration-200 z-50 ${
@@ -118,54 +146,27 @@ const Navbar = () => {
           </div>
         </div>
 
-        {/* Technology Dropdown */}
-        <div className="relative dropdown">
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              toggleDropdown("Technology");
-            }}
-            className="hover:text-mutedSecondary"
-          >
-            Technology ▾
-          </button>
-          <div
-            className={`absolute left-[-60px] mt-2 min-w-[180px] bg-mutedSecondary text-gray-700 rounded-lg shadow-xl overflow-hidden transform transition-all duration-200 z-50 ${
-              dropdownOpen === "Technology"
-                ? "opacity-100 scale-100"
-                : "opacity-0 scale-95 pointer-events-none"
-            }`}
-          >
-            <Link
-              to="/training"
-              className="block px-5  border-b-[1px] border-mutedPrimary  py-3 text-sm hover:bg-gray-100 hover:text-primary transition duration-200"
-              onClick={closeMenu}
-            >
-              Training Hub
-            </Link>
-            <Link
-              to="/blog/1"
-              className="block px-5 py-3 text-sm hover:bg-gray-100  border-b-[1px] border-mutedPrimary hover:text-primary transition duration-200"
-              onClick={closeMenu}
-            >
-              Assistive Tech
-            </Link>
-            <Link
-              to="/blog/12"
-              className="block px-5 py-3 text-sm hover:bg-gray-100  border-b-[1px] border-mutedPrimary hover:text-primary transition duration-200"
-              onClick={closeMenu}
-            >
-              Circulat Economy
-            </Link>
-            <Link
-              to="/blog/11"
-              className="block px-5 py-3 text-sm hover:bg-gray-100  border-b-[1px] border-mutedPrimary hover:text-primary transition duration-200"
-              onClick={closeMenu}
-            >
-              Sustainability
-            </Link>
-          </div>
-        </div>
+        <a
+          href="/#contact"
+          className="hover:text-mutedSecondary"
+          onClick={closeMenu}
+        >
+          Contact
+        </a>
+        <a
+          href="/store"
+          className="hover:text-mutedSecondary"
+          onClick={closeMenu}
+        >
+          Shop
+        </a>
+        <Link
+          to="/blogs"
+          className="hover:text-mutedSecondary"
+          onClick={closeMenu}
+        >
+          Blog
+        </Link>
       </div>
 
       {/* Mobile Menu Button */}
@@ -189,10 +190,7 @@ const Navbar = () => {
           onClick={closeMenu}
         >
           Home
-
-
         </a>
-
 
         <a
           href="/store"
@@ -209,7 +207,11 @@ const Navbar = () => {
         >
           Contact
         </a>
-        <Link to="/blogs" className="hover:text-mutedSecondary" onClick={closeMenu}>
+        <Link
+          to="/blogs"
+          className="hover:text-mutedSecondary"
+          onClick={closeMenu}
+        >
           Blog
         </Link>
 
@@ -265,6 +267,20 @@ const Navbar = () => {
           {dropdownOpen === "Technology" && (
             <div className="flex flex-col text-sm bg-mutedSecondary text-primary rounded-md overflow-hidden transition duration-300">
               <Link
+                to="/blog/11"
+                className="block px-5 py-3 text-sm hover:bg-gray-100  border-b-[1px] border-mutedPrimary hover:text-primary transition duration-200"
+                onClick={closeMenu}
+              >
+                Manufacturing
+              </Link>
+              <Link
+                to="/blog/12"
+                className="block px-5 py-3 text-sm hover:bg-gray-100  border-b-[1px] border-mutedPrimary hover:text-primary transition duration-200"
+                onClick={closeMenu}
+              >
+                Circular Economy
+              </Link>
+              <Link
                 to="/training"
                 className="block px-5  border-b-[1px] border-mutedPrimary  py-3 text-sm hover:bg-gray-100 hover:text-primary transition duration-200"
                 onClick={closeMenu}
@@ -277,20 +293,6 @@ const Navbar = () => {
                 onClick={closeMenu}
               >
                 Assistive Tech
-              </Link>
-              <Link
-                to="/blog/12"
-                className="block px-5 py-3 text-sm hover:bg-gray-100  border-b-[1px] border-mutedPrimary hover:text-primary transition duration-200"
-                onClick={closeMenu}
-              >
-                Circulat Economy
-              </Link>
-              <Link
-                to="/blog/11"
-                className="block px-5 py-3 text-sm hover:bg-gray-100  border-b-[1px] border-mutedPrimary hover:text-primary transition duration-200"
-                onClick={closeMenu}
-              >
-                Sustainability
               </Link>
             </div>
           )}

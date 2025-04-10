@@ -99,7 +99,7 @@ const Complaints = () => {
   return (
     <div className="flex bg-pink-50 min-h-screen">
       <Helmet>
-        <title>Complaints | Admin | Mera Bestie</title>
+        <title>Complaints | Admin | Zang Global</title>
       </Helmet>
       <Sidebar />
       <div className="flex-1 p-6 lg:p-8 ml-[5rem] lg:ml-64">

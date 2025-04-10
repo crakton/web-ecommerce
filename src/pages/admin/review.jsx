@@ -61,7 +61,7 @@ const Reviews = () => {
   return (
     <div className="flex">
       <Helmet>
-        <title>Reviews | Admin | Mera Bestie</title>
+        <title>Reviews | Admin | Zang Global</title>
       </Helmet>
       <Sidebar />
       <div className="flex-1 p-8 ml-[5rem] lg:ml-64 bg-pink-50 min-h-screen">

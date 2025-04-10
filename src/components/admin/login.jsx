@@ -51,7 +51,7 @@ const AdminLogin = () => {
   return (
     <>
       <Helmet>
-        <title>Admin Login | Mera Bestie</title>
+        <title>Admin Login | Zang Global</title>
       </Helmet>
       <Navbar />
       <div className="h-[calc(100vh-140px)] bg-gradient-to-br from-pink-50 to-pink-100 flex items-center justify-center p-4 mt-20">

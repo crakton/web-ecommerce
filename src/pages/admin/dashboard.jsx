@@ -29,7 +29,7 @@ const DashboardPage = () => {
     return (
         <>
             <Helmet>
-                <title>Admin Dashboard | Mera Bestie</title>
+                <title>Admin Dashboard | Zang Global</title>
                 <meta name="description" content="Admin dashboard for managing products, orders and customers" />
             </Helmet>
             <div className="flex">

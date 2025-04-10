@@ -16,7 +16,7 @@ const LearnMore = ({ course, onBack }) => {
   return (
     <>
       <Helmet>
-        <title>{course.title} | Mera Bestie</title>
+        <title>{course.title} | Zang Global</title>
       </Helmet>
       
       <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white py-12 px-4 mt-16">
