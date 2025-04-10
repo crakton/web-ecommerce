@@ -131,7 +131,7 @@ const CouponPage = () => {
       <Helmet>
         <title>Coupons | Admin Dashboard</title>
       </Helmet>
-      <Sidebar />
+      {/* <Sidebar /> */}
       <div className="min-h-screen bg-gray-100 sm:ml-0 md:ml-[10vh] lg:ml-[40vh]">
         <div className="p-4 sm:p-6 lg:p-8">
           <div className="max-w-7xl mx-auto">

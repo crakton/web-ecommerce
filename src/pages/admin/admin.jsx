@@ -16,11 +16,11 @@ const Admin = () => {
             <Helmet>
                 <title>Admin | Zang Global</title>
             </Helmet>
-            <div 
+            {/* <div 
                 className={`fixed inset-0 z-40 lg:hidden bg-black/50 transition-opacity duration-300 
                     ${isSidebarOpen ? 'opacity-100 visible' : 'opacity-0 invisible'}`}
                 onClick={toggleSidebar}
-            ></div>
+            ></div> */}
             <div className={`
                 fixed top-0 left-0 z-50 h-full w-64 bg-white shadow-lg transform transition-transform duration-300
                 lg:relative lg:translate-x-0 

@@ -101,7 +101,7 @@ const Complaints = () => {
       <Helmet>
         <title>Complaints | Admin | Zang Global</title>
       </Helmet>
-      <Sidebar />
+      {/* <Sidebar /> */}
       <div className="flex-1 p-6 lg:p-8 ml-[5rem] lg:ml-64">
         <div className="container mx-auto">
           {/* Search Section */}

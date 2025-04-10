@@ -206,7 +206,7 @@ console.log(sortedProducts,"sorted Products")
       <Helmet>
         <title>Products | Admin | Zang Global</title>
       </Helmet>
-      <Sidebar />
+      {/* <Sidebar /> */}
       <div className="flex-1 p-8 ml-[5rem] lg:ml-64 bg-pink-50 min-h-screen">
         {/* Search Bar */}
         <div className="mb-6 flex justify-between items-center">

@@ -42,13 +42,15 @@ export const createProduct = createAsyncThunk(
       });
 
       if (!uploadResponse.data.success) {
+        
         return rejectWithValue(uploadResponse.data.message || "Image upload failed");
       }
-
+      
       // Cloudinary URLs received from backend
-      const uploadedImages = uploadResponse.data.imageUrls; 
-
+      const uploadedImages = uploadResponse.data.imageUrl; 
+      
       // Add uploaded image URLs to productData
+      console.log(uploadedImages, uploadResponse.data)
       const updatedProductData = { ...productData, img: uploadedImages };
 
       // Send product data with Cloudinary image URLs to backend

@@ -37,6 +37,7 @@ import AssistiveTechPage from "./pages/landingPage/AssistiveTech";
 import Checkout from "./pages/user/checkout";
 import StoreLayout from "./layouts/StoreLayout";
 import SearchPage from "./pages/user/Search";
+import AdminLayout from "./layouts/AdminLayout";
 
 function App() {
   return (
@@ -44,57 +45,59 @@ function App() {
       <Provider store={store}>
         <ToastContainer />
         <BrowserRouter>
-          <Routes>
-            <Route path="/admin" element={<Admin />} />
+        <Routes>
+  {/* Admin base route */}
+  <Route path="/admin" element={<Admin />} />
 
-            <Route path="/admin/:sellerId" element={<DashboardPage />} />
+  {/* Admin Panel - Seller Dashboard */}
+  <Route path="/admin/" element={<AdminLayout />}>
+    <Route index element={<DashboardPage />} />
+    <Route path="products" element={<Product />} />
+    <Route path="orders" element={<Orders />} />
+    <Route path="customers" element={<Customers />} />
+    <Route path="reviews" element={<Reviews />} />
+    <Route path="complaints" element={<Complaints />} />
+    <Route path="calendar" element={<CalendarPage />} />
+    <Route path="SEO" element={<SEO />} />
+  </Route>
 
-            <Route path="/seller/login" element={<LoginPage />} />
-            <Route path="/seller/coupons/:sellerId" element={<CouponPage />} />
-            <Route path="/seller/signup" element={<SellerPage />} />
-            <Route path="/admin/products/:sellerId" element={<Product />} />
-            <Route
-              path="/admin/complaints/:sellerId"
-              element={<Complaints />}
-            />
-            <Route path="/admin/orders/:sellerId" element={<Orders />} />
-            <Route path="/admin/customers/:sellerId" element={<Customers />} />
-            <Route
-              path="/admin/calendar/:sellerId"
-              element={<CalendarPage />}
-            />
-            <Route path="/admin/reviews/:sellerId" element={<Reviews />} />
-            <Route path="/admin/SEO/:sellerId" element={<SEO />} />
-            <Route path="/learnmore" element={<LearnMore />} />
+  {/* Seller Authentication */}
+  <Route path="/seller/login" element={<LoginPage />} />
+  <Route path="/seller/signup" element={<SellerPage />} />
 
-            <Route element={<StoreLayout />}>
-              <Route path="/store" element={<HomePage />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/shop" element={<Shop />} />
-              <Route path="/contact" element={<Contact />} />
-              <Route path="/Login" element={<Login />} />
-              <Route path="/Signup" element={<Signup />} />
-              <Route path="/jobs" element={<OccasionsPage />} />
-              <Route path="/gift-boxes" element={<GiftBox />} />
-              <Route path="/books" element={<GiftBox />} />
-              <Route path="/stationery" element={<GiftBox />} />
-              <Route path="/cart" element={<ShoppingCartPage />} />
-              <Route path="/orders" element={<Order />} />
-              <Route path="product/:productId" element={<ProductDetail />} />
-              <Route path="/checkout" element={<Checkout />} />
-              <Route path="/search" element={<SearchPage />} />
-            </Route>
+  {/* Store (User Shop Area) */}
+  <Route element={<StoreLayout />}>
+    <Route path="/store" element={<HomePage />} />
+    <Route path="/about" element={<About />} />
+    <Route path="/shop" element={<Shop />} />
+    <Route path="/contact" element={<Contact />} />
+    <Route path="/login" element={<Login />} />
+    <Route path="/signup" element={<Signup />} />
+    <Route path="/jobs" element={<OccasionsPage />} />
+    <Route path="/gift-boxes" element={<GiftBox />} />
+    <Route path="/books" element={<GiftBox />} />
+    <Route path="/stationery" element={<GiftBox />} />
+    <Route path="/cart" element={<ShoppingCartPage />} />
+    <Route path="/orders" element={<Order />} />
+    <Route path="/product/:productId" element={<ProductDetail />} />
+    <Route path="/checkout" element={<Checkout />} />
+    <Route path="/search" element={<SearchPage />} />
+    <Route path="/learnmore" element={<LearnMore />} />
+  </Route>
 
-            <Route element={<MainLayout />}>
-              <Route path="/" element={<LandingPage />} />
-              <Route path="/blogs" element={<Blogs />} />
-              <Route path="/blog/:id" element={<BlogView />} />
-              <Route path="training" element={<TrainingHub />} />
-              <Route path="/assistive-tech" element={<AssistiveTechPage />} />
-            </Route>
+  {/* Landing Pages */}
+  <Route element={<MainLayout />}>
+    <Route path="/" element={<LandingPage />} />
+    <Route path="/blogs" element={<Blogs />} />
+    <Route path="/blog/:id" element={<BlogView />} />
+    <Route path="/training" element={<TrainingHub />} />
+    <Route path="/assistive-tech" element={<AssistiveTechPage />} />
+  </Route>
 
-            <Route path="*" element={<NotFoundPage />} />
-          </Routes>
+  {/* 404 - Not Found */}
+  <Route path="*" element={<NotFoundPage />} />
+</Routes>
+
         </BrowserRouter>
       </Provider>
     </React.StrictMode>

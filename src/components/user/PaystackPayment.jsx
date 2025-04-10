@@ -3,7 +3,7 @@ import { PaystackButton } from 'react-paystack';
 import api from '../../config/api';
 
 const PaystackPayment = ({amount, email, setIsProcessing, handleOrderSuccess}) => {
-  const publicKey = 'pk_test_392c3f84a9a492459289386a4917045513366763'; // replace with your public key
+  const publicKey = 'pk_test_6bd575a6439037e4b48d69d5666c03620b0e3fd8'; // replace with your public key
 
   const componentProps = {
     email,

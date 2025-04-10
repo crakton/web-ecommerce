@@ -115,7 +115,7 @@ const Customers = () => {
     <Helmet>
       <title>Customers | Admin | Zang Global</title>
     </Helmet>
-      <Sidebar />
+      {/* <Sidebar /> */}
       <div className="flex-1 p-8 ml-[5rem] lg:ml-64 bg-pink-50 min-h-screen">
         <div className="mb-6 flex justify-center">
           <div className="w-full max-w-md">

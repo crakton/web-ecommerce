@@ -191,68 +191,6 @@ const Navbar = () => {
         >
           Home
         </a>
-
-        <a
-          href="/store"
-          className="hover:text-mutedSecondary"
-          onClick={closeMenu}
-        >
-          Shop
-        </a>
-
-        <a
-          href="/#contact"
-          className="hover:text-mutedSecondary"
-          onClick={closeMenu}
-        >
-          Contact
-        </a>
-        <Link
-          to="/blogs"
-          className="hover:text-mutedSecondary"
-          onClick={closeMenu}
-        >
-          Blog
-        </Link>
-
-        {/* Company Dropdown Mobile */}
-        <div className="w-full">
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              toggleDropdown("Company");
-            }}
-            className="w-full text-left hover:text-mutedSecondary"
-          >
-            Company ▾
-          </button>
-          {dropdownOpen === "Company" && (
-            <div className="flex flex-col text-sm bg-mutedSecondary text-primary rounded-md transition duration-300">
-              <a
-                href="/#why-us"
-                className="px-4 py-2 border-b-[1px] border-mutedPrimary hover:bg-gray-100"
-                onClick={closeMenu}
-              >
-                Why Us
-              </a>
-              <a
-                href="/#achievements"
-                className="px-4 py-2 border-b-[1px] border-mutedPrimary hover:bg-gray-100"
-                onClick={closeMenu}
-              >
-                Achievements
-              </a>
-              <a
-                href="/#about"
-                className="px-4 py-2 border-b-[1px] border-mutedPrimary hover:bg-gray-100"
-                onClick={closeMenu}
-              >
-                About Us
-              </a>
-            </div>
-          )}
-        </div>
-
         {/* Technology Dropdown Mobile */}
         <div className="w-full">
           <button
@@ -297,6 +235,68 @@ const Navbar = () => {
             </div>
           )}
         </div>
+
+
+        {/* Company Dropdown Mobile */}
+        <div className="w-full">
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              toggleDropdown("Company");
+            }}
+            className="w-full text-left hover:text-mutedSecondary"
+          >
+            Company ▾
+          </button>
+          {dropdownOpen === "Company" && (
+            <div className="flex flex-col text-sm bg-mutedSecondary text-primary rounded-md transition duration-300">
+              <a
+                href="/#why-us"
+                className="px-4 py-2 border-b-[1px] border-mutedPrimary hover:bg-gray-100"
+                onClick={closeMenu}
+              >
+                Why Us
+              </a>
+              <a
+                href="/#achievements"
+                className="px-4 py-2 border-b-[1px] border-mutedPrimary hover:bg-gray-100"
+                onClick={closeMenu}
+              >
+                Achievements
+              </a>
+              <a
+                href="/#about"
+                className="px-4 py-2 border-b-[1px] border-mutedPrimary hover:bg-gray-100"
+                onClick={closeMenu}
+              >
+                About Us
+              </a>
+            </div>
+          )}
+        </div>
+
+        <a
+          href="/store"
+          className="hover:text-mutedSecondary"
+          onClick={closeMenu}
+        >
+          Shop
+        </a>
+
+        <a
+          href="/#contact"
+          className="hover:text-mutedSecondary"
+          onClick={closeMenu}
+        >
+          Contact
+        </a>
+        <Link
+          to="/blogs"
+          className="hover:text-mutedSecondary"
+          onClick={closeMenu}
+        >
+          Blog
+        </Link>
       </div>
     </nav>
   );

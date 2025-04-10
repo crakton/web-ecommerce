@@ -25,7 +25,7 @@ function OurTeam() {
             <img
               src={member.image}
               alt={member.name}
-              className="w-56 h-56 object-contain rounded-full mx-auto border-4 border-secondary"
+              className="w-44 h-44 object-contain rounded-full mx-auto border-4 border-secondary"
             />
             <div className="mt-4 text-center">
               <h3 className="text-xl font-semibold text-primary">{member.name}</h3>

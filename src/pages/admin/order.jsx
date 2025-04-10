@@ -166,7 +166,7 @@ const Orders = () => {
       <Helmet>
         <title>Orders | Admin | Zang Global</title>
       </Helmet>
-      <Sidebar />
+      {/* <Sidebar /> */}
       <div className="flex-1 p-8 ml-[5rem] lg:ml-64  min-h-screen">
         <div className="mb-8">
           <h1 className="text-3xl font-bold text-primary mb-4">Order Management</h1>

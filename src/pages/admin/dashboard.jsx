@@ -33,7 +33,7 @@ const DashboardPage = () => {
                 <meta name="description" content="Admin dashboard for managing products, orders and customers" />
             </Helmet>
             <div className="flex">
-                <Sidebar />
+                {/* <Sidebar /> */}
                 <div className={`flex-1 transition-all duration-300 ${isOpen ? 'ml-64' : 'ml-20'} lg:ml-64`}>
                     <div className="p-4">
                         <Dashboard />
