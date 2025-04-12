@@ -29,7 +29,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     dispatch(getProducts());
-  }, [dispatch, refresh]); // Refresh dependency added
+  }, [ refresh]); // Refresh dependency added
 
   
 

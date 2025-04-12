@@ -8,11 +8,11 @@ import { useLocation } from "react-router";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchCart } from "../../redux/slice/cartSlice";
 import { fetchUser } from "../../redux/slice/authSlice";
-import PaystackPayment from "../../components/user/PaystackPayment";
 import api from "../../config/api";
 
 const Checkout = () => {
   const location = useLocation();
+  const [paymentStatus, setPaymentStatus] = useState(null);
   const discount = parseFloat(location.state?.discount || 0);
   const [shipping, setShipping] = useState(0);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -27,25 +27,68 @@ const Checkout = () => {
     phone: "",
   });
   const [saveAddress, setSaveAddress] = useState(false);
-  
+
+
+
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
   const token = useSelector((state) => state.auth.token);
-  
+
   useEffect(() => {
     if (token) {
       dispatch(fetchUser()); // Fetch user data when logged in
     }
-  }, [dispatch, token]);
-  
+  }, [token]);
+
+
+
+  // Extract query parameters from the URL
+  const queryParams = new URLSearchParams(location.search);
+  const trxref = queryParams.get('trxref');
+  const reference = queryParams.get('reference');
+
+  useEffect(() => {
+    const verifyPayment = async () => {
+      
+      if (reference) {
+        try {
+          // Step 1: Verify payment status with your backend
+          const verifyRes = await api.get(`/payments/verify-payment/${reference}`);
+          const paymentStatus = verifyRes.data.status;
+
+          // Step 2: Update state based on payment status
+          if (paymentStatus === "success") {
+            setPaymentStatus("✅ Payment Successful!");
+          } else {
+            setPaymentStatus("❌ Payment Failed or Cancelled.");
+          }
+        } catch (error) {
+          setPaymentStatus("⚠️ Could not verify payment.");
+        }
+      }
+      setLoading(false);
+      handleOrderSuccess()
+    };
+
+    // Run verification if reference is available
+    if (trxref || reference) {
+      verifyPayment();
+    }
+  }, [trxref, reference]);
+
+
+
+
+
+
   const carts = useSelector((state) => state.cart.items);
-  
-  const total = carts?.cart?.total
+
+  const total = carts?.cart?.total;
   useEffect(() => {
     if (user) {
       dispatch(fetchCart(user.userId));
     }
-  }, [dispatch, user]);
+  },[  user]);
 
   const cartItems = carts.cart.productsInCart;
 
@@ -89,8 +132,8 @@ const Checkout = () => {
     return [];
   };
 
-
   const handlePayment = async () => {
+    setIsProcessing(true);
     const orderData = {
       userId: user.userId,
       cartId: carts.cart.cartId,
@@ -99,28 +142,59 @@ const Checkout = () => {
       paymentMethod: "Online",
       name: user.name,
     };
-  
-    try {
-      const response = await api.post("/orders/checkout", orderData);
-      const paymentData = response.data?.data;
-  
-      const orderProcess = await api.post("/payments/process-payment", paymentData);
-      const paystackUrl = orderProcess.data.data.authorization_url
-      const paymentProcess = window.open(paystackUrl)
-      const reference = orderProcess.reference
 
-      if (paymentProcess.closed) {
-        console.log("window closed" ," Attempting payment verification")
-        // Attempt to verify payment now
-      }
-      const paymentVerification =  await api.post("/payments/verify-payment/", orderProcess.reference)
-      console.log(paymentProcess)
-      console.log(paymentVerification)
-    } catch (error) {
+    try {
+      // Step 1: Initialize order
+      const response = await api.post("/orders/checkout", orderData);
+      const paymentData = {
+        callbackUrl: "http://localhost:3000/checkout",
+        ...response.data?.data,
+      };
+      console.log(paymentData);
+
+      // Step 2: Get Paystack payment URL and reference
+      const orderProcess = await api.post(
+        "/payments/process-payment",
+        paymentData
+      );
+      const paystackUrl = orderProcess.data.data.authorization_url;
+      const reference = orderProcess.data.data.reference;
+
+      console.log(paystackUrl, "Payment url ");
+
+      // Step 3: Open payment window
+       window.location.href = paystackUrl
+
+          try {
+            // Step 5: Verify payment status
+            const verifyRes = await api.get(
+              `/payments/verify-payment/${reference}`
+            );
+            const paymentStatus = verifyRes.data.status;
+
+            if (paymentStatus === "success") {
+              alert("✅ Payment successful!");
+              // Optionally redirect or update UI
+            } else {
+              alert("❌ Payment not successful or was cancelled.");
+            }
+
+            console.log("Verification response:", verifyRes.data);
+          } catch (verifyErr) {
+            console.error(
+              "Error verifying payment:",
+              verifyErr.response?.data || verifyErr.message
+            );
+            alert("⚠️ Could not verify payment.");
+          }
+        }
+    
+     catch (error) {
+      setIsProcessing(false);
       console.error("Payment Error:", error.response?.data || error.message);
+      alert("❌ Error initializing payment.");
     }
   };
-  
 
   const handleAddressChange = (e) => {
     const { name, value } = e.target;
@@ -154,8 +228,6 @@ const Checkout = () => {
   const isAddressValid = () => {
     return Object.values(address).every((value) => value.trim() !== "");
   };
-
-
 
   const handlePlaceOrder = async () => {
     const userId = sessionStorage.getItem("userId");
@@ -366,9 +438,7 @@ const Checkout = () => {
             <div className="mt-6 space-y-4">
               <div className="flex justify-between text-gray-700">
                 <span>Subtotal</span>
-                <span className="font-semibold">
-                  ₦ {total?.toFixed(2)}
-                </span>
+                <span className="font-semibold">₦ {total?.toFixed(2)}</span>
               </div>
 
               {discount > 0 && (
@@ -397,8 +467,8 @@ const Checkout = () => {
                 </span>
               </div>
 
-              <div
-                onClick={()=>setIsProcessing(true)}
+              <button
+                onClick={handlePayment}
                 className={`w-full flex items-center  justify-center space-x-2 py-4 rounded-lg transition-all duration-300 ${
                   isAddressValid()
                     ? "bg-black text-white hover:bg-gray-800 hover:shadow-lg"
@@ -408,10 +478,9 @@ const Checkout = () => {
                 {isProcessing ? (
                   <Loader2 className="animate-spin" />
                 ) : (
-                  <PaystackPayment email={user.email} setIsProcessing={setIsProcessing} handleOrderSuccess={handleOrderSuccess} amount={total} />
-                
+                  "Pay Now"
                 )}
-              </div>
+              </button>
             </div>
           </div>
         </div>

@@ -34,7 +34,7 @@ const CartItems = () => {
     if (token) {
       dispatch(fetchUser()); // Fetch user data when logged in
     }
-  }, [dispatch, token]);
+  }, [ token]);
 
   const handleRemoveFromCart = async (product) => {
     setRemovingItem(product.productId);
@@ -55,7 +55,7 @@ const CartItems = () => {
     if (user) {
       dispatch(fetchCart(user.userId));
     }
-  }, [dispatch, user]);
+  }, [ user]);
 
 const cartItems = carts.cart.productsInCart
 

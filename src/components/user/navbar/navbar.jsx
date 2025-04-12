@@ -52,7 +52,7 @@ const ProfessionalNavbar = () => {
     if (token) {
       dispatch(fetchUser()); // Fetch user data when logged in
     }
-  }, [dispatch, token]);
+  }, [ token]);
 
 
 
@@ -61,7 +61,7 @@ const ProfessionalNavbar = () => {
     if (user) {
       dispatch(fetchCart(user.userId));
     }
-  }, [dispatch, user,carts]);
+  }, [ user,carts]);
 
   const cartItems = carts?.cart?.productsInCart
 

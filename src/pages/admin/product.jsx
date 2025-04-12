@@ -43,7 +43,7 @@ const Product = () => {
 
   useEffect(() => {
     dispatch(getProducts());
-  }, [dispatch, refresh]); // Refresh dependency added
+  }, [ refresh]); // Refresh dependency added
 
   const productData = products?.data
   console.log(productData, "from products")

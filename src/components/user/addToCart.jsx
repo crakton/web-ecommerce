@@ -16,7 +16,7 @@ const AddToCart = ({ product }) => {
     if (token && !user) {
       dispatch(fetchUser());
     }
-  }, [dispatch, token, user]);
+  }, [ token, user]);
 
   // Check if product is already in cart
   const isInCart = cart?.cart?.productsInCart?.some((item) => item.productId === product.productId);
