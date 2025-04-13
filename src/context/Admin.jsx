@@ -22,7 +22,7 @@ export const AdminAuthProvider = ({ children }) => {
           // This is a mock implementation
           const mockUser = {
             id: '123',
-            email: 'admin@example.com',
+            email: 'zangglobal@gmail.com',
             name: 'Admin User',
             role: 'admin'
           };
@@ -42,7 +42,7 @@ export const AdminAuthProvider = ({ children }) => {
     try {
       // In a real app, you would call your authentication API here
       // This is a mock implementation
-      if (email === 'admin@example.com' && password === 'admin123') {
+      if (email === 'zangglobal@gmail.com' && password === 'zangadmin2025') {
         const mockUser =  {
           id: '123',
           email,

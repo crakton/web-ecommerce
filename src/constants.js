@@ -13,11 +13,11 @@ import future from "./assets/images/partners/future.png";
 import inovative from "./assets/images/partners/MostInnovativeTech.png";
 import msme from "./assets/images/partners/MSME.jpg";
 
-import sarah from "./assets/images/teams/Sarah.png"
-import friday from "./assets/images/teams/Friday.jpg"
-import vivian from "./assets/images/teams/Vivian.jpeg"
-import lyop from "./assets/images/teams/Lyop.jpg"
-import luka from "./assets/images/teams/Luka.JPG"
+import sarah from "./assets/images/teams/sarah.png"
+import friday from "./assets/images/teams/friday.png"
+import vivian from "./assets/images/teams/vivian.png"
+import lyop from "./assets/images/teams/lyop.png"
+import luka from "./assets/images/teams/luka.png"
 
 
 
