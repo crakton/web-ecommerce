@@ -11,6 +11,9 @@ export const AdminAuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
+  const [loginError,setLoginError] = useState(false);
+  
+
   useEffect(() => {
     // Check for existing session on initial load
     const checkAuth = async () => {
@@ -54,7 +57,8 @@ export const AdminAuthProvider = ({ children }) => {
         setUser(mockUser);
         navigate('/admin/dashboard');
       } else {
-        throw new Error('Invalid credentials');
+        setLoginError(true)
+        console.log('Invalid credentials');
       }
     } catch (error) {
       console.error('Login failed', error);
@@ -74,7 +78,7 @@ export const AdminAuthProvider = ({ children }) => {
     admin,
     login,
     logout,
-    loading
+    loading,loginError
   };
 
   return (

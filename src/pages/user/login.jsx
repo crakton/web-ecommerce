@@ -14,9 +14,10 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [error,setError] = useState()
 
   // Get authentication state from Redux
-  const { user, loading, error } = useSelector((state) => state.auth);
+  const { user, loading } = useSelector((state) => state.auth);
 
   // Handle login submission
   const handleSubmit = async (e) => {
@@ -29,6 +30,7 @@ const Login = () => {
       navigate("/store"); 
     } catch (err) {
       console.error("Login failed:", err);
+      setError(err.message)
     }
   };
 
@@ -56,7 +58,7 @@ const Login = () => {
 
             {error && (
               <div className="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-lg mb-6 text-center">
-                {error}
+                {error} please try again
               </div>
             )}
 

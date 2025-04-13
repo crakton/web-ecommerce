@@ -17,7 +17,7 @@ const AdminLogin = () => {
   const [showResendButton, setShowResendButton] = useState(false);
   const [error, setError] = useState("");
 
-  const {login} = useAdminAuth()
+  const {login, loginError} = useAdminAuth()
 
   console.log("admin");
 
@@ -29,6 +29,9 @@ const AdminLogin = () => {
 
     try {
      login(email,password)
+     if(loginError){
+      setError("Incorrect email or password")
+     }
       console.log(email,password)
     } catch (error) {
       setError("Something went wrong. Please try again.");
@@ -43,7 +46,7 @@ const AdminLogin = () => {
       </Helmet>
       
     
-      <div className="h-[80vh] bg-slate-100 flex items-center justify-center p-4">
+      <div className="h-screen bg-slate-100 flex items-center justify-center p-4">
         <motion.div
           className="w-full max-w-md bg-white shadow-2xl rounded-2xl overflow-hidden"
           initial={{ opacity: 0, scale: 0.9 }}
