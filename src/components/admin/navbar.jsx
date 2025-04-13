@@ -1,7 +1,7 @@
 import React from 'react';
-import '@fortawesome/fontawesome-free/css/all.min.css';
+import { FaCamera, FaSearch, FaShoppingCart, FaTrash } from "react-icons/fa";
 
-const Navbar = () => {
+const AdminNavbar = () => {
     return (
         <nav className="w-full">
             {/* Main Navigation Bar */}
@@ -24,10 +24,10 @@ const Navbar = () => {
                         <i className="fas fa-comments text-sm md:text-base"></i>
                     </button>
                     <button className="text-blue-500 p-2 hover:bg-primary rounded-full">
-                        <i className="fas fa-camera text-sm md:text-base"></i>
+                        <FaCamera className="fas fa-camera text-sm md:text-base" />
                     </button>
                     <button className="text-blue-500 p-2 hover:bg-primary rounded-full">
-                        <i className="fas fa-trash text-sm md:text-base"></i>
+                        <FaTrash className="fas fa-trash text-sm md:text-base" />
                     </button>
                     <button className="text-blue-500 p-2 hover:bg-primary rounded-full">
                         <i className="fas fa-bell text-sm md:text-base"></i>
@@ -37,13 +37,13 @@ const Navbar = () => {
                     {/* Search, Login, and Cart */}
                     <div className="flex items-center space-x-4 ml-4">
                         <button className="text-blue-500 p-2 hover:bg-primary rounded-full">
-                            <i className="fas fa-search text-sm md:text-base"></i>
+                            <FaSearch className="fas fa-search text-sm md:text-base" />
                         </button>
                         <a href="/login" className="text-blue-500 p-2 hover:bg-primary rounded-full">
                             <i className="fas fa-user text-sm md:text-base"></i>
                         </a>
                         <a href="/cart" className="text-blue-500 p-2 hover:bg-primary rounded-full">
-                            <i className="fas fa-shopping-cart text-sm md:text-base"></i>
+                            <FaShoppingCart className="" />
                         </a>
                     </div>
                 </div>
@@ -52,5 +52,5 @@ const Navbar = () => {
     );
 };
 
-export default Navbar;
+export default AdminNavbar;
 

@@ -89,17 +89,20 @@ function Hero() {
       </div>
 
       {/* Right Content (Random but Suitable Content) */}
-      <div className="flex flex-col items-center justify-center z-10 text-center bg-mutedPrimary p-6 rounded-lg shadow-lg max-w-sm w-full">
+      <div className="flex flex-col items-center justify-center z-10 text-center border-[1px]  lg:hover:scale-105 transition-all delay-75 ease-in-out bg-white/40 p-6 rounded-lg shadow-lg max-w-sm w-full">
         <h2 className="text-2xl font-semibold text-primary mb-4">Our Latest Product</h2>
         <p className="text-mutedSecondary mb-6">
           Explore our new range of eco-friendly power solutions designed to power your devices while protecting the planet. Discover more today!
         </p>
-        <button className="bg-secondary text-primary px-4 py-2 rounded-md font-semibold transition duration-300 hover:bg-opacity-80">
-          Learn More
-        </button>
+        <Link to={"/store"} className="bg-secondary text-primary px-4 py-2 rounded-md font-semibold transition duration-300 hover:bg-opacity-80">
+          Shop Now 
+        </Link>
       </div>
     </section>
   );
 }
 
 export default Hero;
+
+
+

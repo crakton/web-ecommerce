@@ -60,7 +60,7 @@ const LandingPage = () => {
   
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full max-w-5xl">
           <motion.div
-            className="bg-mutedSecondary text-background p-6 rounded-lg flex flex-col items-center shadow-lg"
+            className="bg-mutedSecondary text-background py-10 rounded-lg flex flex-col items-center shadow-lg"
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
@@ -70,7 +70,7 @@ const LandingPage = () => {
           </motion.div>
   
           <motion.div
-            className="bg-mutedSecondary text-background p-6 rounded-lg flex flex-col items-center shadow-lg"
+            className="bg-mutedSecondary text-background py-10 rounded-lg flex flex-col items-center shadow-lg"
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.4 }}
@@ -80,7 +80,7 @@ const LandingPage = () => {
           </motion.div>
   
           <motion.div
-            className="bg-mutedSecondary text-background p-6 rounded-lg flex flex-col items-center shadow-lg"
+            className="bg-mutedSecondary text-background py-10 rounded-lg flex flex-col items-center shadow-lg"
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}

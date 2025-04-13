@@ -13,12 +13,18 @@ import { FaMoneyBill, FaRupeeSign } from 'react-icons/fa';
 
 import { useSelector, useDispatch } from 'react-redux';
 import { getProducts } from '../../redux/slice/productSlice';
+import { useAdminAuth } from '../../context/Admin';
 
 const Dashboard = () => {
     const [ordersData, setOrdersData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
     const dispatch = useDispatch()
+
+    const {admin} = useAdminAuth()
+
+
+    console.log(admin)
 
     
   // Redux State
@@ -84,7 +90,7 @@ const Dashboard = () => {
             <div className="flex items-center justify-center min-h-screen bg-slate-50">
                 <div className="text-center">
                     <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-primary mx-auto mb-4"></div>
-                    <p className="text-secondary text-xl">Loading Dashboard...</p>
+                    <p className="text-primary text-xl">Loading Dashboard...</p>
                 </div>
             </div>
         );
@@ -114,11 +120,16 @@ const Dashboard = () => {
         <div className="min-h-screen bg-slate-100 p-6 lg:p-10">
             <div className="container mx-auto">
                 <div className="flex justify-between items-center mb-8">
-                    <div>
+                    <div className='mt-2 flex flex-col justify-center '>
                         <h1 className="text-3xl font-bold text-primary">Dashboard</h1>
+                        <p className="text-mutedPrimary">Hi {admin.name}</p>
+                        <p className="text-sm text-mutedPrimary">{admin.email}</p>
+
+
                         <p className="text-mutedPrimary">Welcome back to Zang Global Admin!</p>
+
                     </div>
-                    <button className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-secondary transition flex items-center" onClick={e=>{setRefresh(!refresh)}}>
+                    <button className="bg-primary text-white px-4 py-2 rounded-lg hover:bg-mutedPrimary transition flex items-center" onClick={e=>{setRefresh(!refresh)}}>
                         <TrendingUp className="mr-2 h-5 w-5" /> Refresh Data
                     </button>
                 </div>

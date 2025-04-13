@@ -4,44 +4,32 @@ import { motion } from "framer-motion";
 import { Helmet } from "react-helmet";
 import Navbar from "../user/navbar/navbar";
 import { Link, useNavigate } from "react-router-dom";
-
+import { useAdminAuth } from "../../context/Admin";
+import AdminNavbar from "./navbar";
 
 const AdminLogin = () => {
   const navigate = useNavigate();
   const [sellerId, setSellerId] = useState("");
-  const [emailOrPhone, setEmailOrPhone] = useState("");
+  const [email, setEmailOrPhone] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [otpVerified, setOtpVerified] = useState(true);
   const [showResendButton, setShowResendButton] = useState(false);
   const [error, setError] = useState("");
- 
+
+  const {login} = useAdminAuth()
+
+  console.log("admin");
+
   const handleLogin = async () => {
-    if (!sellerId || !emailOrPhone || !password || !otpVerified) {
-      setError("Please fill all fields and verify OTP.");
+    if ( !email || !password) {
+      setError("Please fill all fields.");
       return;
     }
 
     try {
-      const response = await fetch(`https://api.merabestie.com/admin/login`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          sellerId,
-          emailOrPhone,
-          password,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (response.ok && data.message === "Login successful") {
-        navigate(`/admin/${data.sellerId}`);
-      } else {
-        setError(data.message || "Login failed. Please try again.");
-      }
+     login(email,password)
+      console.log(email,password)
     } catch (error) {
       setError("Something went wrong. Please try again.");
       console.error("Error:", error);
@@ -53,8 +41,12 @@ const AdminLogin = () => {
       <Helmet>
         <title>Admin Login | Zang Global</title>
       </Helmet>
-      <Navbar />
-      <div className="h-[calc(100vh-140px)] bg-gradient-to-br from-pink-50 to-pink-100 flex items-center justify-center p-4 mt-20">
+      <div className="sticky top-0">
+
+      <AdminNavbar />
+      </div>
+    
+      <div className="h-[80vh] bg-slate-100 flex items-center justify-center p-4">
         <motion.div
           className="w-full max-w-md bg-white shadow-2xl rounded-2xl overflow-hidden"
           initial={{ opacity: 0, scale: 0.9 }}
@@ -70,7 +62,9 @@ const AdminLogin = () => {
               <h2 className="text-4xl font-extrabold text-gray-900 tracking-tight">
                 Admin Login
               </h2>
-              <p className="text-secondary mt-2">Log in to Admin Dashboard</p>
+              <p className="text-mutedPrimary mt-2">
+                Log in to Admin Dashboard
+              </p>
             </div>
 
             {error && (
@@ -80,9 +74,6 @@ const AdminLogin = () => {
             )}
 
             <div className="space-y-6">
-              
-              
-
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <Mail className="text-primary" />
@@ -92,16 +83,15 @@ const AdminLogin = () => {
                   placeholder="Email Address"
                   required
                   className="w-full pl-10 pr-4 py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition duration-300"
-                  value={emailOrPhone}
+                  value={email}
                   onChange={(e) => setEmailOrPhone(e.target.value)}
                 />
               </div>
-              
 
               {showResendButton && (
                 <button
                   type="button"
-                  className="w-full bg-primary hover:bg-secondary text-white py-3 rounded-lg font-semibold transition duration-300 transform active:scale-95"
+                  className="w-full bg-primary hover:bg-mutedPrimary text-white py-3 rounded-lg font-semibold transition duration-300 transform active:scale-95"
                 >
                   Resend OTP
                 </button>
@@ -121,7 +111,7 @@ const AdminLogin = () => {
                 />
                 <button
                   type="button"
-                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-primary hover:text-secondary transition"
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center text-primary hover:text-mutedPrimary transition"
                   onClick={() => setShowPassword(!showPassword)}
                 >
                   {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
@@ -130,9 +120,10 @@ const AdminLogin = () => {
 
               <motion.button
                 type="button"
-                className={`w-full bg-primary hover:bg-secondary text-white py-3 rounded-lg font-semibold transition duration-300 transform active:scale-95 ${
+                className={`w-full bg-primary hover:bg-mutedPrimary text-white py-3 rounded-lg font-semibold transition duration-300 transform active:scale-95 ${
                   !otpVerified ? "opacity-50 cursor-not-allowed" : ""
                 }`}
+                onClick={handleLogin}
                 whileTap={{ scale: 0.95 }}
               >
                 Login
@@ -141,6 +132,8 @@ const AdminLogin = () => {
           </div>
         </motion.div>
       </div>
+
+     
     </>
   );
 };

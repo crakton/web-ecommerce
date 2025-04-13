@@ -15,14 +15,7 @@ const TrainingHub = () => {
       title: "AI and Robotics for Sustainable Development",
       description: "Explore the intersection of AI, robotics, and sustainability. Learn how modern technologies enhance efficiency in waste management, energy conservation, and resource optimization.",
     },
-    {
-      title: "Sustainable Manufacturing",
-      description: "At Zang Global, we are committed to sustainable manufacturing practices that prioritize environmental stewardship and resource efficiency. Transforming electronic waste into innovative products like power banks, solar lanterns, USB cables, and mobile phone chargers helps reduce waste and contribute to a circular economy.",
-    },
-    {
-      title: "Circular Economy and E-waste",
-      description: "E-waste refers to discarded electrical or electronic devices, which are often improperly disposed of, leading to environmental hazards. We are adopting circular economy principles to mitigate the e-waste crisis. By recycling, repurposing, and transforming e-waste into valuable resources, such as power banks and solar lanterns, we demonstrate how circular models can create new products while reducing environmental impact.",
-    }
+   
   ];
 
   return (

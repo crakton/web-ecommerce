@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
 import logo from "../../../assets/images/whiteLogo.png";
-import { FaWhatsapp } from "react-icons/fa";
+import { FaFacebook, FaInstagram, FaLinkedin, FaTwitter, FaWhatsapp } from "react-icons/fa";
 
 const Footer = () => {
   return (
     <footer className="bg-gray-900 text-white py-10 px-5 md:px-20">
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-10">
+      <div className="grid grid-cols-2 md:grid-cols-5 gap-10">
         {/* Column 1 */}
         <div>
           <img
@@ -126,9 +126,47 @@ const Footer = () => {
             </li>
           </ul>
         </div>
+
+        <div>
+          <h2 className="text-lg font-semibold mb-4">Follow Us</h2>
+          <div className="flex gap-4 text-xl">
+            <a
+              href="https://www.facebook.com/zangglobal"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-blue-500 transition"
+            >
+              <FaFacebook />
+            </a>
+            <a
+              href="https://www.instagram.com/zangglobal"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-pink-400 transition"
+            >
+              <FaInstagram />
+            </a>
+            <a
+              href="https://www.x.com/zangglobal"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-blue-400 transition"
+            >
+              <FaTwitter />
+            </a>
+            <a
+              href="https://www.linkedin.com/company/zang-global"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-blue-300 transition"
+            >
+              <FaLinkedin />
+            </a>
+          </div>
+        </div>
       </div>
 
-      <div className="flex justify-between w-full items-center flex-wrap">
+      <div className="flex flex-col-reverse justify-center w-full flex-wrap">
         {/* Newsletter / Social */}
         <div className="mt-10 bg-gray-200/20 w-fit p-10 rounded-md shadow-md shadow-gray-300/30">
           <h3 className="text-lg font-semibold mb-4">Stay in Touch</h3>
@@ -177,6 +215,9 @@ const Footer = () => {
             <span className="text-sm opacity-75">+2348101496175</span>
           </div>
         </div>
+
+
+       
       </div>
 
       {/* Copyright */}
