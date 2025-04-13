@@ -41,10 +41,7 @@ const AdminLogin = () => {
       <Helmet>
         <title>Admin Login | Zang Global</title>
       </Helmet>
-      <div className="sticky top-0">
-
-      <AdminNavbar />
-      </div>
+      
     
       <div className="h-[80vh] bg-slate-100 flex items-center justify-center p-4">
         <motion.div
