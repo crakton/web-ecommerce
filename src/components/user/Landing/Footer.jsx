@@ -166,7 +166,7 @@ const Footer = () => {
         </div>
       </div>
 
-      <div className="flex flex-col-reverse justify-center w-full flex-wrap">
+      <div className="flex flex-col-reverse md:flex-row md:items-center md:justify-between justify-center w-full flex-wrap">
         {/* Newsletter / Social */}
         <div className="mt-10 bg-gray-200/20 w-fit p-10 rounded-md shadow-md shadow-gray-300/30">
           <h3 className="text-lg font-semibold mb-4">Stay in Touch</h3>
@@ -181,9 +181,7 @@ const Footer = () => {
               Subscribe
             </button>
           </form>
-        </div>
-
-        <div className="text-center flex flex-col items-center mt-10 sm:text-left">
+        </div>        <div className="text-center flex flex-col items-center mt-10 sm:text-left">
           <h2 className="text-lg font-semibold mb-3">Contact Us</h2>
           <p className="text-sm opacity-75">
             No. 4 Lion Gate IV Plaza Opposite ITF Centre for Excellence, Bukuru
