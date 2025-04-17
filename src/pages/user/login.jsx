@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Eye, EyeOff, Lock, Mail } from 'lucide-react';
+import { Eye, EyeOff, Loader2, Lock, Mail } from 'lucide-react';
 import Navbar from "../../components/user/navbar/navbar";
 import { motion } from 'framer-motion';
 import { Helmet } from "react-helmet";
@@ -15,21 +15,24 @@ const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [error,setError] = useState()
+  const [loading,setLoading] = useState(false)
 
   // Get authentication state from Redux
-  const { user, loading } = useSelector((state) => state.auth);
 
   // Handle login submission
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true)
     try {
       const resultAction = await dispatch(loginUser({ email, password })).unwrap();
       console.log("Login successful", resultAction);
 
       // Redirect to Dashboard or Home after login
       navigate("/store"); 
+      setLoading(false)
     } catch (err) {
       console.error("Login failed:", err);
+      setLoading(false)
       setError(err.message)
     }
   };
@@ -38,9 +41,6 @@ const Login = () => {
     <>
       {/* <SEOComponent /> */}
       <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4 mt-16">
-        <div className="fixed top-0 left-0 w-full z-50">
-          <Navbar />
-        </div>
         
         <motion.div 
           className="w-full max-w-md bg-white shadow-2xl rounded-2xl overflow-hidden"
@@ -103,11 +103,11 @@ const Login = () => {
               {/* Submit Button */}
               <motion.button
                 type="submit"
-                className="w-full bg-primary text-white py-3 rounded-lg font-semibold hover:bg-primary transition duration-300 transform active:scale-95"
+                className="w-full bg-primary flex items-center justify-center text-white py-3 rounded-lg font-semibold hover:bg-primary transition duration-300 transform active:scale-95"
                 whileTap={{ scale: 0.95 }}
                 disabled={loading}
               >
-                {loading ? "Please wait..." : "Log in"}
+                {loading ? <Loader2 className=" animate-spin" size={25}/> : "Log in"}
               </motion.button>
             </form>
 

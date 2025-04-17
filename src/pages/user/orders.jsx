@@ -4,19 +4,20 @@ import { Helmet } from "react-helmet";
 import { motion } from 'framer-motion';
 import Navbar from '../../components/user/navbar/navbar';
 import { ChevronDown, ChevronUp } from 'lucide-react';
+import { useSelector } from 'react-redux';
+import { fetchUser } from '../../redux/slice/authSlice';
+import { useDispatch } from 'react-redux';
 
 const Order = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+  const user = useSelector((state) =>state.auth.user)
+  console.log(user, "from order")
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchOrders = async () => {
       const userId = sessionStorage.getItem('userId');
-      if (!userId) {
-        navigate('/login');
-        return;
-      }
 
       try {
         const response = await fetch(`https://api.merabestie.com/find-my-order`, {

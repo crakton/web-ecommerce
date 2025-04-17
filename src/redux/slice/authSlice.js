@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../../config/api";
+import { toast } from "react-toastify";
 
 // User Login
 export const loginUser = createAsyncThunk("auth/login", async (userData, { rejectWithValue }) => {
@@ -10,6 +11,7 @@ export const loginUser = createAsyncThunk("auth/login", async (userData, { rejec
     localStorage.setItem("token", response.data.token);
     localStorage.setItem("user", JSON.stringify(response.data.user));
     localStorage.setItem("userId", response.data.userId); // Store userId separately
+    toast.success("Login Successful")
 
     return response.data;
   } catch (error) {
@@ -26,6 +28,7 @@ export const registerUser = createAsyncThunk("auth/register", async (userData, {
     localStorage.setItem("token", response.data.token);
     localStorage.setItem("user", JSON.stringify(response.data.user));
     localStorage.setItem("userId", response.data.user.userId);
+    toast.success("Welcome to Zang Global where you meet innovative Products")
 
     return response.data;
   } catch (error) {

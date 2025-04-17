@@ -2,7 +2,7 @@ import { partnerAwardData } from "../../../constants";
 
 const PartnersAndAwards = () => {
   return (
-    <div className=" mx-auto w-full p-6 bg-primary text-neutralGray">
+    <div id="partners" className=" mx-auto w-full p-6 bg-primary text-neutralGray">
       {/* Partners Section */}
       <h2 className="text-xl font-bold mb-4 text-secondary">Our Partners and Supporters</h2>
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
@@ -15,6 +15,8 @@ const PartnersAndAwards = () => {
       </div>
 
       {/* Awards Section */}
+      <div id="awards">
+        
       <h2 className="text-xl font-bold mt-8 mb-4 text-secondary">Awards & Recognitions</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
         {partnerAwardData.awards.map((award, index) => (
@@ -27,6 +29,7 @@ const PartnersAndAwards = () => {
             </div>
           </div>
         ))}
+        </div>
       </div>
     </div>
   );

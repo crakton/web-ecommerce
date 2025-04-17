@@ -8,7 +8,6 @@ import { Helmet } from "react-helmet";
 
 export default function SignUp() {
   const dispatch = useDispatch();
-  const { loading, error } = useSelector((state) => state.auth); // Get state from Redux
 
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
@@ -16,6 +15,9 @@ export default function SignUp() {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
+  const [loading,setLoading] = useState()
+  const [error, setError] = useState()
+
 
   const formData = { name, email, password, phone}
 
@@ -33,6 +35,7 @@ try {
   dispatch(registerUser(formData));
   dispatch(loginUser(email,password))
 } catch (error) {
+  setError("Error creating account please try again")
   
 }
   };

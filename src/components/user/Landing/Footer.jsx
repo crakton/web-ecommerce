@@ -31,6 +31,15 @@ const Footer = () => {
               </a>
             </li>
             <li>
+              <a
+                href="/#partners"
+                className="hover:underline hover:text-mutedSecondary transition duration-200"
+              >
+                Partners and Supporters
+              </a>
+            </li>
+           
+            <li>
               <Link
                 to="/blogs"
                 className="hover:underline hover:text-mutedSecondary transition duration-200"
@@ -93,6 +102,7 @@ const Footer = () => {
                 Assistive Tech
               </Link>
             </li>
+
           </ul>
         </div>
 
@@ -100,6 +110,21 @@ const Footer = () => {
         <div>
           <h3 className="text-lg font-semibold mb-4">Company</h3>
           <ul className="space-y-2 text-sm">
+          <li>
+              <a
+                href="/#awards"
+                className="hover:underline hover:text-mutedSecondary transition duration-200"
+              >
+                Awards and Recognition
+              </a>
+            </li><li>
+              <a
+                href="/#team"
+                className="hover:underline hover:text-mutedSecondary transition duration-200"
+              >
+                Team
+              </a>
+            </li>
             <li>
               <a
                 href="/#why-us"
