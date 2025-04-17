@@ -5,7 +5,9 @@ import api from "../../config/api";
 export const getProducts = createAsyncThunk("product/getAll", async (_, { rejectWithValue }) => {
   try {
     const response = await api.get("/products");
-    return response.data;
+    console.log("from redux",response.data.data)
+    localStorage.setItem("products",response.data.data)
+    return response.data.data;
   } catch (error) {
     return rejectWithValue(error.message);
   }
@@ -21,10 +23,7 @@ export const getProductById = createAsyncThunk("product/getById", async (product
   }
 });
 
-
-// Create Product
-// Assuming you have an `api` instance setup for backend requests
-
+//Create a new Product
 export const createProduct = createAsyncThunk(
   "product/createProduct",
   async (productData, { rejectWithValue }) => {

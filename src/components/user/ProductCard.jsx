@@ -58,15 +58,8 @@ const ProductCard = ({ product, onBuyNow }) => {
         </div>
 
         {/* Action Buttons */}
-        <div className="mt-3 sm:mt-4 flex flex-col sm:flex-row gap-2 sm:space-x-4">
+        <div className="mt-3 sm:mt-4 flex flex-col sm:flex-row ">
           <AddToCart product={product} quantity={1} />
-
-          <button
-            className="w-full sm:w-auto bg-orange-500 text-white px-3 py-1 rounded-md text-xs sm:text-sm hover:bg-orange-600 focus:ring-2 focus:ring-orange-400 transition"
-            onClick={() => onBuyNow(product)}
-          >
-            Buy Now
-          </button>
         </div>
       </div>
     </div>

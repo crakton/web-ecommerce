@@ -1,60 +1,123 @@
 import { useDispatch, useSelector } from "react-redux";
-import { addToCart, fetchCart, removeFromCart } from "../../redux/slice/cartSlice";
+import {
+  addToCart,
+  fetchCart,
+  removeFromCart,
+  updateCartQuantity,
+} from "../../redux/slice/cartSlice";
 import { toast } from "react-toastify";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { fetchUser } from "../../redux/slice/authSlice";
 import { useNavigate } from "react-router-dom";
+import { FaMinus, FaPlus } from "react-icons/fa";
+
 const AddToCart = ({ product }) => {
   const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart.items);
   const user = useSelector((state) => state.auth.user);
   const token = useSelector((state) => state.auth.token);
-  const navigate =  useNavigate()
+  const navigate = useNavigate();
+  const [cartItem, setCartItem] = useState();
+  const [quantity, setQuantity] = useState();
 
-  // Fetch user on refresh
+  const isInCart = cart?.cart?.productsInCart?.some(
+    (item) => item.productId === product.productId
+  );
+
   useEffect(() => {
     if (token && !user) {
       dispatch(fetchUser());
     }
-  }, [ token, user]);
+  }, [token, user]);
 
-  // Check if product is already in cart
-  const isInCart = cart?.cart?.productsInCart?.some((item) => item.productId === product.productId);
+  useEffect(() => {
+    if (isInCart) {
+      const cartProduct = cart?.cart?.productsInCart?.find(
+        (item) => item.productId === product.productId
+      );
+      setQuantity(cartProduct.quantity)
+      setCartItem(cartProduct);
+    }
+  }, [isInCart, cart, product]);
+
+  const handleAddQuantity = () => {
+    const newQty = quantity + 1;
+    setQuantity(newQty);
+    if (isInCart) {
+      dispatch(
+        updateCartQuantity({
+          productId: product.productId,
+          productQty: newQty,
+          userId: user.userId,
+        })
+      );
+    }
+  };
+
+
+  const handleRemoveQuantity = () => {
+    const newQty = quantity - 1;
+    setQuantity(newQty);
+    if (isInCart) {
+      dispatch(
+        updateCartQuantity({
+          productId: product.productId,
+          productQty: newQty,
+          userId: user.userId,
+        })
+      );
+    }
+  };
 
   const handleAddToCart = async () => {
     if (!user) {
       toast.error("Please log in to add items to the cart.");
-      navigate("/signup")
+      navigate("/signup");
       return;
     }
 
     try {
-      await dispatch(addToCart({ productId: product.productId, productQty: 1, userId: user.userId })).unwrap();
-      dispatch(fetchCart(user?.user.Id))
+      await dispatch(
+        addToCart({
+          productId: product.productId,
+          productQty: quantity,
+          userId: user.userId,
+        })
+      ).unwrap();
+      dispatch(fetchCart(user.userId));
       toast.success(`${product.name} added to cart!`);
     } catch (error) {
-      toast.error(error || "Failed to add to cart.");
-    }
-  };
-
-  const handleRemoveFromCart = async () => {
-    try {
-      await dispatch(removeFromCart({ userId: user.userId, productId: product.productId })).unwrap();
-      toast.success(`${product.name} removed from cart!`);
-    } catch (error) {
-      toast.error(error || "Failed to remove from cart.");
+      toast.error(error?.message || "Failed to add to cart.");
     }
   };
 
   return (
-    <button
-      onClick={isInCart ? handleRemoveFromCart : handleAddToCart}
-      className={`px-1 py-2 rounded-md text-sm text-white transition ${
-        isInCart ? "bg-gray-400 hover:bg-gray-500" : "bg-pink-600 hover:bg-pink-500"
-      }`}
-    >
-      {isInCart ? "Added to Cart" : "Add to Cart"}
-    </button>
+    <div className="w-full">
+      {isInCart ? (
+        <div className="flex items-center justify-between px-2 py-1 border-[1px] border-mutedPrimary rounded-md w-full">
+          <button onClick={handleAddQuantity}>
+            <FaPlus size={20} />
+          </button>
+          <p className="border-[1px] w-[35px] flex items-center justify-center text-sm rounded-md border-mutedPrimary">
+            {cartItem?.quantity}
+          </p>
+          <button
+            onClick={handleRemoveQuantity}
+            disabled={quantity <= 1}
+            className={quantity <= 1 ? "opacity-50 cursor-not-allowed" : ""}
+          >
+            <FaMinus size={20} />
+          </button>
+        </div>
+      ) : (
+        <button
+          onClick={handleAddToCart}
+          className="px-1 py-2 rounded-md text-sm text-white transition bg-primary"
+        >
+          Add to Cart
+        </button>
+      )}
+    </div>
   );
 };
 

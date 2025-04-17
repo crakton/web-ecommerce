@@ -2,10 +2,13 @@ import React, { useState, useEffect, useMemo } from 'react';
 import CartItems from "../../components/user/cart/Cartitems";
 import { fetchProducts } from '../../config/api';
 import ProductCard from '../../components/user/ProductCard';
-import Checkout from './checkout';
+import { useDispatch } from 'react-redux';
+import { getProducts } from '../../redux/slice/productSlice';
+
 
 const ScrollProgress = () => {
   const [scrollProgress, setScrollProgress] = useState(0);
+
 
 
   
@@ -110,6 +113,7 @@ const HomePage = () => {
   const [currentSlide, setCurrentSlide] = useState(1);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
+  const dispatch  = useDispatch()
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -123,8 +127,9 @@ const HomePage = () => {
     (async () => {
       setLoading(true)
       try {
-        const fetchedProducts = await fetchProducts();
-        setProducts(fetchedProducts.data);
+        const fetchedProducts = await dispatch(getProducts());
+        setProducts(fetchedProducts.payload);
+        console.log(fetchedProducts)
         setLoading(false)
       } catch (error) {
         console.error("Error fetching products:", error);
