@@ -1,9 +1,9 @@
 import React from "react";
 import AdminSignup from "../../components/admin/signup";
 
-const SellerPage = () => {
+const RegisterAdmin = () => {
   return <AdminSignup />;
 };
 
-export default SellerPage;
+export default RegisterAdmin;
 

@@ -125,9 +125,9 @@ const HomePage = () => {
 
   useEffect(() => {
     (async () => {
-      setLoading(true)
+      // setLoading(true)3
       try {
-        const fetchedProducts = await dispatch(getProducts());
+        const fetchedProducts =  getProducts();
         setProducts(fetchedProducts.payload);
         console.log(fetchedProducts)
         setLoading(false)

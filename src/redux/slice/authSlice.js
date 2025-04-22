@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../../config/api";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 // User Login
 export const loginUser = createAsyncThunk("auth/login", async (userData, { rejectWithValue }) => {
@@ -21,6 +22,7 @@ export const loginUser = createAsyncThunk("auth/login", async (userData, { rejec
 
 // User Registration
 export const registerUser = createAsyncThunk("auth/register", async (userData, { rejectWithValue }) => {
+  // const navigate = useNavigate()
   try {
     const response = await api.post("/auth/register", userData);
 
@@ -28,7 +30,8 @@ export const registerUser = createAsyncThunk("auth/register", async (userData, {
     localStorage.setItem("token", response.data.token);
     localStorage.setItem("user", JSON.stringify(response.data.user));
     localStorage.setItem("userId", response.data.user.userId);
-    toast.success("Welcome to Zang Global where you meet innovative Products")
+    toast.success("Welcome to Zang Global. Login to continue")
+    // navigate('/login')
 
     return response.data;
   } catch (error) {

@@ -19,7 +19,6 @@ import { toast } from "react-toastify";
 
 import { Navigate } from "react-router-dom";
 import { useAdminAuth } from "../context/Admin";
-import { FaUser } from "react-icons/fa";
 
 const AdminLayout = ({ children, adminOnly = false }) => {
   const navigate = useNavigate();
@@ -129,11 +128,9 @@ const AdminLayout = ({ children, adminOnly = false }) => {
           inStockValue: 0,
         });
 
-        selectedFile.map((item, index)=>{
-          removeImage(index)
-        })
-
-
+        selectedFile.map((item, index) => {
+          removeImage(index);
+        });
 
         setUploadStatus("Product created successfully!");
         toast.success(`Product ${productData.name} created successfully`);
@@ -150,21 +147,10 @@ const AdminLayout = ({ children, adminOnly = false }) => {
     }
   };
 
-  const { isAuthenticated, isAdmin, loading, logout } = useAdminAuth();
+  const { admin, logout } = useAdminAuth();
 
-  console.log(isAdmin, loading, isAuthenticated);
+  console.log(admin, "From the layout");
 
-  if (loading) {
-    return <div>Loading...</div>; // Or a loading spinner
-  }
-
-  if (!isAuthenticated) {
-    return <Navigate to="/admin/login" replace />;
-  }
-
-  if (adminOnly && !isAdmin) {
-    return <Navigate to="/unauthorized" replace />;
-  }
 
   return (
     <div className="flex min-h-screen">
@@ -179,9 +165,6 @@ const AdminLayout = ({ children, adminOnly = false }) => {
       >
         <div className="flex items-center justify-between p-6 border-b text-white">
           {isOpen && <div className="text-2xl font-bold">Zang Global</div>}
-
-
-
         </div>
 
         <div className="space-y-6 px-4">
@@ -230,7 +213,6 @@ const AdminLayout = ({ children, adminOnly = false }) => {
           )}
         </div>
       </div>
-      
 
       {/* Main Content Area */}
       <main className="h-full w-full ">

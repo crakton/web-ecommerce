@@ -17,7 +17,6 @@ const AddToCart = ({ product }) => {
   const user = useSelector((state) => state.auth.user);
   const token = useSelector((state) => state.auth.token);
   const navigate = useNavigate();
-  const [cartItem, setCartItem] = useState();
   const [quantity, setQuantity] = useState();
 
   const isInCart = cart?.cart?.productsInCart?.some(
@@ -36,33 +35,15 @@ const AddToCart = ({ product }) => {
         (item) => item.productId === product.productId
       );
       setQuantity(cartProduct.quantity)
-      setCartItem(cartProduct);
     }
   }, [isInCart, cart, product]);
 
-  const handleAddQuantity = () => {
-    const newQty = quantity + 1;
-    setQuantity(newQty);
+  const handleUpdateQuantity = async () => {
     if (isInCart) {
       dispatch(
         updateCartQuantity({
           productId: product.productId,
-          productQty: newQty,
-          userId: user.userId,
-        })
-      );
-    }
-  };
-
-
-  const handleRemoveQuantity = () => {
-    const newQty = quantity - 1;
-    setQuantity(newQty);
-    if (isInCart) {
-      dispatch(
-        updateCartQuantity({
-          productId: product.productId,
-          productQty: newQty,
+          productQty: quantity,
           userId: user.userId,
         })
       );
@@ -94,25 +75,20 @@ const AddToCart = ({ product }) => {
   return (
     <div className="w-full">
       {isInCart ? (
-        <div className="flex items-center justify-between px-2 py-1 border-[1px] border-mutedPrimary rounded-md w-full">
-          <button onClick={handleAddQuantity}>
-            <FaPlus size={20} />
-          </button>
-          <p className="border-[1px] w-[35px] flex items-center justify-center text-sm rounded-md border-mutedPrimary">
-            {cartItem?.quantity}
-          </p>
+        <div className="flex items-center  gap-3 px-2 py-1 border-[1px] border-mutedPrimary rounded-md w-full">
+         <input type="number" value={quantity} className="focus:ring-0 focus:border-0 w-full flex items-center text-center justify-center" onChange={(e)=>setQuantity(e.target.value)} />
           <button
-            onClick={handleRemoveQuantity}
-            disabled={quantity <= 1}
-            className={quantity <= 1 ? "opacity-50 cursor-not-allowed" : ""}
+            onClick={handleUpdateQuantity}
+          
+            className="bg-primary rounded-sm p-1 text-white"
           >
-            <FaMinus size={20} />
+        Update
           </button>
         </div>
       ) : (
         <button
           onClick={handleAddToCart}
-          className="px-1 py-2 rounded-md text-sm text-white transition bg-primary"
+          className="px-1 py-2 w-full rounded-md text-sm text-white transition bg-primary"
         >
           Add to Cart
         </button>

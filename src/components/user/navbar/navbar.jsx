@@ -180,7 +180,7 @@ const ProfessionalNavbar = () => {
                 >
                   <RiUser3Line className="w-5 h-5" />
                   <span className="ml-2 hidden md:block">
-                    {user ? `Hi, ${user.name}` : "Profile"}
+                    {user.name===undefined?"": `Hi, ${user.name}`}
                   </span>
                 </button>
 

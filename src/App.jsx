@@ -22,7 +22,7 @@ import Complaints from "./pages/admin/complaints";
 import CalendarPage from "./pages/admin/calendar";
 import SEO from "./pages/admin/SEO";
 import LoginPage from "./pages/admin/login";
-import SellerPage from "./pages/admin/signup";
+import RegisterAdmin from "./pages/admin/signup";
 
 // User Pages
 import HomePage from "./pages/user/homepage";
@@ -47,6 +47,7 @@ import Blogs from "./pages/landingPage/Blogs";
 import BlogView from "./pages/landingPage/BlogView";
 import TrainingHub from "./pages/landingPage/TrainingHub";
 import AssistiveTechPage from "./pages/landingPage/AssistiveTech";
+import OrderView from "./pages/admin/orderView";
 
 function App() {
   return (
@@ -55,10 +56,6 @@ function App() {
         <ToastContainer />
         <BrowserRouter>
           <Routes>
-            {/* Admin base login route */}
-            {/* <Route path="/admin" element={<Admin />} /> */}
-
-            {/* Admin Dashboard (Protected) */}
             <Route
               path="/admin/"
               element={
@@ -74,6 +71,7 @@ function App() {
               <Route path="reviews" element={<Reviews />} />
               <Route path="complaints" element={<Complaints />} />
               <Route path="calendar" element={<CalendarPage />} />
+              <Route path="orders/:orderId" element={<OrderView />} />
 
               <Route path="SEO" element={<SEO />} />
             </Route>
@@ -82,6 +80,14 @@ function App() {
               element={
                 <AdminAuthProvider>
                   <LoginPage />
+                </AdminAuthProvider>
+              }
+            />
+            <Route
+              path="/admin/signup"
+              element={
+                <AdminAuthProvider>
+                  <RegisterAdmin />
                 </AdminAuthProvider>
               }
             />

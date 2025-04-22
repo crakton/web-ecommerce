@@ -2,95 +2,115 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../../config/api";
 
 // Fetch All Products
-export const getProducts = createAsyncThunk("product/getAll", async (_, { rejectWithValue }) => {
-  try {
-    const response = await api.get("/products");
-    console.log("from redux",response.data.data)
-    localStorage.setItem("products",response.data.data)
-    return response.data.data;
-  } catch (error) {
-    return rejectWithValue(error.message);
+export const getProducts = createAsyncThunk(
+  "product/getAll",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await api.get("/products");
+      const products = response.data?.data || [];
+      localStorage.setItem("products", JSON.stringify(products));
+      return products;
+    } catch (error) {
+      console.error("Error fetching products:", error);
+      return rejectWithValue(error.response?.data?.message || "Failed to fetch products");
+    }
   }
-});
+);
 
 // Fetch Single Product
-export const getProductById = createAsyncThunk("product/getById", async (productId, { rejectWithValue }) => {
-  try {
-    const response = await api.get(`/products/${productId}`);
-    return response.data;
-  } catch (error) {
-    return rejectWithValue(error.message);
+export const getProductById = createAsyncThunk(
+  "product/getById",
+  async (productId, { rejectWithValue }) => {
+    try {
+      const response = await api.get(`/products/${productId}`);
+      return response.data?.data || null;
+    } catch (error) {
+      console.error(`Error fetching product ${productId}:`, error);
+      return rejectWithValue(error.response?.data?.message || "Product not found");
+    }
   }
-});
+);
 
-//Create a new Product
+// Create a new Product
 export const createProduct = createAsyncThunk(
   "product/createProduct",
   async (productData, { rejectWithValue }) => {
     try {
       if (!productData.img || productData.img.length === 0) {
-        return rejectWithValue("No images selected.");
+        throw new Error("At least one image is required");
       }
 
-      // Upload images to backend (which handles Cloudinary)
       const formData = new FormData();
-      productData.img.forEach((file) => formData.append("files", file)); // Match backend field name
+      productData.img.forEach((file) => formData.append("files", file));
 
-      const uploadResponse = await api.post("/upload/doc-upload/", formData, {
+      const uploadResponse = await api.post("/upload/doc-upload", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
       if (!uploadResponse.data.success) {
-        
-        return rejectWithValue(uploadResponse.data.message || "Image upload failed");
+        throw new Error(uploadResponse.data.message || "Image upload failed");
       }
-      
-      // Cloudinary URLs received from backend
-      const uploadedImages = uploadResponse.data.imageUrl || uploadResponse.data.imageUrls; 
-      
-      // Add uploaded image URLs to productData
-      console.log(uploadedImages, uploadResponse.data)
-      const updatedProductData = { ...productData, img: uploadedImages };
 
-      // Send product data with Cloudinary image URLs to backend
+      const uploadedImages = uploadResponse.data.imageUrl || uploadResponse.data.imageUrls;
+      const updatedProductData = { 
+        ...productData, 
+        img: Array.isArray(uploadedImages) ? uploadedImages : [uploadedImages]
+      };
+
       const response = await api.post("/products/new", updatedProductData);
+      return response.data?.data || response.data;
 
-      // Fetch latest products (assuming getProducts is defined elsewhere)
-      getProducts();
-
-      return response.data;
     } catch (error) {
-      return rejectWithValue(error.response?.data || error.message);
+      console.error("Error creating product:", error);
+      return rejectWithValue(error.response?.data?.message || error.message);
     }
   }
 );
 
 // Update Product
-export const updateProduct = createAsyncThunk("product/updateProduct", async ({ productId, productData }, { rejectWithValue }) => {
-  try {
-    const response = await api.put(`/products/${productId}, productData`);
-    return response.data;
-  } catch (error) {
-    return rejectWithValue(error.response?.data || error.message);
+export const updateProduct = createAsyncThunk(
+  "product/updateProduct",
+  async ({ productId, productData }, { rejectWithValue }) => {
+    try {
+      const response = await api.put(`/products/${productId}`, productData);
+      return response.data?.data || response.data;
+    } catch (error) {
+      console.error(`Error updating product ${productId}:`, error);
+      return rejectWithValue(error.response?.data?.message || "Failed to update product");
+    }
   }
-});
+);
 
 // Delete Product
-export const deleteProduct = createAsyncThunk("product/deleteProduct", async (productId, { rejectWithValue }) => {
-  try {
-    await api.delete(`/products/${productId}`);
-    return productId;
-  } catch (error) {
-    return rejectWithValue(error.response?.data || error.message);
+export const deleteProduct = createAsyncThunk(
+  "product/deleteProduct",
+  async (productId, { rejectWithValue }) => {
+    try {
+      await api.delete(`/products/${productId}`);
+      return productId;
+    } catch (error) {
+      console.error(`Error deleting product ${productId}:`, error);
+      return rejectWithValue(error.response?.data?.message || "Failed to delete product");
+    }
   }
-});
-
-
+);
 
 const productSlice = createSlice({
   name: "products",
-  initialState: { products: [], product: null, loading: false, error: null },
-  reducers: {},
+  initialState: {
+    products: JSON.parse(localStorage.getItem("products")) || [],
+    product: null,
+    loading: false,
+    error: null,
+    success: false
+  },
+  reducers: {
+    resetProductState: (state) => {
+      state.loading = false;
+      state.error = null;
+      state.success = false;
+    }
+  },
   extraReducers: (builder) => {
     builder
       // Get all products
@@ -101,13 +121,14 @@ const productSlice = createSlice({
       .addCase(getProducts.fulfilled, (state, action) => {
         state.loading = false;
         state.products = action.payload;
+        state.success = true;
       })
       .addCase(getProducts.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })
 
-      // Get a single product
+      // Get single product
       .addCase(getProductById.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -115,51 +136,60 @@ const productSlice = createSlice({
       .addCase(getProductById.fulfilled, (state, action) => {
         state.loading = false;
         state.product = action.payload;
+        state.success = true;
       })
       .addCase(getProductById.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })
 
-      // Create a product
+      // Create product
       .addCase(createProduct.pending, (state) => {
         state.loading = true;
         state.error = null;
+        state.success = false;
       })
       .addCase(createProduct.fulfilled, (state, action) => {
-        console.log("New Product:", action.payload); // Debugging
         state.loading = false;
-        state.products = Array.isArray(state.products) ? [...state.products, action.payload] : [action.payload];
+        state.products = [action.payload, ...state.products];
+        state.success = true;
       })
       .addCase(createProduct.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })
 
-      // Update a product
+      // Update product
       .addCase(updateProduct.pending, (state) => {
         state.loading = true;
         state.error = null;
+        state.success = false;
       })
       .addCase(updateProduct.fulfilled, (state, action) => {
         state.loading = false;
-        state.products = state.products.map((product) =>
-          product.id === action.payload.id ? action.payload : product
+        state.products = state.products.map(product => 
+          product._id === action.payload._id ? action.payload : product
         );
+        state.product = action.payload;
+        state.success = true;
       })
       .addCase(updateProduct.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
       })
 
-      // Delete a product
+      // Delete product
       .addCase(deleteProduct.pending, (state) => {
         state.loading = true;
         state.error = null;
+        state.success = false;
       })
       .addCase(deleteProduct.fulfilled, (state, action) => {
         state.loading = false;
-        state.products = Array.isArray(state.products) ? state.products.filter((product) => product.id !== action.payload) : console.log("product Not an Array");
+        state.products = state.products.filter(
+          product => product._id !== action.payload
+        );
+        state.success = true;
       })
       .addCase(deleteProduct.rejected, (state, action) => {
         state.loading = false;
@@ -168,4 +198,5 @@ const productSlice = createSlice({
   },
 });
 
+export const { resetProductState } = productSlice.actions;
 export default productSlice.reducer;

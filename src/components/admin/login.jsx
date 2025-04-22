@@ -1,41 +1,44 @@
 import React, { useState } from "react";
-import { Eye, EyeOff, Lock, Mail, User, Phone } from "lucide-react";
+import { Eye, EyeOff, Lock, Mail } from "lucide-react";
 import { motion } from "framer-motion";
 import { Helmet } from "react-helmet";
-import Navbar from "../user/navbar/navbar";
 import { Link, useNavigate } from "react-router-dom";
 import { useAdminAuth } from "../../context/Admin";
-import AdminNavbar from "./navbar";
 
 const AdminLogin = () => {
   const navigate = useNavigate();
-  const [sellerId, setSellerId] = useState("");
-  const [email, setEmailOrPhone] = useState("");
-  const [password, setPassword] = useState("");
+  const { login, error: authError, loading } = useAdminAuth();
+  const [formData, setFormData] = useState({
+    email: "",
+    password: ""
+  });
   const [showPassword, setShowPassword] = useState(false);
-  const [otpVerified, setOtpVerified] = useState(true);
-  const [showResendButton, setShowResendButton] = useState(false);
-  const [error, setError] = useState("");
+  const [localError, setLocalError] = useState("");
 
-  const {login, loginError} = useAdminAuth()
+  const error = authError || localError;
 
-  console.log("admin");
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
 
-  const handleLogin = async () => {
-    if ( !email || !password) {
-      setError("Please fill all fields.");
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    if (!formData.email || !formData.password) {
+      setLocalError("Please fill all fields");
       return;
     }
 
     try {
-     login(email,password)
-     if(loginError){
-      setError("Incorrect email or password")
-     }
-      console.log(email,password)
-    } catch (error) {
-      setError("Something went wrong. Please try again.");
-      console.error("Error:", error);
+      await login(formData.email, formData.password);
+      // On successful login, the AuthContext will handle navigation
+    } catch (err) {
+      console.error("Login error:", err);
+      setLocalError("Login failed. Please check your credentials.");
     }
   };
 
@@ -45,7 +48,6 @@ const AdminLogin = () => {
         <title>Admin Login | Zang Global</title>
       </Helmet>
       
-    
       <div className="h-screen bg-slate-100 flex items-center justify-center p-4">
         <motion.div
           className="w-full max-w-md bg-white shadow-2xl rounded-2xl overflow-hidden"
@@ -73,29 +75,21 @@ const AdminLogin = () => {
               </div>
             )}
 
-            <div className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-6">
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                   <Mail className="text-primary" />
                 </div>
                 <input
                   type="email"
+                  name="email"
                   placeholder="Email Address"
                   required
                   className="w-full pl-10 pr-4 py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition duration-300"
-                  value={email}
-                  onChange={(e) => setEmailOrPhone(e.target.value)}
+                  value={formData.email}
+                  onChange={handleChange}
                 />
               </div>
-
-              {showResendButton && (
-                <button
-                  type="button"
-                  className="w-full bg-primary hover:bg-mutedPrimary text-white py-3 rounded-lg font-semibold transition duration-300 transform active:scale-95"
-                >
-                  Resend OTP
-                </button>
-              )}
 
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -103,11 +97,12 @@ const AdminLogin = () => {
                 </div>
                 <input
                   type={showPassword ? "text" : "password"}
+                  name="password"
                   placeholder="Password"
                   required
                   className="w-full pl-10 pr-12 py-3 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition duration-300"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  value={formData.password}
+                  onChange={handleChange}
                 />
                 <button
                   type="button"
@@ -119,21 +114,26 @@ const AdminLogin = () => {
               </div>
 
               <motion.button
-                type="button"
-                className={`w-full bg-primary hover:bg-mutedPrimary text-white py-3 rounded-lg font-semibold transition duration-300 transform active:scale-95 ${
-                  !otpVerified ? "opacity-50 cursor-not-allowed" : ""
-                }`}
-                onClick={handleLogin}
+                type="submit"
+                className="w-full bg-primary hover:bg-mutedPrimary text-white py-3 rounded-lg font-semibold transition duration-300 transform active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
                 whileTap={{ scale: 0.95 }}
+                disabled={loading}
               >
-                Login
+                {loading ? "Logging in..." : "Login"}
               </motion.button>
+            </form>
+
+            <div className="mt-4 text-center">
+              <Link 
+                to="/admin/forgot-password" 
+                className="text-primary hover:text-mutedPrimary text-sm"
+              >
+                Forgot password?
+              </Link>
             </div>
           </div>
         </motion.div>
       </div>
-
-     
     </>
   );
 };

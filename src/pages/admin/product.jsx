@@ -4,7 +4,7 @@ import { Helmet } from "react-helmet";
 import { useParams, useNavigate } from 'react-router-dom';
 import Sidebar from '../../components/admin/sidebar';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteProduct, getProducts } from '../../redux/slice/productSlice';
+import { deleteProduct, getProducts, updateProduct } from '../../redux/slice/productSlice';
 import { fetchProducts } from '../../config/api';
 
 const Product = () => {
@@ -37,16 +37,15 @@ const Product = () => {
   const dispatch = useDispatch()
 
     
-  // Redux State
-  const { products, loading,  } = useSelector((state) => state.product); 
+  const { products, loading, error } = useSelector((state) => state.product);
   const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
     dispatch(getProducts());
   }, [ refresh]); // Refresh dependency added
 
-  const productData = products?.data
-  console.log(productData, "from products")
+  const productData = products
+  console.log(products, "from products")
 
   
 
@@ -131,24 +130,15 @@ const Product = () => {
     setCurrentImageIndex(0);
   };
 
-  const handleSave = async (productId) => {
+  const handleSave = async () => {
     try {
-      const response = await fetch('https://api.merabestie.com/instock-update', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          productId,
-          ...editValues
-        })
-      });
-
-      if (response.ok) {
-        setEditingId(null);
-        setShowDetailModal(false);
-        // fetchProducts();
-      }
+      await dispatch(updateProduct({
+        productId: selectedProduct.productId,
+        productData: editValues
+      }));
+      setEditingId(null);
+      setShowDetailModal(false);
+      setRefresh(prev => !prev);
     } catch (error) {
       console.error('Error updating product:', error);
     }
