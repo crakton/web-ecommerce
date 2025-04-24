@@ -2,14 +2,14 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   addToCart,
   fetchCart,
-  removeFromCart,
   updateCartQuantity,
 } from "../../redux/slice/cartSlice";
 import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
 import { fetchUser } from "../../redux/slice/authSlice";
 import { useNavigate } from "react-router-dom";
-import { FaMinus, FaPlus } from "react-icons/fa";
+import { FaMinus, FaPlus, FaShoppingCart, FaCheck } from "react-icons/fa";
+import { motion } from "framer-motion";
 
 const AddToCart = ({ product }) => {
   const dispatch = useDispatch();
@@ -17,36 +17,49 @@ const AddToCart = ({ product }) => {
   const user = useSelector((state) => state.auth.user);
   const token = useSelector((state) => state.auth.token);
   const navigate = useNavigate();
-  const [quantity, setQuantity] = useState();
+  const [quantity, setQuantity] = useState(1);
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [isAdding, setIsAdding] = useState(false);
 
   const isInCart = cart?.cart?.productsInCart?.some(
     (item) => item.productId === product.productId
   );
 
   useEffect(() => {
-    if (token && !user) {
-      dispatch(fetchUser());
-    }
-  }, [token, user]);
-
-  useEffect(() => {
     if (isInCart) {
       const cartProduct = cart?.cart?.productsInCart?.find(
         (item) => item.productId === product.productId
       );
-      setQuantity(cartProduct.quantity)
+      if (cartProduct && quantity !== cartProduct.quantity) {
+        setQuantity(cartProduct.quantity);
+      }
     }
-  }, [isInCart, cart, product]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [product.productId]); // only run when product changes
+  
+
+  const handleQuantityChange = (change) => {
+    const newQuantity = quantity + change;
+    if (newQuantity > 0 && newQuantity <= 10) {
+      setQuantity(newQuantity);
+    }
+  };
 
   const handleUpdateQuantity = async () => {
-    if (isInCart) {
-      dispatch(
+    setIsUpdating(true);
+    try {
+      await dispatch(
         updateCartQuantity({
           productId: product.productId,
           productQty: quantity,
           userId: user.userId,
         })
-      );
+      ).unwrap();
+      toast.success("Quantity updated!");
+    } catch (error) {
+      toast.error(error?.message || "Failed to update quantity");
+    } finally {
+      setIsUpdating(false);
     }
   };
 
@@ -57,6 +70,7 @@ const AddToCart = ({ product }) => {
       return;
     }
 
+    setIsAdding(true);
     try {
       await dispatch(
         addToCart({
@@ -69,29 +83,81 @@ const AddToCart = ({ product }) => {
       toast.success(`${product.name} added to cart!`);
     } catch (error) {
       toast.error(error?.message || "Failed to add to cart.");
+    } finally {
+      setIsAdding(false);
     }
   };
 
   return (
     <div className="w-full">
       {isInCart ? (
-        <div className="flex items-center  gap-3 px-2 py-1 border-[1px] border-mutedPrimary rounded-md w-full">
-         <input type="number" value={quantity} className="focus:ring-0 focus:border-0 w-full flex items-center text-center justify-center" onChange={(e)=>setQuantity(e.target.value)} />
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="flex items-center gap-2 px-3 py-2 border border-gray-200 rounded-lg w-full bg-gray-50"
+        >
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => handleQuantityChange(-1)}
+              disabled={quantity <= 1}
+              className={`p-1 rounded-full ${quantity <= 1 ? 'text-gray-300' : 'text-primary hover:bg-primary/10'}`}
+            >
+              <FaMinus size={12} />
+            </button>
+            
+            <span className="w-8 text-center font-medium text-gray-700">
+              {quantity}
+            </span>
+            
+            <button
+              onClick={() => handleQuantityChange(1)}
+              disabled={quantity >= 10}
+              className={`p-1 rounded-full ${quantity >= 10 ? 'text-gray-300' : 'text-primary hover:bg-primary/10'}`}
+            >
+              <FaPlus size={12} />
+            </button>
+          </div>
+          
           <button
             onClick={handleUpdateQuantity}
-          
-            className="bg-primary rounded-sm p-1 text-white"
+            disabled={isUpdating}
+            className={`ml-auto px-3 py-1 rounded-md text-sm font-medium transition flex items-center gap-1 ${
+              isUpdating
+                ? 'bg-gray-200 text-gray-600'
+                : 'bg-primary hover:bg-primary/90 text-white'
+            }`}
           >
-        Update
+            {isUpdating ? (
+              'Updating...'
+            ) : (
+              <>
+                <FaCheck size={12} />
+                Updated
+              </>
+            )}
           </button>
-        </div>
+        </motion.div>
       ) : (
-        <button
+        <motion.button
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
           onClick={handleAddToCart}
-          className="px-1 py-2 w-full rounded-md text-sm text-white transition bg-primary"
+          disabled={isAdding}
+          className={`w-full px-4 py-2 rounded-lg text-sm font-medium transition flex items-center justify-center gap-2 ${
+            isAdding
+              ? 'bg-primary/80 text-white'
+              : 'bg-primary hover:bg-primary/90 text-white'
+          }`}
         >
-          Add to Cart
-        </button>
+          {isAdding ? (
+            'Adding...'
+          ) : (
+            <>
+              <FaShoppingCart size={14} />
+              Add to Cart
+            </>
+          )}
+        </motion.button>
       )}
     </div>
   );
