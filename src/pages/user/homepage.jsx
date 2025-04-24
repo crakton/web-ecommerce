@@ -127,8 +127,8 @@ const HomePage = () => {
     (async () => {
       // setLoading(true)3
       try {
-        const fetchedProducts =  getProducts();
-        setProducts(fetchedProducts.payload);
+        const fetchedProducts = await fetchProducts();
+        setProducts(fetchedProducts.data);
         console.log(fetchedProducts)
         setLoading(false)
       } catch (error) {
