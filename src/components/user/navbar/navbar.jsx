@@ -180,7 +180,7 @@ const ProfessionalNavbar = () => {
                 >
                   <RiUser3Line className="w-5 h-5" />
                   <span className="ml-2 hidden md:block">
-                    {user.name===undefined?"": `Hi, ${user.name}`}
+                    {user?.name===undefined?"": `Hi, ${user?.name}`}
                   </span>
                 </button>
 
@@ -300,7 +300,7 @@ const ProfessionalNavbar = () => {
                       className="block py-1 text-gray-600 hover:text-primary"
                       onClick={() => setIsMenuOpen(false)}
                     >
-                      {category.name}
+                      {category?.name}
                     </Link>
                   ))}
                 </div>
