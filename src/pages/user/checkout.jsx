@@ -147,7 +147,7 @@ const Checkout = () => {
       // Step 1: Initialize order
       const response = await api.post("/orders/checkout", orderData);
       const paymentData = {
-        callbackUrl: "http://localhost:3000/checkout",
+        callbackUrl: "https://zangglobal.com/checkout",
         ...response.data?.data,
       };
       console.log(paymentData);

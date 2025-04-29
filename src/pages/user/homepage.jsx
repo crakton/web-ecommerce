@@ -5,14 +5,8 @@ import ProductCard from '../../components/user/ProductCard';
 import { useDispatch } from 'react-redux';
 import { getProducts } from '../../redux/slice/productSlice';
 
-
 const ScrollProgress = () => {
   const [scrollProgress, setScrollProgress] = useState(0);
-
-
-
-  
-
 
   useEffect(() => {
     const updateScrollProgress = () => {
@@ -44,36 +38,29 @@ const ScrollProgress = () => {
 const Carousel = ({ slides, currentSlide }) => (
   <div className="relative w-full">
     <div
-      className="h-48 sm:h-64 md:h-96 w-full bg-cover bg-center transition-all duration-300"
+      className="h-48 sm:h-64 md:h-80 lg:h-96 w-full bg-cover bg-center transition-all duration-300"
       style={{ backgroundImage: `url(${slides[currentSlide].image})` }}
     >
-      <div className="absolute inset-0 bg-black bg-opacity-40">
-        <div className="flex flex-col items-center justify-center h-full text-white p-4">
-          <h2 className="text-2xl md:text-4xl font-semibold text-center">{slides[currentSlide].title}</h2>
-          <p className="text-sm md:text-lg mt-2 text-center max-w-md">{slides[currentSlide].description}</p>
+      <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center">
+        <div className="flex flex-col items-center justify-center text-white p-4 max-w-4xl mx-auto text-center">
+          <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold">{slides[currentSlide].title}</h2>
+          <p className="text-xs sm:text-sm md:text-base mt-2 max-w-md">{slides[currentSlide].description}</p>
         </div>
       </div>
     </div>
   </div>
 );
 
-
-
 const ProductGrid = ({ title, products }) => {
-  const [visible, setVisible] = useState(false)
-
-
-  console.log("Products from Grid", products)
-
-
+  const [visible, setVisible] = useState(false);
 
   return (
-    <section className="container mx-auto px-4 py-6 sm:py-8">
+    <section className="container mx-auto px-3 sm:px-4 py-4 sm:py-6 md:py-8">
       {visible && (
-        <div className="fixed bottom-0 right-0 top-0 w-full sm:w-96 h-full bg-white shadow-2xl z-50 transform transition-all duration-300 ease-in-out">
+        <div className="fixed inset-0 w-full h-full bg-white shadow-2xl z-50 transform transition-all duration-300 ease-in-out sm:w-96 sm:left-auto sm:right-0">
           <div className="relative h-full flex flex-col">
             <button
-              onClick={() => visible(false)}
+              onClick={() => setVisible(false)}
               className="absolute top-4 right-4 z-10 bg-red-500 text-white p-2 rounded-full hover:bg-red-600 transition-colors"
             >
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -88,16 +75,16 @@ const ProductGrid = ({ title, products }) => {
         </div>
       )}
 
-      <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mb-6">
-        <h2 className="text-lg sm:text-xl font-semibold">{title}</h2>
+      <div className="flex flex-col sm:flex-row justify-between items-center gap-3 mb-4 sm:mb-6">
+        <h2 className="text-base sm:text-lg md:text-xl font-semibold">{title}</h2>
         <a href="/shop">
-          <button className="w-full sm:w-auto bg-primary text-secondary px-4 py-2 rounded-md text-sm font-medium hover:bg-[rgb(46 49 162)] transition-colors">
+          <button className="w-full sm:w-auto bg-primary text-white px-3 sm:px-4 py-1 sm:py-2 rounded-md text-xs sm:text-sm font-medium hover:bg-primary-dark transition-colors">
             View All
           </button>
         </a>
       </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-6">
+      <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 xl:grid-cols-4 gap-2 sm:gap-4 md:gap-6">
         {products?.map((product, index) => (
           <ProductCard
             key={index}
@@ -110,34 +97,33 @@ const ProductGrid = ({ title, products }) => {
 };
 
 const HomePage = () => {
-  const [currentSlide, setCurrentSlide] = useState(1);
+  const [currentSlide, setCurrentSlide] = useState(0);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
-  const dispatch  = useDispatch()
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % carouselSlides.length);
-    }, 5000); // Change slide every 3 seconds
+    }, 5000); // Change slide every 5 seconds
 
     return () => clearInterval(interval);
   }, []);
 
   useEffect(() => {
     (async () => {
-      // setLoading(true)3
+      setLoading(true);
       try {
         const fetchedProducts = await fetchProducts();
         setProducts(fetchedProducts.data);
-        console.log(fetchedProducts)
-        setLoading(false)
+        dispatch(getProducts(fetchedProducts.data));
       } catch (error) {
         console.error("Error fetching products:", error);
       } finally {
         setLoading(false);
       }
     })();
-  }, []);
+  }, [dispatch]);
 
   const carouselSlides = [
     {
@@ -157,7 +143,6 @@ const HomePage = () => {
     }
   ];
 
-
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -172,7 +157,6 @@ const HomePage = () => {
       <main className="pb-8">
         <Carousel slides={carouselSlides} currentSlide={currentSlide} />
         <ProductGrid title="Top Picks" products={products} />
-        {/* <Checkout />5 */}
       </main>
     </div>
   );

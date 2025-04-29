@@ -201,7 +201,7 @@ const ProfessionalNavbar = () => {
                           My Orders
                         </Link>
                         <Link
-                          to="/orders"
+                          to="/settings"
                           className="flex items-center px-4 py-2 hover:bg-pink-50 transition"
                         >
                           <FaCog className="w-4 h-4 mr-2" />

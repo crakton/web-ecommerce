@@ -40,6 +40,7 @@ import SearchPage from "./pages/user/Search";
 import LearnMore from "./pages/user/learnmore";
 import NotFoundPage from "./pages/user/notfound";
 import Shop from "./pages/user/shop";
+import UserSettingsPage from "./pages/user/settings";
 
 // Landing Pages
 import LandingPage from "./pages/landingPage/LandingPage";
@@ -110,6 +111,7 @@ function App() {
               <Route path="/checkout" element={<Checkout />} />
               <Route path="/search" element={<SearchPage />} />
               <Route path="/learnmore" element={<LearnMore />} />
+              <Route path="settings" element={<UserSettingsPage />} />
             </Route>
 
             {/* Landing Pages */}

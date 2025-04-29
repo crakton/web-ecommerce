@@ -94,34 +94,34 @@ const AddToCart = ({ product }) => {
         <motion.div 
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="flex items-center gap-2 px-3 py-2 border border-gray-200 rounded-lg w-full bg-gray-50"
+          className="flex items-center gap-2 px-2 sm:px-3 py-1 sm:py-2 border border-gray-200 rounded-lg w-full bg-gray-50"
         >
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1 sm:gap-2">
             <button
               onClick={() => handleQuantityChange(-1)}
               disabled={quantity <= 1}
-              className={`p-1 rounded-full ${quantity <= 1 ? 'text-gray-300' : 'text-primary hover:bg-primary/10'}`}
+              className={`rounded-full p-1 ${quantity <= 1 ? 'text-gray-300' : 'text-primary hover:bg-primary/10'}`}
             >
-              <FaMinus size={12} />
+              <FaMinus size={10} className="sm:w-3 sm:h-3" />
             </button>
             
-            <span className="w-8 text-center font-medium text-gray-700">
+            <span className="w-6 sm:w-8 text-center font-medium text-gray-700 text-xs sm:text-sm">
               {quantity}
             </span>
             
             <button
               onClick={() => handleQuantityChange(1)}
               disabled={quantity >= 10}
-              className={`p-1 rounded-full ${quantity >= 10 ? 'text-gray-300' : 'text-primary hover:bg-primary/10'}`}
+              className={`rounded-full p-1 ${quantity >= 10 ? 'text-gray-300' : 'text-primary hover:bg-primary/10'}`}
             >
-              <FaPlus size={12} />
+              <FaPlus size={10} className="sm:w-3 sm:h-3" />
             </button>
           </div>
           
           <button
             onClick={handleUpdateQuantity}
             disabled={isUpdating}
-            className={`ml-auto px-3 py-1 rounded-md text-sm font-medium transition flex items-center gap-1 ${
+            className={`ml-auto px-2 sm:px-3 py-1 rounded-md text-xs sm:text-sm font-medium transition flex items-center gap-1 ${
               isUpdating
                 ? 'bg-gray-200 text-gray-600'
                 : 'bg-primary hover:bg-primary/90 text-white'
@@ -131,8 +131,8 @@ const AddToCart = ({ product }) => {
               'Updating...'
             ) : (
               <>
-                <FaCheck size={12} />
-                Updated
+                <FaCheck size={12} className="hidden sm:block" />
+                <span>Updated</span>
               </>
             )}
           </button>
@@ -143,7 +143,7 @@ const AddToCart = ({ product }) => {
           whileTap={{ scale: 0.98 }}
           onClick={handleAddToCart}
           disabled={isAdding}
-          className={`w-full px-4 py-2 rounded-lg text-sm font-medium transition flex items-center justify-center gap-2 ${
+          className={`w-full px-3 sm:px-4 py-1 sm:py-2 rounded-lg text-xs sm:text-sm font-medium transition flex items-center justify-center gap-1 sm:gap-2 ${
             isAdding
               ? 'bg-primary/80 text-white'
               : 'bg-primary hover:bg-primary/90 text-white'
@@ -153,8 +153,8 @@ const AddToCart = ({ product }) => {
             'Adding...'
           ) : (
             <>
-              <FaShoppingCart size={14} />
-              Add to Cart
+              <FaShoppingCart size={12} className="sm:w-4 sm:h-4" />
+              <span>Add to Cart</span>
             </>
           )}
         </motion.button>

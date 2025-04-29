@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 import api from "../../../config/api";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUser } from "../../../redux/slice/authSlice";
-import { fetchCart, removeFromCart } from "../../../redux/slice/cartSlice";
+import { fetchCart, removeFromCart, updateCartQuantity } from "../../../redux/slice/cartSlice";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
@@ -14,9 +14,8 @@ const CartItems = () => {
   const [loading, setLoading] = useState(false);
   const [removing, setRemoving] = useState(false);
   const [removingItem, setRemovingItem] = useState(null);
-
-  const navigate = useNavigate()
-
+  const [updatingQuantity, setUpdatingQuantity] = useState(null);
+  const navigate = useNavigate();
   const [error, setError] = useState(null);
   const [voucher, setVoucher] = useState('');
   const [discountInfo, setDiscountInfo] = useState({
@@ -25,21 +24,31 @@ const CartItems = () => {
     message: ''
   });
 
-  
   const dispatch = useDispatch();
   const user = useSelector((state) => state.auth.user);
   const token = useSelector((state) => state.auth.token);
+  const carts = useSelector((state) => state.cart.items);
+  const cartItems = carts.cart.productsInCart;
 
   useEffect(() => {
     if (token) {
-      dispatch(fetchUser()); // Fetch user data when logged in
+      dispatch(fetchUser());
     }
-  }, [ token]);
+  }, [token, dispatch]);
+
+  useEffect(() => {
+    if (user) {
+      dispatch(fetchCart(user.userId));
+    }
+  }, [user, dispatch]);
 
   const handleRemoveFromCart = async (product) => {
     setRemovingItem(product.productId);
     try {
-      await dispatch(removeFromCart({ userId: user.userId, productId: product.productId })).unwrap();
+      await dispatch(removeFromCart({ 
+        userId: user.userId, 
+        productId: product.productId 
+      })).unwrap();
       toast.success(`${product.name} removed from cart!`);
       dispatch(fetchCart(user.userId));
     } catch (error) {
@@ -47,19 +56,31 @@ const CartItems = () => {
     }
     setRemovingItem(null);
   };
-  
 
-  const carts= useSelector((state) => state.cart.items);
+  const handleQuantityChange = async (productId, change) => {
+    const product = cartItems.find(item => item.productId === productId);
+    if (!product) return;
 
-  useEffect(() => {
-    if (user) {
+    const newQuantity = product.quantity + change;
+    
+    // Validate quantity (1-10)
+    if (newQuantity < 1 || newQuantity > 10) return;
+
+    setUpdatingQuantity(productId);
+    try {
+      await dispatch(updateCartQuantity({
+        productId,
+        productQty: newQuantity,
+        userId: user.userId
+      })).unwrap();
+      
       dispatch(fetchCart(user.userId));
+    } catch (error) {
+      toast.error(error?.message || "Failed to update quantity");
+    } finally {
+      setUpdatingQuantity(null);
     }
-  }, [ user]);
-
-const cartItems = carts.cart.productsInCart
-
-
+  };
 
   const handleVoucherRedeem = async () => {
     try {
@@ -95,7 +116,7 @@ const cartItems = carts.cart.productsInCart
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64 bg-gray-50">
-        <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-primary "></div>
+        <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-primary"></div>
       </div>
     );
   }
@@ -115,10 +136,8 @@ const cartItems = carts.cart.productsInCart
     );
   }
 
-
   return (
     <div className="space-y-4 sm:space-y-6">
-  
       {/* Cart Items Section */}
       <div className="bg-white shadow-sm rounded-lg overflow-hidden">
         <div className="p-3 sm:p-4 border-b">
@@ -126,10 +145,9 @@ const cartItems = carts.cart.productsInCart
         </div>
         
         <div className="divide-y divide-gray-100">
-           {cartItems?.map((item) => ( 
-             <div key={item.productId} className="p-3 sm:p-4">
+          {cartItems?.map((item) => (
+            <div key={item.productId} className="p-3 sm:p-4">
               <div className="flex flex-col gap-4">
-            
                 <div className="flex items-start justify-between gap-3">
                   <div className="w-20 h-20 bg-gray-50 rounded-md overflow-hidden flex-shrink-0">
                     <img
@@ -139,17 +157,15 @@ const cartItems = carts.cart.productsInCart
                     />
                   </div>
                   <button
-  onClick={() => handleRemoveFromCart(item)}
-  className="text-red-500 hover:text-red-600 transition-colors p-1"
-  aria-label="Remove item"
-  disabled={removingItem === item.productId}
->
-  <FontAwesomeIcon icon={faTrash} className="w-4 h-4" />
-</button>
-
+                    onClick={() => handleRemoveFromCart(item)}
+                    className="text-red-500 hover:text-red-600 transition-colors p-1"
+                    aria-label="Remove item"
+                    disabled={removingItem === item.productId}
+                  >
+                    <FontAwesomeIcon icon={faTrash} className="w-4 h-4" />
+                  </button>
                 </div>
 
-       
                 <div className="flex flex-col gap-2">
                   <div>
                     <h3 className="font-medium text-sm sm:text-base text-gray-900">{item.name}</h3>
@@ -157,25 +173,28 @@ const cartItems = carts.cart.productsInCart
                   </div>
                   
                   <div className="flex items-center justify-between mt-2">
-                    <span className="font-medium text-sm sm:text-base text-gray-900">₦{item.price}</span>
+                    <span className="font-medium text-sm sm:text-base text-gray-900">
+                      ₦{(item.price * item.quantity).toFixed(2)}
+                    </span>
                   
                     <div className="flex items-center border rounded-md bg-gray-50">
                       <button
-                    
-                        className="p-1.5 text-gray-600 hover:bg-gray-100 transition-colors"
-                        disabled={item.quantity <= 1}
+                        onClick={() => handleQuantityChange(item.productId, -1)}
+                        className={`p-1.5 ${item.quantity <= 1 ? 'text-gray-300 cursor-not-allowed' : 'text-gray-600 hover:bg-gray-100'} transition-colors`}
+                        disabled={item.quantity <= 1 || updatingQuantity === item.productId}
                       >
                         <FontAwesomeIcon icon={faMinus} className="w-3 h-3" />
                       </button>
                       <input
                         type="text"
-                        value={item.quantity}
+                        value={updatingQuantity === item.productId ? '...' : item.quantity}
                         readOnly
                         className="w-10 text-center bg-transparent border-x text-sm"
                       />
                       <button
-                     
-                        className="p-1.5 text-gray-600 hover:bg-gray-100 transition-colors"
+                        onClick={() => handleQuantityChange(item.productId, 1)}
+                        className={`p-1.5 ${item.quantity >= 10 ? 'text-gray-300 cursor-not-allowed' : 'text-gray-600 hover:bg-gray-100'} transition-colors`}
+                        disabled={item.quantity >= 10 || updatingQuantity === item.productId}
                       >
                         <FontAwesomeIcon icon={faPlus} className="w-3 h-3" />
                       </button>
@@ -183,8 +202,8 @@ const cartItems = carts.cart.productsInCart
                   </div>
                 </div>
               </div>
-            </div> 
-          ))} 
+            </div>
+          ))}
         </div>
       </div>
 
@@ -224,13 +243,13 @@ const cartItems = carts.cart.productsInCart
           <div className="space-y-3 text-sm sm:text-base">
             <div className="flex justify-between text-gray-600">
               <span>Subtotal</span>
-              {/* <span>₦{cartItems?.productsInCart?.reduce((total, item) => total + (parseFloat(item.price) * item.quantity), 0).toFixed(2)}</span> */}
+              <span>₦{carts?.cart?.subtotal?.toFixed(2) ?? '0.00'}</span>
             </div>
             
             {discountInfo.percentage > 0 && (
               <div className="flex justify-between text-green-600">
                 <span>Discount ({discountInfo.percentage}%)</span>
-                {/* <span>- ₦{(cartItems?.productsInCart?.reduce((total, item) => total + (parseFloat(item.price) * item.quantity), 0) * (discountInfo.percentage / 100)).toFixed(2)}</span> */}
+                <span>- ₦{(carts?.cart?.subtotal * (discountInfo.percentage / 100)).toFixed(2)}</span>
               </div>
             )}
             
@@ -246,10 +265,8 @@ const cartItems = carts.cart.productsInCart
           </div>
 
           {/* Checkout Button */}
-          <button onClick={()=>{
-            navigate("/checkout")
-          }} 
-        
+          <button 
+            onClick={() => navigate("/checkout")}
             className="w-full bg-primary text-white py-3 rounded-md hover:bg-mutedPrimary transition-colors text-sm sm:text-base font-medium mt-4"
           >
             Proceed to Checkout

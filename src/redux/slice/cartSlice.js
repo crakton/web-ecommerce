@@ -28,6 +28,7 @@ export const addToCart = createAsyncThunk("carts/addToCart", async ({ productId,
   try {
     const response = await api.post("/carts/add", { productId, productQty, userId });
     toast.success(`added to cart!`);
+    console.log(response)
     return response.data;
   } catch (error) {
     return rejectWithValue(error.response?.data || error.message);
