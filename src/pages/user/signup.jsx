@@ -31,6 +31,11 @@ export default function SignUp() {
     try {
       dispatch(registerUser(formData));
       setLoading(false);
+      setEmail("")
+      setConfirmPassword("")
+      setPassword("")
+      setPhone("")
+      setName("")
     } catch (error) {
       setError("Error creating account please try again");
       setLoading(false);

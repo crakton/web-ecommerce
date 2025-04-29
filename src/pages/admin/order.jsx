@@ -1,10 +1,21 @@
-// src/pages/admin/Orders.jsx
 import React, { useState, useEffect } from 'react';
-import { Search, ArrowUpDown, Eye, MoreHorizontal } from 'lucide-react';
+import { 
+  Search, 
+  ArrowUpDown, 
+  Eye, 
+  MoreHorizontal,
+  Check,
+  ChevronDown,
+  Truck,
+  Package,
+  CheckCircle,
+  XCircle
+} from 'lucide-react';
 import { Helmet } from "react-helmet";
 import { useNavigate } from 'react-router-dom';
 import api from '../../config/api';
 import { useAdminAuth } from '../../context/Admin';
+import { toast } from 'react-toastify';
 
 const statusColors = {
   'Pending': 'bg-yellow-100 text-yellow-800',
@@ -13,6 +24,14 @@ const statusColors = {
   'Delivered': 'bg-purple-100 text-purple-800',
   'Cancelled': 'bg-red-100 text-red-800'
 };
+
+const statusOptions = [
+  { value: 'Pending', label: 'Pending', icon: <Package size={16} /> },
+  { value: 'Processing', label: 'Processing', icon: <Package size={16} /> },
+  { value: 'Shipped', label: 'Shipped', icon: <Truck size={16} /> },
+  { value: 'Delivered', label: 'Delivered', icon: <CheckCircle size={16} /> },
+  { value: 'Cancelled', label: 'Cancelled', icon: <XCircle size={16} /> }
+];
 
 const Orders = () => {
   const navigate = useNavigate();
@@ -24,6 +43,8 @@ const Orders = () => {
   });
   const { admin } = useAdminAuth();
   const [loading, setLoading] = useState(true);
+  const [updatingStatus, setUpdatingStatus] = useState(null);
+  const [openDropdown, setOpenDropdown] = useState(null);
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -32,6 +53,7 @@ const Orders = () => {
         setOrders(response.data.data);
       } catch (error) {
         console.error('Error fetching orders:', error);
+        toast.error('Failed to load orders');
       } finally {
         setLoading(false);
       }
@@ -46,6 +68,27 @@ const Orders = () => {
       direction = 'descending';
     }
     setSortConfig({ key, direction });
+  };
+
+  const handleStatusUpdate = async (orderId, newStatus) => {
+    setUpdatingStatus(orderId);
+    try {
+      await api.patch(`/orders/${orderId}/status`, { status: newStatus });
+      setOrders(orders.map(order => 
+        order.orderId === orderId ? { ...order, status: newStatus } : order
+      ));
+      toast.success(`Order status updated to ${newStatus}`);
+      setOpenDropdown(null);
+    } catch (error) {
+      console.error('Error updating status:', error);
+      toast.error('Failed to update order status');
+    } finally {
+      setUpdatingStatus(null);
+    }
+  };
+
+  const toggleDropdown = (orderId) => {
+    setOpenDropdown(openDropdown === orderId ? null : orderId);
   };
 
   const sortedOrders = React.useMemo(() => {
@@ -99,7 +142,11 @@ const Orders = () => {
   };
 
   if (loading) {
-    return <div className="flex justify-center items-center h-screen">Loading orders...</div>;
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-primary"></div>
+      </div>
+    );
   }
 
   return (
@@ -107,17 +154,16 @@ const Orders = () => {
       <Helmet>
         <title>Orders | Admin | Zang Global</title>
       </Helmet>
-      {/* <Sidebar /> */}
       <div className="flex-1 p-8 ml-[5rem] lg:ml-64 min-h-screen">
         <div className="mb-8">
-          <div className="flex justify-between items-center mb-6">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
             <h1 className="text-2xl font-bold text-gray-800">Order Management</h1>
-            <div className="relative w-64">
+            <div className="relative w-full md:w-64">
               <Search className="absolute left-3 top-3 text-gray-400" size={18} />
               <input
                 type="text"
                 placeholder="Search orders..."
-                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
@@ -189,7 +235,7 @@ const Orders = () => {
                     filteredOrders.map((order) => (
                       <tr key={order.orderId} className="hover:bg-gray-50">
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm font-medium text-pink-600">#{order.orderId}</div>
+                          <div className="text-sm font-medium text-primary">#{order.orderId}</div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           <div className="text-sm text-gray-900">{formatDate(order.createdAt)}</div>
@@ -204,22 +250,54 @@ const Orders = () => {
                           </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm text-gray-900">₦{order.price}</div>
+                          <div className="text-sm text-gray-900">₦{order.price.toLocaleString()}</div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap">
-                          <span className={`px-2 py-1 rounded-full text-xs font-medium ${statusColors[order.status] || 'bg-gray-100 text-gray-800'}`}>
-                            {order.status}
-                          </span>
+                          <div className="relative inline-block text-left">
+                            <button
+                              type="button"
+                              onClick={() => toggleDropdown(order.orderId)}
+                              className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${statusColors[order.status] || 'bg-gray-100 text-gray-800'} ${updatingStatus === order.orderId ? 'opacity-50' : ''}`}
+                              disabled={updatingStatus === order.orderId}
+                            >
+                              {updatingStatus === order.orderId ? (
+                                'Updating...'
+                              ) : (
+                                <>
+                                  {statusOptions.find(s => s.value === order.status)?.icon}
+                                  <span className="ml-1">{order.status}</span>
+                                  <ChevronDown size={14} className="ml-1" />
+                                </>
+                              )}
+                            </button>
+                            
+                            {openDropdown === order.orderId && (
+                              <div className="origin-top-right absolute left-0 mt-2 w-40 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-10">
+                                <div className="py-1">
+                                  {statusOptions.map((option) => (
+                                    <button
+                                      key={option.value}
+                                      onClick={() => handleStatusUpdate(order.orderId, option.value)}
+                                      className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
+                                    >
+                                      {option.icon}
+                                      <span className="ml-2">{option.label}</span>
+                                      {order.status === option.value && (
+                                        <Check size={16} className="ml-auto text-green-500" />
+                                      )}
+                                    </button>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+                          </div>
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                           <button
                             onClick={() => navigate(`/admin/orders/${order.orderId}`)}
-                            className="text-pink-600 hover:text-pink-900 mr-4"
+                            className="text-primary hover:text-primary-dark mr-4"
                           >
                             <Eye size={18} className="inline mr-1" /> View
-                          </button>
-                          <button className="text-gray-500 hover:text-gray-700">
-                            <MoreHorizontal size={18} />
                           </button>
                         </td>
                       </tr>
