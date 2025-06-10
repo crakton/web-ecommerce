@@ -1,217 +1,207 @@
-import React, {
-  useState,
-  useEffect,
-  useRef,
-} from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  RiSearchLine,
-  RiCloseLine,
-  RiMenu3Line,
-  RiUser3Line,
-  RiShoppingCart2Line,
-  RiHome2Line,
-  RiStore2Line,
-  RiPhoneLine,
-  RiLogoutBoxRLine,
-  RiFileList3Line,
-  RiUserAddLine,
-  RiLoginBoxLine,
-} from "react-icons/ri";
-import SearchBar from "./SearchBar";
 import { useSelector, useDispatch } from "react-redux";
 import logo from "../../../assets/images/logoBlue.png";
 import { fetchUser, logout } from "../../../redux/slice/authSlice";
 import { fetchCart } from "../../../redux/slice/cartSlice";
-import { FaCog } from "react-icons/fa";
 
-const ProfessionalNavbar = () => {
+const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [name, setName] = useState();
   const location = useLocation();
-  const searchRef = useRef();
   const profileRef = useRef();
-  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
-  const toggleProfileMenu = () => setIsProfileMenuOpen(!isProfileMenuOpen);
-  const isActive = (path) => location.pathname === path;
-  const navigate = useNavigate()
-
+  const navigate = useNavigate();
   const dispatch = useDispatch();
+
   const user = useSelector((state) => state.auth.user);
   const token = useSelector((state) => state.auth.token);
-  const carts = useSelector((state) => state.cart.items);
+  const cartItems = useSelector((state) => state.cart.items?.productsInCart) || [];
 
+  // Handle scroll effect
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 10);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Fetch user data when logged in
   useEffect(() => {
     if (token) {
-      dispatch(fetchUser()); // Fetch user data when logged in
+      dispatch(fetchUser());
     }
   }, [token]);
 
+  // Fetch cart when user changes
   useEffect(() => {
-    if (user) {
+    if (user?.userId) {
       dispatch(fetchCart(user.userId));
     }
-  }, [user, carts]);
+  }, [user?.userId]);
 
-  const cartItems = carts?.cart?.productsInCart;
-
-  // Handle click outside for search and profile menu
+  // Close profile menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (searchRef.current && !searchRef.current.contains(event.target)) {
-      }
       if (profileRef.current && !profileRef.current.contains(event.target)) {
         setIsProfileMenuOpen(false);
       }
     };
-
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   const handleLogout = () => {
-    dispatch(logout()); // Fetch user data when logged out
-    navigate("/login")
+    dispatch(logout());
+    navigate("/login");
   };
+
+  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+  const toggleProfileMenu = () => setIsProfileMenuOpen(!isProfileMenuOpen);
+  const isActive = (path) => location.pathname === path;
+
+  // Animation variants
   const menuVariants = {
-    closed: {
-      x: "-100%",
-      transition: { type: "spring", stiffness: 400, damping: 40 },
-    },
-    open: {
-      x: 0,
-      transition: { type: "spring", stiffness: 400, damping: 40 },
-    },
+    closed: { x: "-100%" },
+    open: { x: 0 }
   };
 
   const linkVariants = {
-    closed: { x: -20, opacity: 0 },
+    closed: { opacity: 0, x: -20 },
     open: (i) => ({
-      x: 0,
       opacity: 1,
-      transition: {
-        delay: i * 0.1,
-        type: "spring",
-        stiffness: 300,
-        damping: 24,
-      },
-    }),
+      x: 0,
+      transition: { delay: i * 0.1 }
+    })
   };
 
   const navLinks = [
-    { path: "/store", name: "HOME", icon: RiHome2Line },
-    { path: "/shop", name: "SHOP", icon: RiStore2Line },
-    { path: "/contact", name: "CONTACT", icon: RiPhoneLine },
+    { path: "/store", name: "Home" },
+    { path: "/shop", name: "Shop" },
+    { path: "/contact", name: "Contact" }
   ];
 
   const categories = [
-    { name: "cables", path: "/fashion" },
+    { name: "Cables", path: "/fashion" },
     { name: "Powerbanks", path: "/gift-boxes" },
     { name: "Solar Lanterns", path: "/books" },
-    { name: "Chagers", path: "/stationery" },
-    { name: "All Products", path: "/shop" },
+    { name: "Chargers", path: "/stationery" },
+    { name: "All Products", path: "/shop" }
   ];
 
   return (
     <nav
       className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
-        scrolled ? "bg-white shadow-md" : "bg-transparent"
+        scrolled ? "bg-white shadow-md" : "bg-white"
       }`}
     >
-
       {/* Main Navigation */}
-      <div className="bg-white border-b">
-        <div className=" px-3">
-          <div className="h-[60px] sm:h-[70px] flex items-center justify-between">
-            {/* Mobile Menu Toggle */}
-            <button
-              onClick={toggleMenu}
-              className="sm:hidden text-black hover:text-primary transition"
-            >
-              <RiMenu3Line className="w-6 h-6" />
-            </button>
+      <div className="container mx-auto px-4">
+        <div className="h-16 md:h-20 flex items-center justify-between">
+          {/* Mobile Menu Toggle */}
+          <button
+            onClick={toggleMenu}
+            className="md:hidden text-gray-700 hover:text-primary transition"
+            aria-label="Toggle menu"
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+          </button>
 
-            {/* Logo */}
+          {/* Logo */}
+          <Link to="/" className="flex items-center">
+            <img src={logo} alt="Logo" className="h-8 md:h-10" />
+          </Link>
+
+          {/* Desktop Navigation */}
+          <div className="hidden md:flex items-center space-x-1 lg:space-x-2">
+            {navLinks.map((link) => (
+              <Link
+                key={link.path}
+                to={link.path}
+                className={`px-3 py-2 mx-1 rounded-md text-sm lg:text-base font-medium ${
+                  isActive(link.path)
+                    ? "text-primary bg-primary/10"
+                    : "text-gray-700 hover:text-primary hover:bg-gray-50"
+                } transition-colors`}
+              >
+                {link.name}
+              </Link>
+            ))}
+          </div>
+
+          {/* Right Side Icons */}
+          <div className="flex items-center space-x-2 sm:space-x-4">
             <Link
-              to="/"
-              className="text-2xl flex items-center transition mx-auto lg:mx-0"
+              to="/search"
+              className="p-2 text-gray-700 hover:text-primary transition rounded-full hover:bg-gray-100"
+              aria-label="Search"
             >
-              <img src={logo} width={120} />
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+              </svg>
             </Link>
-            <div className="flex items-center space-x-3 sm:space-x-6">
-              <Link
-                to={"/store"}
-                className={`px-4 py-2 mx-2 flex items-center ${
-                  isActive("/")
-                    ? "text-primary"
-                    : "text-gray-800 hover:text-primary"
-                } transition-colors duration-200`}
-              >
-                <RiHome2Line className="w-5 h-5 mr-2" />
-                Home
-              </Link>
-              <Link
-                to={"/search"}
-                className="text-gray-800 hover:text-primary transition"
-              >
-                <RiSearchLine className="w-5 h-5" />
-              </Link>
 
-              <Link
-                to="/cart"
-                className="relative text-gray-800 hover:text-primary transition flex items-center"
+            <Link
+              to="/cart"
+              className="relative p-2 text-gray-700 hover:text-primary transition rounded-full hover:bg-gray-100"
+              aria-label="Cart"
+            >
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+              </svg>
+              {cartItems.length > 0 && (
+                <span className="absolute -top-1 -right-1 bg-primary text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                  {cartItems.length}
+                </span>
+              )}
+            </Link>
+
+            <div className="relative" ref={profileRef}>
+              <button
+                onClick={toggleProfileMenu}
+                className="p-2 text-gray-700 hover:text-primary transition rounded-full hover:bg-gray-100 flex items-center"
+                aria-label="User profile"
               >
-                <RiShoppingCart2Line className="w-5 h-5" />
-                <div className="flex gap-1 items-center">
-                  <span className="ml-2 hidden md:block">Cart</span>
-                  <span className="text-xs bg-green-200 text-green-600 flex items-center justify-center py-[0.5px] px-[5px] rounded-full">
-                    {user ? cartItems?.length : ""}
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                </svg>
+                {user?.name && (
+                  <span className="ml-1 hidden sm:inline text-sm">
+                    Hi, {user.name.split(" ")[0]}
                   </span>
-                </div>
-              </Link>
+                )}
+              </button>
 
-              <div className="relative" ref={profileRef}>
-                <button
-                  onClick={toggleProfileMenu}
-                  className="flex items-center text-gray-800 hover:text-primary transition"
-                >
-                  <RiUser3Line className="w-5 h-5" />
-                  <span className="ml-2 hidden md:block">
-                    {user?.name===undefined?"": `Hi, ${user?.name}`}
-                  </span>
-                </button>
-
+              <AnimatePresence>
                 {isProfileMenuOpen && (
                   <motion.div
-                    initial={{ opacity: 0, y: -10 }}
+                    initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    className="absolute right-0 mt-2 w-48 bg-white border rounded-lg shadow-lg overflow-hidden z-50"
+                    exit={{ opacity: 0, y: 10 }}
+                    className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg overflow-hidden z-50 border border-gray-100"
                   >
                     {user ? (
                       <>
                         <Link
                           to="/orders"
-                          className="flex items-center px-4 py-2 hover:bg-pink-50 transition"
+                          className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition"
                         >
-                          <RiFileList3Line className="w-4 h-4 mr-2" />
                           My Orders
                         </Link>
                         <Link
                           to="/settings"
-                          className="flex items-center px-4 py-2 hover:bg-pink-50 transition"
+                          className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition"
                         >
-                          <FaCog className="w-4 h-4 mr-2" />
                           Profile Settings
                         </Link>
                         <button
                           onClick={handleLogout}
-                          className="w-full text-left flex items-center px-4 py-2 hover:bg-pink-50 transition"
+                          className="w-full text-left px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition"
                         >
-                          <RiLogoutBoxRLine className="w-4 h-4 mr-2" />
                           Logout
                         </button>
                       </>
@@ -219,23 +209,21 @@ const ProfessionalNavbar = () => {
                       <>
                         <Link
                           to="/login"
-                          className="flex items-center px-4 py-2 hover:bg-pink-50 transition"
+                          className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition"
                         >
-                          <RiLoginBoxLine className="w-4 h-4 mr-2" />
                           Login
                         </Link>
                         <Link
-                          to="/Signup"
-                          className="flex items-center px-4 py-2 hover:bg-pink-50 transition"
+                          to="/signup"
+                          className="block px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition"
                         >
-                          <RiUserAddLine className="w-4 h-4 mr-2" />
                           Sign Up
                         </Link>
                       </>
                     )}
                   </motion.div>
                 )}
-              </div>
+              </AnimatePresence>
             </div>
           </div>
         </div>
@@ -244,83 +232,128 @@ const ProfessionalNavbar = () => {
       {/* Mobile Menu */}
       <AnimatePresence>
         {isMenuOpen && (
-          <motion.div
-            initial="closed"
-            animate="open"
-            exit="closed"
-            variants={menuVariants}
-            className="lg:hidden fixed inset-y-0 left-0 w-64 z-50 bg-white shadow-xl"
-          >
-            <div className="flex justify-between items-center p-4 border-b">
-              <Link
-                to="/"
-                className="text-2xl flex items-center transition mx-auto lg:mx-0"
-              >
-                <img src={logo} width={100} />
-              </Link>
-              <motion.button
-                whileHover={{ rotate: 90 }}
-                whileTap={{ scale: 0.9 }}
-                onClick={() => setIsMenuOpen(false)}
-                className="text-gray-800"
-              >
-                <RiCloseLine className="w-6 h-6" />
-              </motion.button>
-            </div>
-            <div className="py-4">
-              {navLinks.map(({ path, name, icon: Icon }, i) => (
-                <motion.div
-                  key={path}
-                  custom={i}
-                  variants={linkVariants}
-                  initial="closed"
-                  animate="open"
-                  exit="closed"
-                >
-                  <Link
-                    to={path}
-                    className={`flex items-center px-6 py-3 ${
-                      isActive(path)
-                        ? "text-primary bg-pink-50"
-                        : "text-gray-800 hover:bg-pink-50 hover:text-primary"
-                    } transition-colors duration-200`}
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    <Icon className="w-5 h-5 mr-3" />
-                    {name}
-                  </Link>
-                </motion.div>
-              ))}
-              {name === "SHOP" && (
-                <div className="pl-8 py-2 space-y-2">
-                  {categories.map((category) => (
-                    <Link
-                      key={category.path}
-                      to={category.path}
-                      className="block py-1 text-gray-600 hover:text-primary"
-                      onClick={() => setIsMenuOpen(false)}
-                    >
-                      {category?.name}
-                    </Link>
-                  ))}
-                </div>
-              )}
-              <div className="border-t mt-4 pt-4">
-                <Link
-                  to="/cart"
-                  className="flex items-center px-6 py-3 text-gray-800 hover:bg-pink-50 hover:text-primary transition-colors duration-200"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  <RiShoppingCart2Line className="w-5 h-5 mr-3" />0
+          <>
+            {/* Overlay */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 0.5 }}
+              exit={{ opacity: 0 }}
+              onClick={toggleMenu}
+              className="fixed inset-0 bg-black z-40"
+            />
+            
+            {/* Menu Content */}
+            <motion.div
+              initial="closed"
+              animate="open"
+              exit="closed"
+              variants={menuVariants}
+              transition={{ type: "tween", ease: "easeInOut" }}
+              className="fixed inset-y-0 left-0 w-64 z-50 bg-white shadow-xl"
+            >
+              <div className="flex justify-between items-center p-4 border-b">
+                <Link to="/" onClick={toggleMenu}>
+                  <img src={logo} alt="Logo" className="h-8" />
                 </Link>
+                <button
+                  onClick={toggleMenu}
+                  className="text-gray-700 p-1 rounded-full hover:bg-gray-100"
+                  aria-label="Close menu"
+                >
+                  <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
+                  </svg>
+                </button>
               </div>
-            </div>
-          </motion.div>
+
+              <div className="py-4">
+                {navLinks.map(({ path, name }, i) => (
+                  <motion.div
+                    key={path}
+                    custom={i}
+                    variants={linkVariants}
+                    initial="closed"
+                    animate="open"
+                    exit="closed"
+                  >
+                    <Link
+                      to={path}
+                      onClick={toggleMenu}
+                      className={`block px-6 py-3 ${
+                        isActive(path)
+                          ? "text-primary bg-primary/10"
+                          : "text-gray-700 hover:bg-gray-50"
+                      } transition-colors`}
+                    >
+                      {name}
+                    </Link>
+                  </motion.div>
+                ))}
+
+                <div className="px-6 py-3">
+                  <h3 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
+                    Categories
+                  </h3>
+                  <div className="space-y-1">
+                    {categories.map((category) => (
+                      <Link
+                        key={category.path}
+                        to={category.path}
+                        onClick={toggleMenu}
+                        className="block py-1.5 text-sm text-gray-700 hover:text-primary"
+                      >
+                        {category.name}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div className="border-t px-6 py-4">
+                {user ? (
+                  <>
+                    <Link
+                      to="/orders"
+                      onClick={toggleMenu}
+                      className="block py-2 text-sm text-gray-700 hover:text-primary"
+                    >
+                      My Orders
+                    </Link>
+                    <button
+                      onClick={() => {
+                        toggleMenu();
+                        handleLogout();
+                      }}
+                      className="block py-2 text-sm text-gray-700 hover:text-primary"
+                    >
+                      Logout
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <Link
+                      to="/login"
+                      onClick={toggleMenu}
+                      className="block py-2 text-sm text-gray-700 hover:text-primary"
+                    >
+                      Login
+                    </Link>
+                    <Link
+                      to="/signup"
+                      onClick={toggleMenu}
+                      className="block py-2 text-sm text-gray-700 hover:text-primary"
+                    >
+                      Sign Up
+                    </Link>
+                  </>
+                )}
+              </div>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
-   
     </nav>
   );
 };
 
-export default ProfessionalNavbar;
+export default Header;

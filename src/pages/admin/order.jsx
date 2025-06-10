@@ -154,7 +154,7 @@ const Orders = () => {
       <Helmet>
         <title>Orders | Admin | Zang Global</title>
       </Helmet>
-      <div className="flex-1 p-8 ml-[5rem] lg:ml-64 min-h-screen">
+      <div className="flex-1 p-8 min-h-screen">
         <div className="mb-8">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
             <h1 className="text-2xl font-bold text-gray-800">Order Management</h1>

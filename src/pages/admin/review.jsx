@@ -34,7 +34,7 @@ const Reviews = () => {
         // Create a users map by ID
         const usersMap = {};
         usersResponse.data.forEach(user => {
-          usersMap[user._id] = user;
+          usersMap[user.userId] = user;
         });
         setUsers(usersMap);
         

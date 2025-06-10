@@ -45,15 +45,19 @@ import UserSettingsPage from "./pages/user/settings";
 // Landing Pages
 import LandingPage from "./pages/landingPage/LandingPage";
 import Blogs from "./pages/landingPage/Blogs";
-import BlogView from "./pages/landingPage/BlogView";
 import TrainingHub from "./pages/landingPage/TrainingHub";
 import AssistiveTechPage from "./pages/landingPage/AssistiveTech";
 import OrderView from "./pages/admin/orderView";
+import { CartProvider } from "./context/CartContext";
+import AdminBlogList from "./pages/admin/blogs";
+import BlogDetail from "./pages/landingPage/BlogView";
 
 function App() {
   return (
     <React.StrictMode>
       <Provider store={store}>
+        <CartProvider>
+
         <ToastContainer />
         <BrowserRouter>
           <Routes>
@@ -64,13 +68,14 @@ function App() {
                   <AdminLayout adminOnly />
                 </AdminAuthProvider>
               }
-            >
+              >
               <Route path="dashboard" element={<DashboardPage />} />
               <Route path="products" element={<Product />} />
               <Route path="orders" element={<Orders />} />
               <Route path="customers" element={<Customers />} />
               <Route path="reviews" element={<Reviews />} />
               <Route path="complaints" element={<Complaints />} />
+              <Route path="blogs" element={<AdminBlogList />} />
               <Route path="calendar" element={<CalendarPage />} />
               <Route path="orders/:orderId" element={<OrderView />} />
 
@@ -83,7 +88,7 @@ function App() {
                   <LoginPage />
                 </AdminAuthProvider>
               }
-            />
+              />
             <Route
               path="/admin/signup"
               element={
@@ -91,7 +96,7 @@ function App() {
                   <RegisterAdmin />
                 </AdminAuthProvider>
               }
-            />
+              />
 
             {/* Store (User Area) */}
             <Route element={<StoreLayout />}>
@@ -118,7 +123,7 @@ function App() {
             <Route element={<MainLayout />}>
               <Route path="/" element={<LandingPage />} />
               <Route path="/blogs" element={<Blogs />} />
-              <Route path="/blog/:id" element={<BlogView />} />
+              <Route path="/blogs/:id" element={<BlogDetail />} />
               <Route path="/training" element={<TrainingHub />} />
               <Route path="/assistive-tech" element={<AssistiveTechPage />} />
             </Route>
@@ -127,6 +132,7 @@ function App() {
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </BrowserRouter>
+              </CartProvider>
       </Provider>
     </React.StrictMode>
   );

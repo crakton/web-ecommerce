@@ -43,7 +43,7 @@ export const createProduct = createAsyncThunk(
       const formData = new FormData();
       productData.img.forEach((file) => formData.append("files", file));
 
-      const uploadResponse = await api.post("/upload/doc-upload", formData, {
+      const uploadResponse = await api.post("/upload/docs-upload", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 

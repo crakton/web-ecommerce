@@ -6,9 +6,6 @@ import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Navbar from "../../components/user/navbar/navbar";
 import { Helmet } from "react-helmet";
-import { useDispatch, useSelector } from "react-redux";
-import { fetchCart } from "../../redux/slice/cartSlice";
-
 
 const ShoppingCartPage = () => {
 

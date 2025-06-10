@@ -138,9 +138,12 @@ export const AdminAuthProvider = ({ children }) => {
 
       const response = await api.post("/admin/login", { email, password });
       const data = response.data.seller;
+      console.log(response);
+
       const token = response.data.token;
       
       setAuthData(token, data);
+      localStorage.setItem("adminId", data._id); // Store user ID in localStorage
       navigate("/admin/dashboard");
     } catch (err ) {
       setError(

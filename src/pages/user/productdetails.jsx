@@ -12,81 +12,62 @@ import {
   FaBox,
   FaShippingFast,
   FaWarehouse,
-  FaExclamationCircle
+  FaExclamationCircle,
+  FaChevronLeft,
+  FaChevronRight,
+  FaShare,
+  FaHeart
 } from 'react-icons/fa';
 import Navbar from '../../components/user/navbar/navbar';
 import { Helmet } from "react-helmet";
 import ReviewSection from './ReviewSection';
 import ReviewForm from './ReviewForm';
 import api, { fetchProductById } from '../../config/api';
-
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
-import { prepareStackTrace } from 'postcss/lib/css-syntax-error';
 import { useDispatch, useSelector } from 'react-redux';
-import axios from "axios";
 import AddToCart from '../../components/user/addToCart';
-
 
 const ProductDetail = () => {
   const { productId } = useParams();
   const navigate = useNavigate();
   const [product, setProduct] = useState(null);
-  const [selectedImage, setSelectedImage] = useState(0); // Added state for selected image
+  const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [stockStatus, setStockStatus] = useState(null);
   const [recentlyViewed, setRecentlyViewed] = useState([]);
-  const [rating, setRating] = useState(1);
   const [reviews, setReviews] = useState([]);
   const [showReviewForm, setShowReviewForm] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [isWishlisted, setIsWishlisted] = useState(false);
 
-
-  const submitReview = async (data) => {
-    try {
-      const response = await api.post(`/reviews/new`,data, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      console.log("Review Added Successfully")
-      return response.data; 
-    } catch (error) {
-      console.error("Error submitting review:", error.response?.data || error.message);
-      throw error;
-    }
-  };
-
-  const user  = useSelector(state=>state.auth.user)
-  const userId = user?.userId
-  
+  const user = useSelector(state => state.auth.user);
+  const userId = user?.userId;
 
   useEffect(() => {
-    if (!productId) return; // Prevent API call if productId is invalid
+    if (!productId) return;
 
     const fetchProduct = async () => {
       try {
         const data = await fetchProductById(productId);
-        setProduct(data)
+        setProduct(data);
         calculateStockStatus(data);
-        console.log(product)
       } catch (error) {
+        toast.error("Failed to load product details");
       } finally {
-
+        setLoading(false);
       }
     };
 
     fetchProduct();
   }, [productId]);
 
-
-
   useEffect(() => {
     const fetchReviews = async () => {
       try {
-        const response = await api.get(`/reviews/product/${productId}`)
+        const response = await api.get(`/reviews/product/${productId}`);
         const data = await response?.data;
-        setReviews(data)
+        setReviews(data);
       } catch (error) {
         console.error('Error fetching reviews:', error);
       }
@@ -94,29 +75,25 @@ const ProductDetail = () => {
     fetchReviews();
   }, [productId]);
 
-
   const calculateStockStatus = (productData) => {
-    if(!productData){
-      console.log("no stock details")
-    }
+    if (!productData) return;
 
     const stock = productData.inStockValue || 0;
     let status = '';
     let color = '';
-    console.log(productData)
 
     if (stock > 50) {
       status = 'In Stock';
-      color = 'text-green-600 bg-green-50';
+      color = 'bg-green-50 text-green-800';
     } else if (stock > 10) {
       status = 'Low Stock';
-      color = 'text-yellow-600 bg-yellow-50';
+      color = 'bg-yellow-50 text-yellow-800';
     } else if (stock > 0) {
       status = 'Very Low Stock';
-      color = 'text-orange-600 bg-orange-50';
+      color = 'bg-orange-50 text-orange-800';
     } else {
       status = 'Out of Stock';
-      color = 'text-red-600 bg-red-50';
+      color = 'bg-red-50 text-red-800';
     }
 
     setStockStatus({ status, color, stock });
@@ -129,13 +106,24 @@ const ProductDetail = () => {
     }
   };
 
+  const submitReview = async (data) => {
+    try {
+      const response = await api.post(`/reviews/new`, data, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      toast.success("Review added successfully!");
+      return response.data;
+    } catch (error) {
+      toast.error("Failed to submit review");
+      throw error;
+    }
+  };
 
-
-
-  const handleSubmitReview = async (e ,reviewData) => {
+  const handleSubmitReview = async (e, reviewData) => {
     e.preventDefault();
-    console.log(reviewData, "Reviewing...")
-    const data =  {userId, productId, ...reviewData,}
+    const data = { userId, productId, ...reviewData };
     try {
       const newReview = await submitReview(data);
       setReviews([newReview, ...reviews]);
@@ -144,43 +132,66 @@ const ProductDetail = () => {
       console.error("Failed to submit review:", error.message);
     }
   };
-  
-
 
   const handlePreviousImage = () => {
-  setSelectedImage((prevIndex) =>
-    prevIndex === 0 ? product.img.length - 1 : prevIndex - 1
-  );
-};
+    setSelectedImage(prev => (prev === 0 ? product.img.length - 1 : prev - 1));
+  };
 
-const handleNextImage = () => {
-  setSelectedImage((prevIndex) =>
-    prevIndex === product.img.length - 1 ? 0 : prevIndex + 1
-  );
-};
+  const handleNextImage = () => {
+    setSelectedImage(prev => (prev === product.img.length - 1 ? 0 : prev + 1));
+  };
+
+  const toggleWishlist = () => {
+    setIsWishlisted(!isWishlisted);
+    toast.success(!isWishlisted ? "Added to wishlist" : "Removed from wishlist");
+  };
+
+  const shareProduct = () => {
+    if (navigator.share) {
+      navigator.share({
+        title: product.name,
+        text: `Check out this product: ${product.name}`,
+        url: window.location.href,
+      }).catch(console.error);
+    } else {
+      navigator.clipboard.writeText(window.location.href);
+      toast.info("Link copied to clipboard!");
+    }
+  };
 
   if (!product) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center">
-        <div className="w-full max-w-6xl mx-auto p-6">
+      <div className="min-h-screen bg-gray-50">
+        <Navbar />
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 mt-24">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {/* Skeleton for Image */}
-            <div className="bg-gray-50 flex flex-col items-center">
-              <Skeleton height={500} width="100%" />
-              <div className="flex mt-4 space-x-2">
-                {[...Array(4)].map((_, index) => (
-                  <Skeleton key={index} width={64} height={64} />
+            {/* Image Gallery Skeleton */}
+            <div className="space-y-4">
+              <Skeleton height={400} className="rounded-xl" />
+              <div className="grid grid-cols-4 gap-2">
+                {[...Array(4)].map((_, i) => (
+                  <Skeleton key={i} height={80} className="rounded-lg" />
                 ))}
               </div>
             </div>
-
-            {/* Skeleton for Product Info */}
-            <div className="p-6 space-y-4">
-              <Skeleton height={40} width="80%" />
-              <Skeleton height={30} width="60%" />
-              <Skeleton height={20} width="30%" />
-              <Skeleton height={50} width="100%" />
-              <Skeleton height={50} width="100%" />
+            
+            {/* Product Info Skeleton */}
+            <div className="space-y-6">
+              <Skeleton height={32} width="70%" />
+              <Skeleton height={28} width="40%" />
+              <div className="flex items-center space-x-2">
+                <Skeleton circle height={24} width={24} />
+                <Skeleton height={24} width="20%" />
+              </div>
+              <Skeleton height={20} count={4} />
+              <div className="flex space-x-4">
+                <Skeleton height={48} width={48} />
+                <Skeleton height={48} width={120} />
+                <Skeleton height={48} width={120} />
+              </div>
+              <div className="pt-8">
+                <Skeleton height={48} width="100%" />
+              </div>
             </div>
           </div>
         </div>
@@ -191,183 +202,276 @@ const handleNextImage = () => {
   return (
     <>
       <Helmet>
-        <title>{product.name} </title>
+        <title>{product.name} | Zang Global</title>
+        <meta name="description" content={product.description} />
       </Helmet>
       <Navbar />
-      <ToastContainer />
+      <ToastContainer position="bottom-right" />
 
-      <div className="min-h-screen  mt-[150px] ">
-        <div className="max-w-6xl mx-auto px-1 sm:px-3 lg:px-8">
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className=" rounded-xl shadow-2xl overflow-hidden border border-pink-100"
+      <div className="min-h-screen bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 mt-24">
+          {/* Back Button */}
+          <button 
+            onClick={() => navigate(-1)}
+            className="flex items-center text-pink-600 hover:text-pink-800 mb-6 transition-colors"
           >
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
-              {/* Product Image Section */}
-              <div className="p-2 bg-gray-50 flex flex-col items-center">
-                <motion.div
-                  whileHover={{ scale: 1.05 }}
-                  transition={{ type: "spring", stiffness: 300 }}
-                  className="w-full max-w-md h-[250px] relative"
-                >
+            <FaChevronLeft className="mr-2" />
+            Back to Products
+          </button>
+
+          {/* Product Main Section */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+            className="bg-white rounded-2xl shadow-sm overflow-hidden"
+          >
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 p-6">
+              {/* Image Gallery */}
+              <div className="space-y-4">
+                <div className="relative aspect-square w-full bg-gray-100 rounded-xl overflow-hidden">
                   <img
                     src={product.img[selectedImage]}
                     alt={product.name}
-                    className="absolute inset-0 w-full h-full object-contain rounded-xl shadow-lg"
+                    className="w-full h-full object-contain p-4"
                   />
-                  {/* Previous Button */}
+                  
+                  {/* Navigation Arrows */}
                   <button
                     onClick={handlePreviousImage}
-                    className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-50 hover:bg-opacity-75 text-gray-700 rounded-full p-2"
+                    className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white p-2 rounded-full shadow-md"
                   >
-                    &#8592;
+                    <FaChevronLeft className="text-gray-700" />
                   </button>
-                  {/* Next Button */}
                   <button
                     onClick={handleNextImage}
-                    className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white bg-opacity-50 hover:bg-opacity-75 text-gray-700 rounded-full p-2"
+                    className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white p-2 rounded-full shadow-md"
                   >
-                    &#8594;
+                    <FaChevronRight className="text-gray-700" />
                   </button>
-                </motion.div>
-                <div className="flex mt-1  space-x-2">
+                  
+                  {/* Badges */}
+                  <div className="absolute top-4 left-4 flex space-x-2">
+                    {product.isNew && (
+                      <span className="bg-pink-600 text-white text-xs font-bold px-2 py-1 rounded">
+                        NEW
+                      </span>
+                    )}
+                    {product.discount && (
+                      <span className="bg-green-600 text-white text-xs font-bold px-2 py-1 rounded">
+                        -{product.discount}%
+                      </span>
+                    )}
+                  </div>
+                </div>
+                
+                {/* Thumbnail Gallery */}
+                <div className="grid grid-cols-4 gap-2">
                   {product.img.map((img, index) => (
                     <button
                       key={index}
                       onClick={() => setSelectedImage(index)}
-                      className={`w-16 h-16 object-cover rounded ${selectedImage === index ? "border-2 border-pink-600" : "border"} cursor-pointer`}
+                      className={`aspect-square bg-gray-100 rounded-lg overflow-hidden border-2 ${selectedImage === index ? 'border-pink-500' : 'border-transparent'}`}
                     >
-                      <img src={img} alt={`${product.name} ${index + 1}`} className="w-full h-full object-cover rounded" />
+                      <img
+                        src={img}
+                        alt={`${product.name} thumbnail ${index + 1}`}
+                        className="w-full h-full object-cover"
+                      />
                     </button>
                   ))}
                 </div>
               </div>
 
-              {/* Product Info Section */}
-              <div className="p-2 space-y-2q">
-                {/* Header Section with Name and Price */}
-                <div className="border-b border-pink-100 pb-6">
-                  <h1 className="text-lg font-bold text-gray-900 mb-1 bg-gradient-to-r from-pink-600 to-rose-500 text-transparent bg-clip-text">
-                    {product.name}
-                  </h1>
-                  <div className="flex items-center justify-between">
-                    <p className="text-lg font-semibold">
-                      ₦{product.price}
-                    </p>
-                    <div className="flex items-center space-x-2 bg-yellow-50 px-3 py-1 rounded-full">
-                      <FaStar className="text-yellow-400" />
-                      <span className="font-medium text-yellow-600">
-                        {product.rating}
-                      </span>                    </div>
+              {/* Product Info */}
+              <div className="space-y-6">
+                <div className="flex justify-between items-start">
+                  <div>
+                    <h1 className="text-2xl md:text-3xl font-bold text-gray-900">
+                      {product.name}
+                    </h1>
+                    <div className="flex items-center mt-2 space-x-2">
+                      <div className="flex items-center bg-yellow-50 px-2 py-1 rounded">
+                        <FaStar className="text-yellow-500 mr-1" />
+                        <span className="font-medium text-yellow-700">
+                          {product.rating || '4.5'}
+                        </span>
+                        <span className="text-gray-500 text-sm ml-1">
+                          ({reviews.length} reviews)
+                        </span>
+                      </div>
+                    </div>
                   </div>
-                  <p className='text-xs'>
-                    {
-                      product.description
-                    }
-                  </p>
+                  
+                  <div className="flex space-x-3">
+                    <button 
+                      onClick={toggleWishlist}
+                      className={`p-2 rounded-full ${isWishlisted ? 'text-pink-600' : 'text-gray-400 hover:text-pink-600'}`}
+                    >
+                      <FaHeart className={isWishlisted ? 'fill-current' : ''} />
+                    </button>
+                    <button 
+                      onClick={shareProduct}
+                      className="p-2 rounded-full text-gray-400 hover:text-pink-600"
+                    >
+                      <FaShare />
+                    </button>
+                  </div>
                 </div>
 
-                {/* Stock Status Section */}
-                <div className="flex items-center space-x-4">
-                  <div
-                    className={`px-4 py-2 rounded-md flex items-center ${stockStatus?.color}`}
-                  >
-                    {stockStatus?.status === "In Stock" && (
-                      <FaBox className="mr-2 text-green-600" />
-                    )}
-                    {stockStatus?.status === "Low Stock" && (
-                      <FaExclamationCircle className="mr-2 text-orange-200" />
-                    )}
-                    {stockStatus?.status === "Very Low Stock" && (
-                      <FaWarehouse className="mr-2 text-orange-600" />
-                    )}
-                    {stockStatus?.status === "Out of Stock" && (
-                      <FaShippingFast className="mr-2 text-red-600" />
-                    )}
-                    <span className="font-medium">
-                      {stockStatus?.status} {stockStatus?.stock} available
+                {/* Price */}
+                <div className="space-y-1">
+                  <div className="flex items-center space-x-3">
+                    <span className="text-3xl font-bold text-gray-900">
+                      ₦{product.price.toLocaleString()}
                     </span>
+                    {product.originalPrice && (
+                      <span className="text-lg text-gray-500 line-through">
+                        ₦{product.originalPrice.toLocaleString()}
+                      </span>
+                    )}
                   </div>
-                  <div className="bg-mutedSecondary px-4 py-2 rounded-md flex items-center">
-                    <FaTag className="mr-2 text" />
-                    <span className="font-medium text-primary">
-                      {product.category}
+                  {product.discount && (
+                    <span className="text-green-600 font-medium">
+                      Save ₦{(product.originalPrice - product.price).toLocaleString()} ({product.discount}%)
                     </span>
+                  )}
+                </div>
+
+                {/* Description */}
+                <div className="prose max-w-none text-gray-600">
+                  <p>{product.description}</p>
+                </div>
+
+                {/* Stock Status */}
+                <div className="flex flex-wrap gap-2">
+                  <div className={`px-3 py-2 rounded-lg flex items-center text-sm font-medium ${stockStatus?.color}`}>
+                    {stockStatus?.status === "In Stock" && <FaBox className="mr-2" />}
+                    {stockStatus?.status === "Low Stock" && <FaExclamationCircle className="mr-2" />}
+                    {stockStatus?.status === "Very Low Stock" && <FaWarehouse className="mr-2" />}
+                    {stockStatus?.status === "Out of Stock" && <FaShippingFast className="mr-2" />}
+                    {stockStatus?.status} ({stockStatus?.stock} available)
+                  </div>
+                  <div className="px-3 py-2 rounded-lg bg-gray-100 text-gray-800 text-sm font-medium flex items-center">
+                    <FaTag className="mr-2" />
+                    {product.category}
                   </div>
                 </div>
 
-                {/* Quantity Section */}
-                <div className="flex items-center space-x-4 py-6">
-                  <button
-                    onClick={() => handleQuantityChange(-1)}
-                    className="bg-primary text-white px-4 py-2 rounded-md disabled:opacity-50"
-                    disabled={quantity <= 1}
-                  >
-                    <FaMinus />
-                  </button>
-                  <span className="text-xl font-medium text-gray-700">
-                    {quantity}
-                  </span>
-                  <button
-                    onClick={() => handleQuantityChange(1)}
-                    className="bg-pink-600 text-white px-4 py-2 rounded-md disabled:opacity-50"
-                    disabled={quantity >= stockStatus?.stock}
-                  >
-                    <FaPlus />
-                  </button>
+                {/* Quantity Selector */}
+                <div className="flex items-center space-x-4 pt-2">
+                  <span className="text-gray-700 font-medium">Quantity:</span>
+                  <div className="flex items-center border rounded-lg overflow-hidden">
+                    <button
+                      onClick={() => handleQuantityChange(-1)}
+                      disabled={quantity <= 1}
+                      className="px-3 py-2 bg-gray-100 text-gray-600 hover:bg-gray-200 disabled:opacity-30"
+                    >
+                      <FaMinus />
+                    </button>
+                    <span className="px-4 py-2 text-center w-12 font-medium">
+                      {quantity}
+                    </span>
+                    <button
+                      onClick={() => handleQuantityChange(1)}
+                      disabled={quantity >= stockStatus?.stock}
+                      className="px-3 py-2 bg-gray-100 text-gray-600 hover:bg-gray-200 disabled:opacity-30"
+                    >
+                      <FaPlus />
+                    </button>
+                  </div>
                 </div>
 
-                {/* Add to Cart Button */}
-                <div className="flex justify-evenly items-center w-full gap-5">
-                <AddToCart product={product} quantity={quantity} />
-
+                {/* Action Buttons */}
+                <div className="grid grid-cols-2 gap-4 pt-6">
+                  <AddToCart 
+                    product={product} 
+                    quantity={quantity} 
+                    className="w-full"
+                  />
                   <button
-                    className="w-1/2 py-2 bg-primary text-sm text-white font-semibold rounded-lg hover:bg-mutedPrimary"
+                    className="w-full py-3 px-6 bg-pink-600 hover:bg-pink-700 text-white font-medium rounded-lg transition-colors"
                   >
-                    Buy now
+                    Buy Now
                   </button>
                 </div>
               </div>
             </div>
           </motion.div>
 
+          {/* Product Details Tabs */}
+          <div className="mt-8 bg-white rounded-2xl shadow-sm overflow-hidden">
+            <div className="border-b border-gray-200">
+              <nav className="flex -mb-px">
+                <button className="py-4 px-6 border-b-2 border-pink-500 text-pink-600 font-medium">
+                  Description
+                </button>
+                <button className="py-4 px-6 text-gray-500 hover:text-gray-700 font-medium">
+                  Specifications
+                </button>
+                <button className="py-4 px-6 text-gray-500 hover:text-gray-700 font-medium">
+                  Shipping & Returns
+                </button>
+              </nav>
+            </div>
+            <div className="p-6">
+              <div className="prose max-w-none">
+                <h3 className="text-lg font-medium text-gray-900">Product Details</h3>
+                <p>{product.description}</p>
+                {/* Add more detailed description content here */}
+              </div>
+            </div>
+          </div>
+
           {/* Reviews Section */}
-          <ReviewSection
-            reviews={reviews}
-            onWriteReview={() => setShowReviewForm(true)}
-          />
+          <div className="mt-8 bg-white rounded-2xl shadow-sm overflow-hidden">
+            <ReviewSection
+              reviews={reviews}
+              rating={product.rating}
+              onWriteReview={() => setShowReviewForm(true)}
+            />
+          </div>
+
+          {/* Review Form Modal */}
           {showReviewForm && (
-         <ReviewForm
-         productId={productId}
-         onClose={() => setShowReviewForm(false)}
-         onSubmitSuccess={handleSubmitReview}
-         handleSubmit={handleSubmitReview}
-       />
-       
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
+              <div className="bg-white rounded-2xl max-w-md w-full max-h-[90vh] overflow-y-auto">
+                <ReviewForm
+                  productId={productId}
+                  onClose={() => setShowReviewForm(false)}
+                  onSubmitSuccess={handleSubmitReview}
+                  handleSubmit={handleSubmitReview}
+                />
+              </div>
+            </div>
           )}
-          {/* Recently Viewed Section */}
+
+          {/* Recently Viewed */}
           {recentlyViewed.length > 0 && (
-            <div className="mt-12 max-w-7xl mx-auto p-9 pt-0">
-              <h2 className="text-3xl font-semibold text-gray-900 mb-6">
-                Recently Viewed
-              </h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="mt-12">
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">Recently Viewed</h2>
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 {recentlyViewed.map((item) => (
-                  <Link key={item.productId} to={`/${item.productId}`}>
-                    <div className="bg-white shadow-lg rounded-xl overflow-hidden">
-                      <img
-                        src={item.img[0] ? item.img[0] : item.img}
-                        alt={item.name}
-                        className="w-full h-64 object-cover"
-                      />
-                      <div className="p-6">
-                        <h3 className="text-xl font-bold text-gray-900">
+                  <Link 
+                    key={item.productId} 
+                    to={`/${item.productId}`}
+                    className="group"
+                  >
+                    <div className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow">
+                      <div className="aspect-square bg-gray-100 relative">
+                        <img
+                          src={item.img[0] ? item.img[0] : item.img}
+                          alt={item.name}
+                          className="w-full h-full object-contain p-4"
+                        />
+                        <div className="absolute inset-0 bg-black/5 group-hover:opacity-100 opacity-0 transition-opacity" />
+                      </div>
+                      <div className="p-4">
+                        <h3 className="font-medium text-gray-900 line-clamp-2 mb-1">
                           {item.name}
                         </h3>
-                        <p className="text-lg font-semibold text-pink-600">
-                          {item.price}
+                        <p className="text-lg font-bold text-pink-600">
+                          ₦{item.price.toLocaleString()}
                         </p>
                       </div>
                     </div>

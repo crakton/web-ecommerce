@@ -1,93 +1,101 @@
-import React, { useState, useEffect } from "react";
-import { faTrash, faMinus, faPlus } from "@fortawesome/free-solid-svg-icons";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
+import { faTrash, faMinus, faPlus, faSpinner } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import emptyCart from '../../Images/empty_cart.webp';
-import { Link } from 'react-router-dom';
-import api from "../../../config/api";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchUser } from "../../../redux/slice/authSlice";
 import { fetchCart, removeFromCart, updateCartQuantity } from "../../../redux/slice/cartSlice";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import api from "../../../config/api";
+import emptyCart from '../../Images/empty_cart.webp';
 
 const CartItems = () => {
-  const [loading, setLoading] = useState(false);
-  const [removing, setRemoving] = useState(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const [voucher, setVoucher] = useState('');
   const [removingItem, setRemovingItem] = useState(null);
   const [updatingQuantity, setUpdatingQuantity] = useState(null);
-  const navigate = useNavigate();
-  const [error, setError] = useState(null);
-  const [voucher, setVoucher] = useState('');
   const [discountInfo, setDiscountInfo] = useState({
     code: '',
     percentage: 0,
     message: ''
   });
+  const [isLoadingCart, setIsLoadingCart] = useState(true);
 
-  const dispatch = useDispatch();
-  const user = useSelector((state) => state.auth.user);
-  const token = useSelector((state) => state.auth.token);
-  const carts = useSelector((state) => state.cart.items);
-  const cartItems = carts.cart.productsInCart;
+  const token = useSelector(state => state.auth.token);
+  const user = useSelector(state => state.auth.user);
+  const cartId = useSelector(state => state.cart.items);
+  const totalPrice = useSelector(state => state.cart.items.total);
+console.log("Carts:", totalPrice);
+  const cartItems = useSelector((state) => state.cart.items.productsInCart) || [];
+  const cartStatus = useSelector(state => state.cart.status);
 
+  // Fetch user only when token is present and user is not already fetched
   useEffect(() => {
-    if (token) {
+    if (token && !user.userId) {
       dispatch(fetchUser());
     }
-  }, [token, dispatch]);
+  }, [token, user.userId, dispatch]);
 
+  // Fetch cart when user is available and cart is not fetched
   useEffect(() => {
-    if (user) {
-      dispatch(fetchCart(user.userId));
+    if (user?.userId) {
+      setIsLoadingCart(true);
+      dispatch(fetchCart(user?.userId))
+        .finally(() => setIsLoadingCart(false));
     }
-  }, [user, dispatch]);
+  }, [user?.userId, dispatch]);
 
-  const handleRemoveFromCart = async (product) => {
+  const handleRemoveFromCart = useCallback(async (product) => {
     setRemovingItem(product.productId);
     try {
-      await dispatch(removeFromCart({ 
-        userId: user.userId, 
-        productId: product.productId 
+      const result = await dispatch(removeFromCart({
+        userId: user.userId,
+        productId: product.productId
       })).unwrap();
-      toast.success(`${product.name} removed from cart!`);
-      dispatch(fetchCart(user.userId));
+  
+      // Check if the removal was successful
+      if (result) {
+        toast.success(`${product.name} removed from cart!`);
+        // Update local state immediately for better UX
+        dispatch(fetchCart(user.userId)); // Refresh the cart from server
+      } else {
+        throw new Error("Failed to remove item");
+      }
     } catch (error) {
-      toast.error(error || "Failed to remove from cart.");
+      toast.error(error?.message || "Failed to remove item.");
+    } finally {
+      setRemovingItem(null);
     }
-    setRemovingItem(null);
-  };
-
-  const handleQuantityChange = async (productId, change) => {
+  }, [dispatch, user.userId]);
+  const handleQuantityChange = useCallback(async (productId, change) => {
     const product = cartItems.find(item => item.productId === productId);
     if (!product) return;
 
     const newQuantity = product.quantity + change;
-    
-    // Validate quantity (1-10)
     if (newQuantity < 1 || newQuantity > 10) return;
 
     setUpdatingQuantity(productId);
     try {
       await dispatch(updateCartQuantity({
+        userId: user.userId,
         productId,
         productQty: newQuantity,
-        userId: user.userId
       })).unwrap();
-      
-      dispatch(fetchCart(user.userId));
     } catch (error) {
       toast.error(error?.message || "Failed to update quantity");
     } finally {
       setUpdatingQuantity(null);
     }
-  };
+  }, [dispatch, cartItems, user.userId]);
 
-  const handleVoucherRedeem = async () => {
+  const handleVoucherRedeem = useCallback(async () => {
+    if (!voucher.trim()) return;
+    
     try {
-      const response = await api.post('/coupons/verify-coupon', {
-        code: voucher
-      });
-
+      setDiscountInfo(prev => ({ ...prev, message: 'Verifying...' }));
+      const response = await api.post('/coupons/verify-coupon', { code: voucher });
       const data = response.data;
 
       if (data.message === 'Invalid coupon code') {
@@ -96,39 +104,55 @@ const CartItems = () => {
           percentage: 0,
           message: 'Invalid coupon code'
         });
+        toast.error('Invalid coupon code');
       } else if (data.discountPercentage) {
         setDiscountInfo({
           code: voucher,
           percentage: data.discountPercentage,
           message: `${data.discountPercentage}% discount applied!`
         });
+        toast.success('Coupon applied successfully!');
       }
     } catch (err) {
-      console.error('Error verifying coupon:', err);
       setDiscountInfo({
         code: '',
         percentage: 0,
         message: 'Error verifying coupon'
       });
+      toast.error('Failed to apply coupon');
     }
-  };
+  }, [voucher]);
 
-  if (loading) {
+  const subtotal = useMemo(() => totalPrice);
+  const discountAmount = useMemo(() => (subtotal * discountInfo.percentage) / 100, [subtotal, discountInfo.percentage]);
+  const total = useMemo(() => subtotal - discountAmount, [subtotal, discountAmount]);
+
+  if (isLoadingCart) {
     return (
-      <div className="flex justify-center items-center h-64 bg-gray-50">
-        <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-primary"></div>
+      <div className="flex flex-col items-center justify-center min-h-[300px]">
+        <FontAwesomeIcon 
+          icon={faSpinner} 
+          className="text-4xl text-primary animate-spin mb-4" 
+        />
+        <p className="text-lg text-gray-600">Loading your cart...</p>
       </div>
     );
   }
 
-  if (error || cartItems?.length === 0) {
+  if (!cartItems.length && !isLoadingCart) {
     return (
-      <div className="bg-white shadow-sm rounded-lg p-4 sm:p-6 flex flex-col items-center justify-center">
-        <img src={emptyCart} alt="Empty Cart" className="w-32 sm:w-48 h-32 sm:h-48 mb-4 object-contain" />
-        <p className="text-base sm:text-lg text-gray-600 mb-4 text-center">{error || 'Your cart is empty'}</p>
+      <div className="bg-white shadow-sm rounded-lg p-4 sm:p-6 flex flex-col items-center justify-center min-h-[300px]">
+        <img 
+          src={emptyCart} 
+          alt="Empty Cart" 
+          className="w-32 sm:w-48 h-32 sm:h-48 mb-4 object-contain" 
+        />
+        <p className="text-base sm:text-lg text-gray-600 mb-4 text-center">
+          Your cart is empty
+        </p>
         <Link 
           to="/store" 
-          className="px-6 py-2 bg-primary text-white rounded-md hover:bg-primary transition-colors duration-200 text-sm sm:text-base"
+          className="px-6 py-2 bg-primary text-white rounded-md hover:bg-primary-dark transition-colors text-sm sm:text-base"
         >
           Continue Shopping
         </Link>
@@ -138,67 +162,82 @@ const CartItems = () => {
 
   return (
     <div className="space-y-4 sm:space-y-6">
-      {/* Cart Items Section */}
       <div className="bg-white shadow-sm rounded-lg overflow-hidden">
-        <div className="p-3 sm:p-4 border-b">
-          <h2 className="text-lg sm:text-xl font-semibold text-gray-800">Your Cart</h2>
+        <div className="p-4 border-b">
+          <h2 className="text-xl font-semibold text-gray-800">Your Cart ({cartItems.length} items)</h2>
         </div>
-        
         <div className="divide-y divide-gray-100">
-          {cartItems?.map((item) => (
-            <div key={item.productId} className="p-3 sm:p-4">
-              <div className="flex flex-col gap-4">
-                <div className="flex items-start justify-between gap-3">
-                  <div className="w-20 h-20 bg-gray-50 rounded-md overflow-hidden flex-shrink-0">
-                    <img
-                      src={item.img[0] || "https://i.etsystatic.com/19893040/r/il/0ddcd7/3907960016/il_570xN.3907960016_ej9x.jpg"}
-                      alt={item.name}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <button
-                    onClick={() => handleRemoveFromCart(item)}
-                    className="text-red-500 hover:text-red-600 transition-colors p-1"
-                    aria-label="Remove item"
-                    disabled={removingItem === item.productId}
-                  >
-                    <FontAwesomeIcon icon={faTrash} className="w-4 h-4" />
-                  </button>
+          {cartItems.map((item) => (
+            <div key={item.productId} className="p-4 hover:bg-gray-50 transition-colors">
+              <div className="flex gap-4">
+                <div className="relative">
+                  <img
+                    src={item.img[0]}
+                    alt={item.name}
+                    className="w-20 h-20 object-cover rounded-md border"
+                    onError={(e) => {
+                      e.target.src = 'https://via.placeholder.com/80?text=No+Image';
+                    }}
+                  />
+                  {updatingQuantity === item.productId && (
+                    <div className="absolute inset-0 bg-white bg-opacity-70 flex items-center justify-center">
+                      <FontAwesomeIcon icon={faSpinner} className="animate-spin text-primary" />
+                    </div>
+                  )}
                 </div>
-
-                <div className="flex flex-col gap-2">
+                <div className="flex flex-col justify-between flex-1">
                   <div>
-                    <h3 className="font-medium text-sm sm:text-base text-gray-900">{item.name}</h3>
-                    <p className="text-xs sm:text-sm text-gray-500 mt-1">{item.category || "No category available"}</p>
+                    <Link to={`/product/${item.productId}`} className="font-medium text-gray-900 hover:text-primary">
+                      {item.name}
+                    </Link>
+                    <p className="text-xs text-gray-500 capitalize">{item.category || "No category"}</p>
+                    <p className="font-semibold text-sm mt-1">
+                      ₦{(item.price * item.quantity).toLocaleString('en-NG', { minimumFractionDigits: 2 })}
+                    </p>
                   </div>
-                  
-                  <div className="flex items-center justify-between mt-2">
-                    <span className="font-medium text-sm sm:text-base text-gray-900">
-                      ₦{(item.price * item.quantity).toFixed(2)}
-                    </span>
-                  
-                    <div className="flex items-center border rounded-md bg-gray-50">
+                  <div className="flex justify-between items-center mt-2">
+                    <div className="flex items-center border rounded bg-gray-50">
                       <button
                         onClick={() => handleQuantityChange(item.productId, -1)}
-                        className={`p-1.5 ${item.quantity <= 1 ? 'text-gray-300 cursor-not-allowed' : 'text-gray-600 hover:bg-gray-100'} transition-colors`}
                         disabled={item.quantity <= 1 || updatingQuantity === item.productId}
+                        className="px-3 py-1 text-gray-600 hover:bg-gray-100 disabled:text-gray-300 disabled:bg-transparent transition-colors"
                       >
-                        <FontAwesomeIcon icon={faMinus} className="w-3 h-3" />
+                        {updatingQuantity === item.productId ? (
+                          <FontAwesomeIcon icon={faSpinner} className="animate-spin" />
+                        ) : (
+                          <FontAwesomeIcon icon={faMinus} />
+                        )}
                       </button>
-                      <input
-                        type="text"
-                        value={updatingQuantity === item.productId ? '...' : item.quantity}
-                        readOnly
-                        className="w-10 text-center bg-transparent border-x text-sm"
-                      />
+                      <span className="w-10 text-center bg-white">
+                        {updatingQuantity === item.productId ? (
+                          <FontAwesomeIcon icon={faSpinner} className="animate-spin" />
+                        ) : (
+                          item.quantity
+                        )}
+                      </span>
                       <button
                         onClick={() => handleQuantityChange(item.productId, 1)}
-                        className={`p-1.5 ${item.quantity >= 10 ? 'text-gray-300 cursor-not-allowed' : 'text-gray-600 hover:bg-gray-100'} transition-colors`}
                         disabled={item.quantity >= 10 || updatingQuantity === item.productId}
+                        className="px-3 py-1 text-gray-600 hover:bg-gray-100 disabled:text-gray-300 disabled:bg-transparent transition-colors"
                       >
-                        <FontAwesomeIcon icon={faPlus} className="w-3 h-3" />
+                        {updatingQuantity === item.productId ? (
+                          <FontAwesomeIcon icon={faSpinner} className="animate-spin" />
+                        ) : (
+                          <FontAwesomeIcon icon={faPlus} />
+                        )}
                       </button>
                     </div>
+                    <button
+                      onClick={() => handleRemoveFromCart(item)}
+                      className="text-red-500 hover:text-red-700 transition-colors"
+                      disabled={removingItem === item.productId}
+                    >
+                      {removingItem === item.productId ? (
+                        <FontAwesomeIcon icon={faSpinner} className="animate-spin" />
+                      ) : (
+                        <FontAwesomeIcon icon={faTrash} />
+                      )}
+                    </button>
                   </div>
                 </div>
               </div>
@@ -207,71 +246,64 @@ const CartItems = () => {
         </div>
       </div>
 
-      {/* Order Summary Section */}
-      <div className="bg-white shadow-sm rounded-lg overflow-hidden">
-        <div className="p-3 sm:p-4 border-b">
-          <h2 className="text-lg sm:text-xl font-semibold text-gray-800">Order Summary</h2>
-        </div>
-        
-        <div className="p-3 sm:p-4 space-y-4">
-          {/* Voucher Input */}
-          <div className="flex flex-col sm:flex-row gap-2">
-            <input
-              type="text"
-              placeholder="Enter voucher code"
-              value={voucher}
-              onChange={(e) => setVoucher(e.target.value)}
-              className="flex-1 border rounded-md px-3 py-2 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-secondary/20 focus:border-secondary"
-            />
-            <button
-              className="w-full sm:w-auto bg-secondary text-white px-4 py-2 rounded-md hover:bg-primary transition-colors text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
-              onClick={handleVoucherRedeem}
-              disabled={!voucher}
-            >
-              Redeem
-            </button>
-          </div>
+      {/* Order Summary */}
+      <div className="bg-white shadow-sm rounded-lg p-4 sticky top-4">
+        <h2 className="text-lg font-semibold mb-4">Order Summary</h2>
 
-          {/* Discount Message */}
-          {discountInfo.message && (
-            <div className={`text-sm ${discountInfo.code ? 'text-green-600' : 'text-red-500'} bg-gray-50 p-2 rounded-md`}>
-              {discountInfo.message}
-            </div>
-          )}
-
-          {/* Price Breakdown */}
-          <div className="space-y-3 text-sm sm:text-base">
-            <div className="flex justify-between text-gray-600">
-              <span>Subtotal</span>
-              <span>₦{carts?.cart?.subtotal?.toFixed(2) ?? '0.00'}</span>
-            </div>
-            
-            {discountInfo.percentage > 0 && (
-              <div className="flex justify-between text-green-600">
-                <span>Discount ({discountInfo.percentage}%)</span>
-                <span>- ₦{(carts?.cart?.subtotal * (discountInfo.percentage / 100)).toFixed(2)}</span>
-              </div>
-            )}
-            
-            <div className="flex justify-between text-gray-600">
-              <span>Shipping</span>
-              <span>₦0.00</span>
-            </div>
-            
-            <div className="flex justify-between font-semibold text-gray-900 pt-3 border-t">
-              <span>Total</span>
-              <span>₦{carts?.cart?.total?.toFixed(2) ?? '0.00'}</span>
-            </div>
-          </div>
-
-          {/* Checkout Button */}
-          <button 
-            onClick={() => navigate("/checkout")}
-            className="w-full bg-primary text-white py-3 rounded-md hover:bg-mutedPrimary transition-colors text-sm sm:text-base font-medium mt-4"
+        <div className="flex flex-col sm:flex-row gap-2 mb-3">
+          <input
+            type="text"
+            placeholder="Enter voucher code"
+            value={voucher}
+            onChange={(e) => setVoucher(e.target.value)}
+            className="flex-1 border px-3 py-2 rounded-md text-sm focus:ring-2 focus:ring-primary focus:border-transparent"
+          />
+          <button
+            onClick={handleVoucherRedeem}
+            disabled={!voucher.trim() || discountInfo.message === 'Verifying...'}
+            className="bg-secondary text-white px-4 py-2 rounded-md hover:bg-secondary-dark disabled:opacity-50 disabled:cursor-not-allowed transition-colors text-sm sm:text-base"
           >
-            Proceed to Checkout
+            {discountInfo.message === 'Verifying...' ? (
+              <FontAwesomeIcon icon={faSpinner} className="animate-spin" />
+            ) : (
+              'Redeem'
+            )}
           </button>
         </div>
+
+        {discountInfo.message && (
+          <div className={`text-sm p-2 rounded-md mb-3 ${
+            discountInfo.code ? 'bg-green-50 text-green-600' : 
+            discountInfo.message === 'Verifying...' ? 'bg-blue-50 text-blue-600' : 
+            'bg-red-50 text-red-500'
+          }`}>
+            {discountInfo.message}
+          </div>
+        )}
+
+        <div className="text-sm mt-3 space-y-3">
+          <div className="flex justify-between">
+            <span className="text-gray-600">Subtotal</span>
+            <span className="font-medium">₦{subtotal.toLocaleString('en-NG', { minimumFractionDigits: 2 })}</span>
+          </div>
+          {discountInfo.percentage > 0 && (
+            <div className="flex justify-between text-green-600">
+              <span>Discount ({discountInfo.percentage}%)</span>
+              <span>-₦{discountAmount.toLocaleString('en-NG', { minimumFractionDigits: 2 })}</span>
+            </div>
+          )}
+          <div className="border-t pt-3 flex justify-between font-semibold text-base">
+            <span>Total</span>
+            <span className="text-primary">₦{total.toLocaleString('en-NG', { minimumFractionDigits: 2 })}</span>
+          </div>
+        </div>
+
+        <Link
+          to={'/checkout'}
+          className="w-full flex items-center justify-center mt-6 bg-primary text-white py-3 rounded-md hover:bg-primary-dark transition-colors font-medium"
+        >
+          Proceed to Checkout
+        </Link>
       </div>
     </div>
   );

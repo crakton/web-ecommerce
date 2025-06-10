@@ -5,7 +5,7 @@ import AddToCart from "./addToCart";
 
 const ProductCard = ({ product }) => {
   return (
-    <div className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow  border border-gray-100 h-full flex flex-col">
+    <div className="bg-white rounded-lg  overflow-hidden shadow-sm hover:shadow-md transition-shadow  border border-gray-100 h-full flex flex-col">
       {/* Product Image */}
       <Link to={`/product/${product.productId}`} className="block flex-grow">
         <img

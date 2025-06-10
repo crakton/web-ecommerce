@@ -34,21 +34,12 @@ const DashboardPage = () => {
             </Helmet>
             <div className="flex">
                 {/* <Sidebar /> */}
-                <div className={`flex-1 transition-all duration-300 ${isOpen ? 'ml-64' : 'ml-20'} lg:ml-64`}>
+                <div>
                     <div className="p-4">
                         <Dashboard />
                     </div>
                 </div>
             </div>
-            <style>
-                {`
-                    @media (max-width: 1024px) {
-                        .sidebar-logo {
-                            display: none; /* Hide the logo name on mobile */
-                        }
-                    }
-                `}
-            </style>
         </>
     );
 };

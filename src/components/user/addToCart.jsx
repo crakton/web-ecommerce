@@ -13,7 +13,7 @@ import { motion } from "framer-motion";
 
 const AddToCart = ({ product }) => {
   const dispatch = useDispatch();
-  const cart = useSelector((state) => state.cart.items);
+  const cartItem = useSelector((state) => state.cart.items.productsInCart);
   const user = useSelector((state) => state.auth.user);
   const token = useSelector((state) => state.auth.token);
   const navigate = useNavigate();
@@ -21,13 +21,16 @@ const AddToCart = ({ product }) => {
   const [isUpdating, setIsUpdating] = useState(false);
   const [isAdding, setIsAdding] = useState(false);
 
-  const isInCart = cart?.cart?.productsInCart?.some(
+  const  userId = user?.userId
+
+
+  const isInCart =cartItem?.some(
     (item) => item.productId === product.productId
   );
 
   useEffect(() => {
     if (isInCart) {
-      const cartProduct = cart?.cart?.productsInCart?.find(
+      const cartProduct = cartItem?.find(
         (item) => item.productId === product.productId
       );
       if (cartProduct && quantity !== cartProduct.quantity) {
@@ -52,12 +55,13 @@ const AddToCart = ({ product }) => {
         updateCartQuantity({
           productId: product.productId,
           productQty: quantity,
-          userId: user.userId,
+          userId,
         })
       ).unwrap();
       toast.success("Quantity updated!");
     } catch (error) {
       toast.error(error?.message || "Failed to update quantity");
+      console.error("Error updating quantity:", error);
     } finally {
       setIsUpdating(false);
     }
@@ -69,7 +73,7 @@ const AddToCart = ({ product }) => {
       navigate("/signup");
       return;
     }
-
+  
     setIsAdding(true);
     try {
       await dispatch(
@@ -79,14 +83,18 @@ const AddToCart = ({ product }) => {
           userId: user.userId,
         })
       ).unwrap();
-      dispatch(fetchCart(user.userId));
-      toast.success(`${product.name} added to cart!`);
+  
+      // The toast will now be shown from the Redux slice
+      // Refresh the cart to ensure consistency
+      await dispatch(fetchCart(user.userId));
     } catch (error) {
-      toast.error(error?.message || "Failed to add to cart.");
+      // Error toast will be shown from Redux slice
+      console.error("Add to cart error:", error);
     } finally {
       setIsAdding(false);
     }
   };
+  
 
   return (
     <div className="w-full">
