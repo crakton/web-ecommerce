@@ -33,19 +33,17 @@
     "react-redux": "^9.2.0",
     "react-responsive-carousel": "^3.2.23",
     "react-router-dom": "^6.28.0",
-    "react-scripts": "5.0.1",
     "react-toastify": "^10.0.6",
     "react-type-animation": "^3.2.0",
     "recharts": "^2.14.1",
     "web-vitals": "^2.1.4",
     "zustand": "^5.0.2"
   },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
-  },
+"scripts": {
+  "dev": "vite",
+  "build": "vite build",
+  "preview": "vite preview"
+},
   "eslintConfig": {
     "extends": [
       "react-app",
@@ -66,9 +64,11 @@
   },
   "devDependencies": {
     "@types/node": "^22.10.1",
+    "@vitejs/plugin-react": "^4.5.2",
     "autoprefixer": "^10.4.20",
     "postcss": "^8.4.49",
-    "tailwindcss": "^3.4.16"
+    "tailwindcss": "^3.4.16",
+    "vite": "^6.3.5"
   },
   "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }

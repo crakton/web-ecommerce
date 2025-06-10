@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import Dashboard from '../../components/admin/dashboard';
-import Sidebar from '../../components/admin/sidebar';
 import { Helmet } from "react-helmet";
 import { Menu, X } from 'lucide-react'; // Assuming you're using lucide-react for icons
 

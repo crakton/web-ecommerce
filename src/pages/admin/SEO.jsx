@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Helmet } from "react-helmet";
 
-import Sidebar from '../../components/admin/sidebar';
 
 const SEO = () => {
   const { sellerId } = useParams();
@@ -253,7 +252,6 @@ const SEO = () => {
       <Helmet>
         <title>SEO Management | Admin | Zang Global</title>
       </Helmet>
-      {/* <Sidebar /> */}
       <div className="flex-1 p-8 ml-[5rem] lg:ml-64 bg-pink-50 min-h-screen">
         <div className="mb-6 flex justify-between items-center">
           <div className="relative">

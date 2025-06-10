@@ -1,3 +1,4 @@
+import React from "react";
 import { partnerAwardData } from "../../../constants";
 
 const PartnersAndAwards = () => {

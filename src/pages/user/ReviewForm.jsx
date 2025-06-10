@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { FaStar } from 'react-icons/fa';
 import { BsStar, BsStarFill, BsStarHalf } from 'react-icons/bs'
 const ReviewForm = ({ productId, onClose, onSubmitSuccess, handleSubmit }) => {
   const [rating, setRating] = useState(0);

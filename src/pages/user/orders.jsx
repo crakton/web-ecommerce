@@ -5,8 +5,6 @@ import { motion } from 'framer-motion';
 import Navbar from '../../components/user/navbar/navbar';
 import { ChevronUp, ChevronDown, Clock, CreditCard, Truck, CheckCircle, XCircle } from 'lucide-react';
 import { useSelector } from 'react-redux';
-import { fetchUser } from '../../redux/slice/authSlice';
-import { useDispatch } from 'react-redux';
 import api from '../../config/api';
 
 const Order = () => {

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 
@@ -105,7 +105,6 @@ const UserSettingsPage = () => {
       <h1 className="text-3xl font-bold text-gray-800 mb-8">Account Settings</h1>
       
       <div className="flex flex-col md:flex-row gap-8">
-        {/* Sidebar Navigation */}
         <div className="w-full md:w-64 flex-shrink-0">
           <div className="bg-white rounded-lg shadow-sm p-4">
             <div className="flex items-center gap-4 mb-6">

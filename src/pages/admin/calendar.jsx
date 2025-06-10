@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import Sidebar from '../../components/admin/sidebar';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import { Helmet } from "react-helmet";
@@ -13,7 +12,6 @@ const CalendarPage = () => {
       <title>Calendar | Admin | Zang Global</title>
     </Helmet>
     <div className="flex">
-      {/* <Sidebar /> */}
       <div className="flex-1 p-8 ml-[5rem] lg:ml-64 bg-pink-50 min-h-screen">
         <div className="max-w-3xl mx-auto">
           <h1 className="text-3xl font-bold text-gray-800 mb-8 text-center">Calendar</h1>

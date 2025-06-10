@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Plus, Trash2, Edit } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { Helmet } from 'react-helmet';
-import Sidebar from '../../components/admin/sidebar';
 import { useParams, useNavigate } from 'react-router-dom';
 
 const CouponPage = () => {
@@ -131,7 +130,6 @@ const CouponPage = () => {
       <Helmet>
         <title>Coupons | Admin Dashboard</title>
       </Helmet>
-      {/* <Sidebar /> */}
       <div className="min-h-screen bg-gray-100 sm:ml-0 md:ml-[10vh] lg:ml-[40vh]">
         <div className="p-4 sm:p-6 lg:p-8">
           <div className="max-w-7xl mx-auto">

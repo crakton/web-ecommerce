@@ -1,5 +1,5 @@
+import React from "react";
 import AdminLogin from "../../components/admin/login";
-import AdminProtectedRoute from "../../components/protectedRoute";
 
 const LoginPage = () => {
   return (

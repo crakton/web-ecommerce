@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { FaSearch, FaTimes } from "react-icons/fa";
 import ProductCard from "../../components/user/ProductCard";
 import { fetchProducts } from "../../config/api";

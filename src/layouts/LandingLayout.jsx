@@ -1,3 +1,4 @@
+import React from "react";
 import { Outlet } from "react-router-dom";
 import Navbar from "../components/user/Landing/LandingNavBar";
 import Footer from "../components/user/Landing/Footer";

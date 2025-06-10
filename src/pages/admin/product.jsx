@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Pencil, Save, Search, ArrowUpDown, Trash, X, ChevronLeft, ChevronRight, Upload, Loader2, ImageIcon } from 'lucide-react';
 import { Helmet } from "react-helmet";
 import { useParams, useNavigate } from 'react-router-dom';
-import Sidebar from '../../components/admin/sidebar';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteProduct, getProducts, updateProduct } from '../../redux/slice/productSlice';
 import { fetchProducts } from '../../config/api';
@@ -196,7 +195,6 @@ console.log(sortedProducts,"sorted Products")
       <Helmet>
         <title>Products | Admin | Zang Global</title>
       </Helmet>
-      {/* <Sidebar /> */}
       <div className="flex-1 p-8  bg-pink-50 min-h-screen">
         {/* Search Bar */}
         <div className="mb-6 flex justify-between items-center">

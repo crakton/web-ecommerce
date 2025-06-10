@@ -25,20 +25,15 @@ import RegisterAdmin from "./pages/admin/signup";
 
 // User Pages
 import HomePage from "./pages/user/homepage";
-import About from "./pages/user/about";
 import Contact from "./pages/user/contact";
 import Login from "./pages/user/login";
 import Signup from "./pages/user/signup";
-import OccasionsPage from "./pages/user/occasionspage";
-import GiftBox from "./pages/user/gift-box";
 import ShoppingCartPage from "./pages/user/cart";
 import Order from "./pages/user/orders";
 import ProductDetail from "./pages/user/productdetails";
 import Checkout from "./pages/user/checkout";
 import SearchPage from "./pages/user/Search";
-import LearnMore from "./pages/user/learnmore";
 import NotFoundPage from "./pages/user/notfound";
-import UserSettingsPage from "./pages/user/settings";
 
 // Landing Pages
 import LandingPage from "./pages/landingPage/LandingPage";
@@ -53,7 +48,6 @@ function App() {
   return (
     <React.StrictMode>
       <Provider store={store}>
-
         <ToastContainer />
         <BrowserRouter>
           <Routes>
@@ -64,7 +58,7 @@ function App() {
                   <AdminLayout adminOnly />
                 </AdminAuthProvider>
               }
-              >
+            >
               <Route path="dashboard" element={<DashboardPage />} />
               <Route path="products" element={<Product />} />
               <Route path="orders" element={<Orders />} />
@@ -83,7 +77,7 @@ function App() {
                   <LoginPage />
                 </AdminAuthProvider>
               }
-              />
+            />
             <Route
               path="/admin/signup"
               element={
@@ -91,26 +85,19 @@ function App() {
                   <RegisterAdmin />
                 </AdminAuthProvider>
               }
-              />
+            />
 
             {/* Store (User Area) */}
             <Route element={<StoreLayout />}>
               <Route path="/store" element={<HomePage />} />
-              <Route path="/about" element={<About />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
-              <Route path="/jobs" element={<OccasionsPage />} />
-              <Route path="/gift-boxes" element={<GiftBox />} />
-              <Route path="/books" element={<GiftBox />} />
-              <Route path="/stationery" element={<GiftBox />} />
               <Route path="/cart" element={<ShoppingCartPage />} />
               <Route path="/orders" element={<Order />} />
               <Route path="/product/:productId" element={<ProductDetail />} />
               <Route path="/checkout" element={<Checkout />} />
               <Route path="/search" element={<SearchPage />} />
-              <Route path="/learnmore" element={<LearnMore />} />
-              <Route path="settings" element={<UserSettingsPage />} />
             </Route>
 
             {/* Landing Pages */}

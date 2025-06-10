@@ -1,5 +1,5 @@
-// components/ProtectedRoute.tsx
-import { useAdminAuth } from "../context/Admin";
+
+import React, { useAdminAuth } from "../context/Admin";
 import { Navigate, Outlet } from "react-router-dom";
 
 const ProtectedRoute = () => {

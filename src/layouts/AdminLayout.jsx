@@ -198,7 +198,6 @@ const AdminLayout = ({ children, adminOnly = false }) => {
             ))}
           </nav>
 
-          {/* Sidebar Footer */}
           <div className="p-4 border-t border-gray-700 space-y-3">
             <button
               onClick={() => setShowDialog(true)}

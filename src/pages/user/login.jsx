@@ -1,9 +1,6 @@
 import React, { useState } from "react";
 import { Eye, EyeOff, Loader2, Lock, Mail } from 'lucide-react';
-import Navbar from "../../components/user/navbar/navbar";
 import { motion } from 'framer-motion';
-import { Helmet } from "react-helmet";
-import SEOComponent from "../../components/SEO/SEOComponent";
 import { useDispatch, useSelector } from "react-redux";
 import { loginUser } from "../../redux/slice/authSlice";
 import { useNavigate } from "react-router-dom";

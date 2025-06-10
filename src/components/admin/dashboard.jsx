@@ -19,12 +19,11 @@ const Dashboard = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const dispatch = useDispatch();
-    const { products, loading } = useSelector((state) => state.product);
-
+  const { products, loading } = useSelector((state) => state.product);
 
   const { admin } = useAdminAuth();
 
-  console.log(admin)
+  console.log(admin);
 
   // Redux State
 
@@ -42,6 +41,7 @@ const Dashboard = () => {
       if (!response.ok) {
         throw new Error("Failed to fetch orders");
       }
+
       const data = await response.json();
       setOrdersData(data.orders);
       setIsLoading(false);
@@ -54,6 +54,8 @@ const Dashboard = () => {
   useEffect(() => {
     getOrderData();
   }, [refresh]);
+
+  console.log(ordersData);
 
   const totalOrders = ordersData.length;
   const deliveredOrders = ordersData.length;

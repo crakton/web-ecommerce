@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet";
 import Dashboard from "../../components/admin/dashboard";
-import Sidebar from "../../components/admin/sidebar";
 
 const DashboardPage = () => {
   const { sellerId } = useParams();

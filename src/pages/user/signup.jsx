@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Eye, EyeOff, User, Mail, Phone, Lock, Loader2 } from "lucide-react";
 import { useDispatch } from "react-redux";
 import { registerUser } from "../../redux/slice/authSlice"; // Import Redux action
