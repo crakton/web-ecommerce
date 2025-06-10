@@ -1,10 +1,12 @@
 import AdminLogin from "../../components/admin/login";
-import AdminNavbar from "../../components/admin/navbar";
+import AdminProtectedRoute from "../../components/protectedRoute";
 
 const LoginPage = () => {
-  return <>
-  <AdminLogin />;
-  </>
+  return (
+    <>
+        <AdminLogin />;
+    </>
+  );
 };
 
 export default LoginPage;

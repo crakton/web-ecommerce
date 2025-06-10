@@ -144,6 +144,7 @@ export const AdminAuthProvider = ({ children }) => {
       
       setAuthData(token, data);
       localStorage.setItem("adminId", data._id); // Store user ID in localStorage
+      localStorage.setItem("admin", JSON.stringify(data)); // Store admin data in localStorage
       navigate("/admin/dashboard");
     } catch (err ) {
       setError(

@@ -18,7 +18,6 @@ import Product from "./pages/admin/product";
 import Orders from "./pages/admin/order";
 import Customers from "./pages/admin/customer";
 import Reviews from "./pages/admin/review";
-import Complaints from "./pages/admin/complaints";
 import CalendarPage from "./pages/admin/calendar";
 import SEO from "./pages/admin/SEO";
 import LoginPage from "./pages/admin/login";
@@ -39,7 +38,6 @@ import Checkout from "./pages/user/checkout";
 import SearchPage from "./pages/user/Search";
 import LearnMore from "./pages/user/learnmore";
 import NotFoundPage from "./pages/user/notfound";
-import Shop from "./pages/user/shop";
 import UserSettingsPage from "./pages/user/settings";
 
 // Landing Pages
@@ -48,7 +46,6 @@ import Blogs from "./pages/landingPage/Blogs";
 import TrainingHub from "./pages/landingPage/TrainingHub";
 import AssistiveTechPage from "./pages/landingPage/AssistiveTech";
 import OrderView from "./pages/admin/orderView";
-import { CartProvider } from "./context/CartContext";
 import AdminBlogList from "./pages/admin/blogs";
 import BlogDetail from "./pages/landingPage/BlogView";
 
@@ -56,7 +53,6 @@ function App() {
   return (
     <React.StrictMode>
       <Provider store={store}>
-        <CartProvider>
 
         <ToastContainer />
         <BrowserRouter>
@@ -74,7 +70,6 @@ function App() {
               <Route path="orders" element={<Orders />} />
               <Route path="customers" element={<Customers />} />
               <Route path="reviews" element={<Reviews />} />
-              <Route path="complaints" element={<Complaints />} />
               <Route path="blogs" element={<AdminBlogList />} />
               <Route path="calendar" element={<CalendarPage />} />
               <Route path="orders/:orderId" element={<OrderView />} />
@@ -102,7 +97,6 @@ function App() {
             <Route element={<StoreLayout />}>
               <Route path="/store" element={<HomePage />} />
               <Route path="/about" element={<About />} />
-              <Route path="/shop" element={<Shop />} />
               <Route path="/contact" element={<Contact />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
@@ -132,7 +126,6 @@ function App() {
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </BrowserRouter>
-              </CartProvider>
       </Provider>
     </React.StrictMode>
   );

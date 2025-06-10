@@ -84,7 +84,7 @@ const Dashboard = () => {
   // Loading State
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-slate-50">
+      <div className="flex items-center w-full justify-center min-h-screen bg-slate-50">
         <div className="text-center">
           <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-primary mx-auto mb-4"></div>
           <p className="text-primary text-xl">Loading Dashboard...</p>
@@ -94,7 +94,7 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-slate-100 p-6 lg:p-10">
+    <div className="min-h-screen w-full bg-slate-100 p-6">
       <div className="container mx-auto">
         <div className="flex justify-between items-center mb-8">
           <div className="mt-2 flex flex-col justify-center ">
